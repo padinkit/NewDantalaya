@@ -1,0 +1,117 @@
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Edit Patient</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="index.html">Dashboard</a></li>
+				<li class="active">Edit Patient</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="white-box">
+				<h3 class="box-title">Patient's Account Information</h3>
+				<form class="form-material form-horizontal">
+					<div class="form-group">
+						<label class="col-md-12" for="example-email">Email </label>
+						<div class="col-md-12">
+							<input type="email" id="example-email" name="example-email"
+								class="form-control" placeholder="enter your email"
+								value="jondoe@ex.com" ng-model="patientData.data.email">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-12" for="example-phone">Phone </label>
+						<div class="col-md-12">
+							<input type="text" id="example-phone" name="example-phone"
+								class="form-control" placeholder="enter your phone"
+								data-mask="99999-99999" value="99999-99999" ng-model="patientData.data.mobile">
+						</div>
+					</div>
+					<button type="submit"
+						class="btn btn-info waves-effect waves-light m-r-10" ng-click="updatePatientDetails()">Submit</button>
+				</form>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="white-box">
+				<h3 class="box-title">Basic Information</h3>
+				<form class="form-material form-horizontal">
+					<div class="form-group">
+						<label class="col-md-12" for="example-text">First Name </label>
+						<div class="col-md-12">
+							<input type="text" id="example-text" name="example-text"
+								class="form-control" placeholder="Enter Patient's name" ng-model="patientData.data.firstname">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-12" for="example-text">Last Name </label>
+						<div class="col-md-12">
+							<input type="text" id="example-text" name="example-text"
+								class="form-control" placeholder="Enter Patient's name" ng-model="patientData.data.lastname">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-12" for="bdate">Date of Birth </label>
+						<div class="col-md-12">
+							<input type="text" id="bdate" name="bdate"
+								class="form-control mydatepicker"
+								placeholder="enter your birth date" value="12/10/2017" ng-model="patientData.data.dob">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-12">Gender</label>
+						<div class="col-sm-12">
+							<select class="form-control" ng-model="patientData.data.gender">
+								<option>Select Gender</option>
+								<option selected="selected">Male</option>
+								<option>Female</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-12" for="example-text">Aadhaar ID </label>
+						<div class="col-md-12">
+							<input type="text" id="example-text" name="example-text"
+								class="form-control" placeholder="Enter Patient's Aadhaar ID"
+								value="12345678" ng-model="patientData.data.aadhaarno">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-12">Profile Image</label>
+						<div class="col-sm-12">
+							<img class="img-responsive" src="images/users/varun.jpg" alt=""
+								style="max-width: 120px" ng-model="patientData.data.photo" >
+						</div>
+						<div class="col-sm-12">
+							<div class="fileinput fileinput-new input-group"
+								data-provides="fileinput">
+								<div class="form-control" data-trigger="fileinput">
+									<i class="glyphicon glyphicon-file fileinput-exists"></i> <span
+										class="fileinput-filename"></span>
+								</div>
+								<span class="input-group-addon btn btn-default btn-file"><span
+									class="fileinput-new">Select file</span> <span
+									class="fileinput-exists">Change</span> <input type="file"
+									name="..."> </span><a href="#"
+									class="input-group-addon btn btn-default fileinput-exists"
+									data-dismiss="fileinput">Remove</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-12">Address:</label>
+						<div class="col-md-12">
+							<textarea class="form-control" ng-model="patientData.data.address"   rows="3"></textarea>
+						</div>
+					</div>
+					<button type="submit"
+						class="btn btn-info waves-effect waves-light m-r-10" ng-click="updatePatientDetails()">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

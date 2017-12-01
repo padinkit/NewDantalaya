@@ -1,0 +1,25 @@
+{
+  "name": "Project",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "setup": "npm install && bower install",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "angular-material-data-table": "^0.10.10",
+    "ejs": "*",
+    "emailjs": "^1.0.8",
+    "express": "3.2.6",
+    "express-session": "^1.14.2",
+    "fs": "0.0.1-security",
+    "mail": "^0.2.3",
+    "mongoose": "^4.10.8",
+    "nodemailer": "^2.7.2",
+    "passport": "~0.2.0",
+    "passport-local": "~1.0.0",
+    "path": "^0.12.7",
+    "request": "^2.83.0",
+    "xoauth2": "^1.2.0"
+  }
+}

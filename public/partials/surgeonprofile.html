@@ -1,0 +1,242 @@
+
+
+
+    <section id="dpreg">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <p class="dserhead">House Surgeon Profile</p>
+
+                    <div class="container dreggrid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form id="contactForm" name="contactForm">
+                                    <fieldset>
+										<div class="row">
+							           		<div class="col-md-6 dregpad">
+							           			<div>
+							           				<img ng-src="{{signup.photo}}" width="116"  height="120" />
+							           			</div>
+							           			 
+							           			 <br>
+							           			 <label class=""><small>*Upload Photo of size less than 15 KB and of resolution 116px * 120px</small></label>
+									        	 <input type="file" ng-model="signup.photo" accept="image/*"  app-filereader style="margin: 0px;"/>	        	 
+									        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 15 KB</small></p>
+							           		</div>
+								        </div>
+
+                                        <div class="row">
+
+
+                                            <div class="col-md-6 dregpad">
+
+                                                <div>
+               <label for="contactName">First Name <span class="required">*</span><div id="fname_error" class="val_error"></div></label>
+               <input type="text" value="" size="35" id="contactName" name="contactName" title="overall type: NAME_FULL
+    server type: NAME_FULL
+    heuristic type: NAME_FULL
+    label: Name *
+    parseable name: contactName
+    field signature: 3196301078
+    form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="signup.firstname" disabled>
+    
+                  </div>
+
+                                                <div>
+               <label for="gender">Gender <span class="required">*</span></label>
+               <select class="form-control"  id="gender" name="gender" ng-model="signup.gender" disabled>
+                              <option>Male</option>
+                              <option>Female</option>
+                              <option>Other</option>
+                           </select>
+                  </div>
+                  
+                  <div>
+               <label for="aadhaar">Aadhaar number <div id="aadhaar_error" class="val_error"></div></label>
+               <input type="text" value="" size="35" id="aadhaar" name="aadhaar" ng-model="signup.aadhaarno">
+               
+                  </div>
+
+                  <div>
+               <label for="residential">Residential Address<span class="required">*</span><div id="addr_error" class="val_error"></div></label>
+               <textarea cols="40" rows="6" id="residential" name="residential" ng-model="signup.address"></textarea>
+               
+                  </div>
+                  
+            </div>
+                 
+            <div class="col-md-6">
+
+                 <div>
+               <label for="lastName">Last Name <span class="required">*</span><div id="lname_error" class="val_error"></div></label>
+               <input type="text" value="" size="35" id="lastName" name="lastName" title="overall type: NAME_FULL
+    server type: NAME_FULL
+    heuristic type: NAME_FULL
+    label: Name *
+    parseable name: contactName
+    field signature: 3196301078
+    form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="signup.lastname" disabled>
+                
+                  </div>
+                 
+                 
+                  <div>
+               <label for="date">Date of Birth <span class="required">*</span><div id="dob_error" class="val_error"></div></label>
+               <input type="date" value="" size="35" id="date" name="date" title="overall type: NAME_FULL
+    server type: NAME_FULL
+    heuristic type: NAME_FULL
+    label: Name *
+    parseable name: contactName
+    field signature: 3196301078
+    form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="signup.dob" disabled>
+    
+                  </div>
+                  
+            </div>
+
+                  
+</div>
+          
+          
+            <div class="row">
+           
+           
+            <div class="col-md-6 dregpad">
+                 
+                  <div>
+               <label for="City">City <span class="required">*</span><div id="city_error" class="val_error"></div></label>
+               <input type="text" value="" size="35" id="City" name="City" ng-model="signup.city">
+               
+                  </div>
+
+                  <div>
+               <label for="pin">Pin <span class="required">*</span><div id="pin_error" class="val_error"></div></label>
+               <input type="number" value="" size="35" id="pin" name="pin" ng-model="signup.pin" >
+               
+                  </div>
+                  
+             
+                  
+            </div>
+                 
+            <div class="col-md-6">
+
+               <div>
+               <label for="state">State <span class="required">*</span></label>
+               <select class="form-control"  id="state" name="state" ng-model="signup.state">
+                              <option value="">Andhra Pradesh</option>
+                              <option value="">Arunachal Pradesh</option>
+                              <option value="">Assam</option>
+                              <option value="">Bihar</option>
+                              <option value="">Chhattisgarh</option>
+                              <option value="">New Delhi</option>
+                              <option value="">Goa</option>
+                              <option value="">Gujarat</option>
+                              <option value="">Haryana</option>
+                              <option value="">Himachal Pradesh</option>
+                              <option value="">Jammu and Kashmir</option>
+                              <option value="">Jharkhand</option>
+                              <option value="">Karnataka</option>
+                              <option value="">Kerala</option>
+                              <option value="">Madhya Pradesh</option>
+                              <option value="">Maharashtra</option>
+                              <option value="">Manipur</option>
+                              <option value="">Meghalaya</option>
+                              <option value="">Mizoram</option>
+                              <option value="">Nagaland</option>
+                              <option value="">Puducherry</option>
+                              <option value="">Punjab</option>
+                              <option value="">Rajasthan</option>
+                              <option value="">Sikkim</option>
+                              <option value="">Tamil Nadu</option>
+                              <option value="">Telangana</option>
+                              <option value="">Tripura</option>
+                              <option value="">Uttar Pradesh</option>
+                              <option value="">Uttarakhand</option>
+                              <option value="">West Bengal</option>
+                           </select>
+                  </div>
+                  
+            </div>
+
+                  
+</div>
+         
+                     <div class="row">
+           
+           
+            <div class="col-md-6 dregpad">
+                 
+                  <div>
+               <label for="mobile">Mobile <span class="required">*</span><div id="mobileno_error" class="val_error"></div></label>
+               <input type="text" value="" size="35" id="mobile" name="mobile" ng-model="signup.mobile">
+               
+                  </div>
+                  </div>
+
+                                            <div class="col-md-6">
+
+             <div>
+          <label for="mobile">Email <span class="required">*</span><div id="email_error" class="val_error"></div></label>
+          <input type="text" value="" size="35" id="email" name="email" ng-model="signup.email" disabled>
+          
+             </div>
+         </div>
+
+                  
+</div>
+
+<div class="row">
+
+
+<div class="col-md-6 dregpad">
+
+<div>
+<label for="si">Date of Starting internship <span class="required">*</span><div id="si_error" class="val_error"></div></label>
+<input type="date" value="" size="35" id="si" name="si" ng-model="signup.internshipstartdate">
+</div>
+
+</div>
+
+<div class="col-md-6">
+
+<div>
+<label for="ci">Date of Completing internship <span class="required">*</span><div id="ci_error" class="val_error"></div></label>
+<input type="date" value="" size="35" id="ci" name="ci" ng-model="signup.intershipcompdate">
+</div>
+</div>
+
+
+</div>
+
+
+
+<div class="row dsub">
+<div class="col-md-12">
+<div class="dgal">
+
+<div class="col-md-6">
+<button type="submit" class="btn dbtn pull-left" ng-click="save()">Save Changes
+</div>
+</div>
+</div>
+</div>
+
+
+</fieldset>
+</form>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+    

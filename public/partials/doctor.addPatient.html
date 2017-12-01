@@ -1,0 +1,58 @@
+<div ng-controller="addPatientController" class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Add Patient</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="index.html">Dashboard</a></li>
+				<li class="active">Add Patient</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="white-box" >
+				<h3 class="box-title">Patients's Account Information</h3>
+				<form class="form-material form-horizontal" name="searchPatient">
+					<div class="form-group">
+						<label class="col-md-12" for="example-email">Email </label>
+						<div class="col-md-12">
+							<input  name="email" type="email" ng-model="email"  id="example-email" class="form-control" placeholder="enter your email" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-12" for="example-phone">Phone </label>
+						<div class="col-md-12">
+							<input name="phone"   type="number" ng-model="phone" id="example-phone" class="form-control" placeholder="enter your phone"  />
+						</div>
+					</div>
+					<button ng-click = "checkPatient()" type="submit"
+						class="btn btn-info waves-effect waves-light m-r-10">Submit</button>
+					<button type="submit"
+						class="btn btn-inverse waves-effect waves-light m-r-10">Cancel</button>
+					<a type="submit" href="#/doctor/addNewPatient"
+						class="btn btn-inverse waves-effect waves-light" >Add New Patient</a>
+				</form>
+			</div>
+			
+			<div class="white-box" ng-if="noMatches">
+				<h3 class="text-danger">No Matches Found</h3>
+			</div>
+			
+			<div class="white-box" ng-if="queriedPatients && !noMatches">
+				<h3 class="box-title">Patients's Found</h3>
+				<div class="addPatientBox" ng-repeat="patient in queriedPatients" ng-if="!patient.data.dependant">
+				<p>{{patient.data.firstname}}  {{patient.data.lastname}}  </p>				
+				<p>{{patient.data.email}} </p>
+				<button ng-click ="linkPatient(patient._id, patient)" type="submit" class="btn btn-info waves-effect waves-light m-r-10">Add</button>
+				<a ui-sref="doctor.addNewPatient({data: patient.data.email})" type="submit" class="btn btn-info waves-effect waves-light m-r-10">Add a Dependant</a>
+				
+						
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

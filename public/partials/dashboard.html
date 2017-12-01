@@ -1,0 +1,213 @@
+   <div class="container-fluid">
+        	 <form>
+	            <div class="row">
+	               <div class="col-md-12" ng-if="userType == 'patient'">
+	                    <div class="container tile">
+		    	    <div class="row home" ng-if="!showdoctor">
+			    		<div class="col-md-8">
+			    			<div>
+					    		<a class="treatmenttile" href="#/patientTreatmentDetails">
+					    			<h3>Treatment Details</h3>
+					    		</a>
+				    		</div>
+				    		
+				    		<div>
+				    			<a class="treatmenttile" ng-click= "searchdoctor()" href="javascript:void(0)">
+					    			<h3> Search for Doctors</h3>
+					    		</a>
+				    		</div>
+				    	</div>
+				    	<!-- <div class="col-md-4">
+				    		<a class="treatmenttile" href="#!/details">
+				    			<h3>Payment Details</h3>
+				    		</a>
+				    	</div>  -->
+				    	<div class="col-md-3 col-md-offset-1">
+				    		<h4>Booked Appointments</h4>
+				    		<p ng-if="userData.data.events.length == 0">No appointments booked</p>
+				    		<div class="patient-events">
+				    			<div ng-repeat="data in userData.data.events" class="events {{data.className}}">
+				    				<div>
+				    					<label>Title : </label>
+				    					<span>{{data.title}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Date : </label>
+				    					<span>{{data.start | date}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Doctor Name : </label>
+				    					<span>{{data.doctorName}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Doctor's Ph.No : </label>
+				    					<span>{{data.doctorPhone}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Doctor's Email Id : </label>
+				    					<span>{{data.doctorMail}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Status : </label>
+				    					<span>{{getStatus(data.className)}}</span>
+				    				</div>
+				    			</div>
+				    		</div>
+				    	</div>
+			    	</div>
+	    	        </div>
+	               </div>
+	               
+	               
+	               <div ng-if="showdoctor">
+	               <section class="search-doctor">
+        <div class="container-fluid">
+        	 <form>
+	            <div class="row">
+	               <div class="col-md-12" ng-if="userType == 'patient'">
+	               <h1>Search for Doctors</h1>
+	                 <input type="text" name="location" placeholder="Search by Location." ng-model="searchparam.location">
+	               </div>
+	               <div class="col-md-12">  
+	               		<a><button type="submit" ng-click="search('doctor')">Search</button></a>
+	               </div>
+	               </div>
+	               </div>
+	               </section>
+	               </div>
+	               
+	               
+	               <div class="col-md-12" ng-if="userType == 'admin'">
+	                    <h1>Search for</h1>
+	                    <h1>
+	                    	<select name="special" ng-model="searchparam.userstype">
+	                    		<option value="technician">Technician</option>
+					    	    <option value="surgeon">Surgeon</option>
+	                    	</select>
+	                    
+	                    </h1>
+	                    <input type="text" name="location" placeholder="Search by Location." ng-model="searchparam.location">
+	               </div>
+	            </div>
+            </form>
+        </div>
+    
+    <section class="patient-db">
+        <div class="container-fluid">
+
+          <!--   <div class="row" style="display: flex; justify-content: center;">
+           
+                <form action="" method="get" class="search1">
+                               <div class="col-md-6">
+                    <input type="search" name="search" value="Sriram">
+                    </div>
+                               <div class="col-md-6">
+
+                    <input type="submit" value="Search" class="button btn dbtn">
+                </div>
+
+               </form>
+            </div> -->
+            <div class="row" ng-if="results.length === 0 && searchsubmit">
+               <div class="col-md-12">
+                <p>No Results Found</p>
+               </div>
+            </div>
+
+            <div class="row" ng-if="results.length !== 0">
+               <div class="col-md-12">
+                <p>Search Results</p>
+               </div>
+            </div>
+            <div class="row" ng-if="userType == 'patient'">
+                <div class="col-md-6" ng-repeat="result in results">
+                    <div class="profilecard">
+                        <div class="doctorname"><p style="color: #2F96B4;">Dr.{{result.data.firstname | capitalize}}  {{result.data.lastname | capitalize}}  ( {{result.data.specialization}} )</p></div>
+                        <hr>
+                        <div class="doctormeta">
+                            <div class="doctorphoto">
+                                <img ng-src="{{result.data.photo ? result.data.photo : '../images/doctor1.png'}}" alt="">
+                                <p class="capitalize"><small>{{result.data.profile }}</small></p>
+                            </div>
+                            <div class="doctordetails">
+                                <div class="doctoraddress"><b>{{result.data.clinicname | capitalize}}</b></div>
+                                <div><hr></div>
+                                <div class="doctoraddress"><i class="fa fa-map-marker" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;{{result.data.clinicaddress | capitalize}}</div>
+                                <div class="doctoraddress">&nbsp;&nbsp;&nbsp;{{result.data.cliniccity | capitalize}},{{result.data.clinicstate|capitalize}}</div>
+                              <!--  <div class="doctoraddress">{{result.data.clinicstate}}</div> -->
+                                <div><hr></div>
+                                <div class="doctoraddress"><i class="fa fa-phone-square" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;Contact Number - <a href="tel:{{result.data.cliniccontact}}"> <b>{{result.data.cliniccontact}} </b> </a></div>
+                                <div class="doctoraddress"><a href="{{result.data.clinicwebsite}}">{{result.data.clinicwebsite}}</a></div>
+                            </div>
+                        </div>
+                        <!--<div class="doctorworking">-->
+                            <!--<button type="button" class="btn btn-success btn-lg"><i class="fa fa-compass fa-lg" aria-hidden="true"></i><strong>&nbsp;Get Directions</strong></button>-->
+                            <!--&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span><button type="button" class="btn btn-success btn-lg"><i class="fa fa-user-md fa-lg" aria-hidden="true"></i><strong>&nbsp;Book an Appointment</strong></button></span>-->
+                            <!--&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span><button type="button" class="btn btn-success btn-lg"><i class="fa fa-question-circle" aria-hidden="true"></i><strong>&nbsp;Enquire</strong></button></span>-->
+
+                        <!--</div>-->
+                        <hr>
+                        <div class="doctorworking col-xs-11"><i class="fa fa-hourglass" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;Working hours - <b>{{result.data.hours}}</b>
+                        <button class="btn btn-primary pull-right" ng-click="bookAppointment(result.data)">Book An Appointment</button>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+            
+            <div class="row" ng-if="userType == 'admin'">
+                <div class="col-md-6" ng-repeat="result in results">
+                    <div class="profilecard">
+                        <div class="doctorname"><p style="color: #2F96B4;">{{result.data.firstname | capitalize}}  {{result.data.lastname | capitalize}}  ( {{result.data.specialization}} )</p></div>
+                        <hr>
+                        <div class="doctormeta">
+                            <div class="doctorphoto">
+                                <img ng-src="{{result.data.photo ? result.data.photo : '../images/doctor1.png'}}" alt="">
+                                <p class="capitalize"><small>{{result.data.profile }}</small></p>
+                            </div>
+                            <div class="doctordetails">
+                                <div><hr></div>
+                                <div class="doctoraddress"><i class="fa fa-map-marker" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;{{result.data.address | capitalize}}</div>
+                                <div class="doctoraddress">&nbsp;&nbsp;&nbsp;{{result.data.city | capitalize}},{{result.data.state|capitalize}}</div>
+                              <!--  <div class="doctoraddress">{{result.data.clinicstate}}</div> -->
+                                <div><hr></div>
+                                <div class="doctoraddress"><i class="fa fa-phone-square" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;Contact Number - <a href="tel:{{result.data.contact}}"> <b>{{result.data.contact}} </b> </a></div>
+                            </div>
+                        </div>
+                        <!--<div class="doctorworking">-->
+                            <!--<button type="button" class="btn btn-success btn-lg"><i class="fa fa-compass fa-lg" aria-hidden="true"></i><strong>Get Direction</strong></button>-->
+                            <!--&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span><button type="button" class="btn btn-success btn-lg"><i class="fa fa-user-md fa-lg" aria-hidden="true"></i><strong>Book an Appointment</strong></button></span>-->
+                            <!--&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span><button type="button" class="btn btn-success btn-lg"><i class="fa fa-question-circle" aria-hidden="true"></i><strong>Enquire</strong></button></span>-->
+
+                        <!--</div>-->
+                        <hr>
+                        <div class="doctorworking"><i class="fa fa-hourglass" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;Working hours - <b>{{result.data.hours}}</b></div>
+                    </div>
+                </div>        
+            </div>
+           
+        </div> 
+
+    
+    
+    <div class="modal fade" tabindex="-1" role="dialog" id="appointmentModal">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Book Appointment with {{selected.firstname}} {{selected.lastname}}</h4>
+	      </div>
+	      <div class="modal-body">
+	         <div class="white-box">
+				 <div id='calendar'></div>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
+    
+    
+    
+   

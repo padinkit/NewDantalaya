@@ -1,0 +1,259 @@
+<section>
+    <section class="tabs-banner">
+        Patient Information
+    </section>
+    <div class="container tabs-below">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <div>
+                    <p><span style="text-decoration: underline;">Patient Unique ID:</span> <span>Auto Populated</span></p>
+                    <p><span style="text-decoration: underline;">Patient Name:</span> <span>Auto Populated</span></p>
+                    <p><span style="text-decoration: underline;">Phone Number:</span> <span>Auto Populated</span></p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div>
+                    <p><span style="text-decoration: underline;">Email ID:</span> <span>Auto Populated</span></p>
+                    <p><span style="text-decoration: underline;">Date Of Birth:</span> <span>Auto Populated</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <section class="tabs-banner">
+        Treatment Details
+    </section>
+    <section id="newPatientReg" ng-cloak>
+        <md-content>
+            <md-tabs md-stretch-tabs="always" md-center-tabs md-swipe-content md-dynamic-height md-border-bottom>
+                <md-tab label="New Treatment">
+                    <md-content class="md-padding">
+                        <form class="form-horizontal">
+                            <div class="container tabs-form-below">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><span style="text-decoration: underline;">Treatment ID:</span><span>Self Generated</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><span style="text-decoration: underline;">Treatment Date:</span><span>Self Generated</span></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="chiefComplaint" style="padding-left: 1%">Cheif Complaint:</label>
+                                        <input id="chiefComplaint" placeholder="Enter Details" name="chiefComplaint">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="illnessHistory" style="padding-left: 1%"> History of present illness:</label>
+                                        <input id="illnessHistory" placeholder="Enter Details" name="illnessHistory">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Medical History:</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <md-checkbox ng-model="isChecked1" aria-label="Diabetes">Diabetes</md-checkbox>
+                                            <md-checkbox ng-model="isChecked2" aria-label="BP">BP</md-checkbox>
+                                            <md-checkbox ng-model="isChecked3" aria-label="Asthma">Asthma</md-checkbox>
+                                            <md-checkbox ng-model="isChecked4" aria-label="Allergy">Allergy</md-checkbox>
+                                            <md-checkbox ng-model="isChecked5" aria-label="Thyroid related">Thyroid related</md-checkbox>
+                                            <md-checkbox ng-model="isChecked6" aria-label="Bleeding Disorders">Bleeding Disorders</md-checkbox>
+                                            <md-checkbox ng-model="isChecked7" aria-label="Cardiac Disease">Cardiac Disease</md-checkbox>
+                                            <md-checkbox ng-model="isChecked8" aria-label="Pregnency">Pregnency</md-checkbox>
+                                            <md-checkbox ng-model="isChecked9" aria-label="Habits">Habits</md-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tmj">TMJ:</label>
+                                    <input id="tmj" name="tmj" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label for="SalPathology">Salivary gland pathology:</label>
+                                    <input id="SalPathology" name="SalPathology" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="other" style="padding-left: 1%">Any Other:</label>
+                                        <input id="other" placeholder="Enter Details" name="other">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 tablefix" style="margin-top: 15px">
+                                        <label style="padding-left: 1%">Intra Oral Findings:</label>
+                                        <table border="1">
+                                            <thead>
+                                                <tr class="noBorder">
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>55
+                                                    </th>
+                                                    <th>54</th>
+                                                    <th>53</th>
+                                                    <th>52</th>
+                                                    <th>51</th>
+                                                    <th>61</th>
+                                                    <th>62</th>
+                                                    <th>63</th>
+                                                    <th>64</th>
+                                                    <th>65</th>
+                                                </tr>
+                                                <tr class="noBorder">
+                                                    <th>18</th>
+                                                    <th>17</th>
+                                                    <th>16</th>
+                                                    <th>15</th>
+                                                    <th>14</th>
+                                                    <th>13</th>
+                                                    <th>12</th>
+                                                    <th>11</th>
+                                                    <th>21</th>
+                                                    <th>22</th>
+                                                    <th>23</th>
+                                                    <th>24</th>
+                                                    <th>25</th>
+                                                    <th>26</th>
+                                                    <th>27</th>
+                                                    <th>28</th>
+                                                </tr>
+                                            </thead>
+                                            <tr>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                                <td style="width: 50px; height: 50px"></td>
+                                            </tr>
+                                            <tr style="text-decoration: underline;" class="noBorderBottom">
+                                                <td>48</td>
+                                                <td>47</td>
+                                                <td>46</td>
+                                                <td>45</td>
+                                                <td>44</td>
+                                                <td>43</td>
+                                                <td>42</td>
+                                                <td>41</td>
+                                                <td>31</td>
+                                                <td>32</td>
+                                                <td>33</td>
+                                                <td>34</td>
+                                                <td>35</td>
+                                                <td>36</td>
+                                                <td>37</td>
+                                                <td>38</td>
+                                            </tr>
+                                            <tr style="text-decoration: underline;" class="noBorderBottom">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>85</td>
+                                                <td>84</td>
+                                                <td>83</td>
+                                                <td>82</td>
+                                                <td>81</td>
+                                                <td>71</td>
+                                                <td>72</td>
+                                                <td>73</td>
+                                                <td>74</td>
+                                                <td>75</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="Investigations" style="padding-left: 1%">Investigations:</label>
+                                        <input id="Investigations" placeholder="Enter Details" name="Investigations">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="xray" style="padding-left: 1%">X-Ray:</label>
+                                        <input id="xray" placeholder="Enter Details" name="xray">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="FinalDiagnosis" style="padding-left: 1%">Provisional Diagnosis:</label>
+                                        <input id="FinalDiagnosis" placeholder="Enter Details" name="FinalDiagnosis">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" style="margin-top: 15px">
+                                        <label for="FinalDiagnosis" style="padding-left: 1%">Final Diagnosis:</label>
+                                        <input id="FinalDiagnosis" placeholder="Enter Details" name="FinalDiagnosis">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button type="reset" class="btn dbtn pull-right ddis">Reset</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn dbtn pull-left">Save & Next</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Current Treatment">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Tab Two</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus. Vivamus convallis sodales ante varius gravida. Curabitur a purus vel augue ultrices ultricies id a nisl. Nullam malesuada consequat diam, a facilisis tortor volutpat et. Sed urna dolor, aliquet vitae posuere vulputate, euismod ac lorem. Sed felis risus, pulvinar at interdum quis, vehicula sed odio. Phasellus in enim venenatis, iaculis tortor eu, bibendum ante. Donec ac tellus dictum neque volutpat blandit. Praesent efficitur faucibus risus, ac auctor purus porttitor vitae. Phasellus ornare dui nec orci posuere, nec luctus mauris semper.</p>
+                        <p>Morbi viverra, ante vel aliquet tincidunt, leo dolor pharetra quam, at semper massa orci nec magna. Donec posuere nec sapien sed laoreet. Etiam cursus nunc in condimentum facilisis. Etiam in tempor tortor. Vivamus faucibus egestas enim, at convallis diam pulvinar vel. Cras ac orci eget nisi maximus cursus. Nunc urna libero, viverra sit amet nisl at, hendrerit tempor turpis. Maecenas facilisis convallis mi vel tempor. Nullam vitae nunc leo. Cras sed nisl consectetur, rhoncus sapien sit amet, tempus sapien.</p>
+                        <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Visit Treatment History">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Tab Three</h1>
+                        <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Patient Payment Info">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Tab Three</h1>
+                        <p>Integer turpis erat, porttitorvitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-content>
+    </section>
+</section>

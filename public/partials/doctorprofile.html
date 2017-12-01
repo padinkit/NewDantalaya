@@ -1,0 +1,286 @@
+<section id="dpreg">
+   
+        <div class="container-fluid">
+        <div class="row">
+        <div class="col-md-12">
+
+        <p class="dserhead">Dentist Profile</p>
+
+        <div class="container dreggrid">
+        <div class="row">
+        <div class="col-md-12">
+        <form id="contactForm" name="contactForm" >
+        <fieldset>
+          <div class="row">
+           		<div class="col-md-6 dregpad">
+           			<div>
+           				<img ng-src="{{signup.photo}}" width="116"  height="120" />
+           			</div>
+           			 
+           			 <br>
+           			 <label class=""><small>*Upload Photo of size less than 15 KB and of resolution 116px * 120px</small></label>
+		        	 <input type="file" ng-model="signup.photo" accept="image/*"  app-filereader style="margin: 0px;"/>	        	 
+		        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 15 KB</small></p>
+           		</div>
+	        </div>
+
+            <div class="row">
+                <div class="col-md-6 dregpad">
+                    <div>
+                        <label for="contactName">First Name <span class="required">*</span><div id="fname_error" class="val_error"></div></label>
+                        <input type="text" value="" size="35" id="contactName" name="contactName" title="overall type: NAME_FULL
+    server type: NAME_FULL
+    heuristic type: NAME_FULL
+    label: Name *
+    parseable name: contactName
+    field signature: 3196301078
+    form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="signup.firstname" disabled >
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label for="lastName">Last Name <span class="required">*</span><div id="lname_error" class="val_error"></div></label>
+                        <input type="text" value="" size="35" id="lastName" name="lastName" title="overall type: NAME_FULL
+    server type: NAME_FULL
+    heuristic type: NAME_FULL
+    label: Name *
+    parseable name: contactName
+    field signature: 3196301078
+    form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="signup.lastname"disabled>
+
+                    </div>
+                </div>
+                <div class="col-md-6 dregpad">
+                    <div>
+                        <label for="gender">Gender <span class="required">*</span></label>
+                        <select class="form-control"  id="gender" name="gender" ng-model="signup.gender" disabled>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label for="date">Date of Birth <span class="required">*</span><div id="dob_error" class="val_error"></div></label>
+                        <input type="date" value="" size="35" id="date" name="date" title="overall type: NAME_FULL
+    server type: NAME_FULL
+    heuristic type: NAME_FULL
+    label: Name *
+    parseable name: contactName
+    field signature: 3196301078
+    form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="signup.dob" disabled>
+
+                    </div>
+                </div>
+            </div>
+
+           <div class="row">
+           
+           
+            <div class="col-md-6 dregpad">
+                 
+
+
+       
+    <div>
+    <label for="dci">DCI Reg. No <span class="required">*</span><div id="dci_error" class="val_error"></div> </label>
+    <input type="text" value="" size="35" id="dci" name="dci" ng-model="dciregno" disabled>
+    </div> 
+                 
+    <div>
+    <label for="qual">Qualification <span class="required">*</span><div id="qual_error" class="val_error"></div></label>
+      <select class="form-control" id="qual" name="qual" ng-model="signup.qualification">
+	    <option value="BDS">BDS</option>
+	    <option value="MDS">MDS</option>
+	  </select>
+    </div>
+    <div>
+    <label for="cname">Clinic Name (if any ) </label>
+    <input type="text" value="" size="35" id="cname" name="cname" ng-model="signup.clinicname">
+    </div>
+    <div>
+    <label for="clinic">Clinic Address<span class="required">*</span><div id="claddr_error" class="val_error"></div></label>
+    <textarea cols="40" rows="6" id="clinic" name="clinic" ng-model="signup.clinicaddress"></textarea>
+    </div>
+    <div>
+    <label for="City">City <span class="required">*</span><div id="city_error" class="val_error"></div></label>
+    <input type="text" value="" size="35" id="City" name="City" ng-model="signup.cliniccity" >
+    </div>
+    <div>
+    <label for="state">State <span class="required">*</span></label>
+    <select class="form-control" id="state" name="state" ng-model="signup.clinicstate">
+    <option value="">Andhra Pradesh</option>
+    <option value="">Arunachal Pradesh</option>
+    <option value="">Assam</option>
+    <option value="">Bihar</option>
+    <option value="">Chhattisgarh</option>
+    <option value="">New Delhi</option>
+    <option value="">Goa</option>
+    <option value="">Gujarat</option>
+    <option value="">Haryana</option>
+    <option value="">Himachal Pradesh</option>
+    <option value="">Jammu and Kashmir</option>
+    <option value="">Jharkhand</option>
+    <option value="">Karnataka</option>
+    <option value="">Kerala</option>
+    <option value="">Madhya Pradesh</option>
+    <option value="">Maharashtra</option>
+    <option value="">Manipur</option>
+    <option value="">Meghalaya</option>
+    <option value="">Mizoram</option>
+    <option value="">Nagaland</option>
+    <option value="">Puducherry</option>
+    <option value="">Punjab</option>
+    <option value="">Rajasthan</option>
+    <option value="">Sikkim</option>
+    <option value="">Tamil Nadu</option>
+    <option value="">Telangana</option>
+    <option value="">Tripura</option>
+    <option value="">Uttar Pradesh</option>
+    <option value="">Uttarakhand</option>
+    <option value="">West Bengal</option>
+    </select>
+    </div>
+    <div>
+    <label for="pin">Pin <span class="required">*</span><div id="pin_error" class="val_error"></div></label>
+    <input type="number" value="" size="35" id="pin" name="pin" ng-model="signup.clinicpin">
+    </div>
+    <div>
+    <label for="cmobile">Clinic Contact No <span class="required">*</span><div id="cmobile_error" class="val_error"></div></label>
+    <input type="text" value="" size="35" id="cmobile" name="cmobile" ng-model="signup.cliniccontact">
+    <h4 class="dregsmall">(Shared with patients)Ex:044-12345678</h4>
+    </div>
+    <div>
+    <label for="mobile">Mobile <span class="required">*</span><div id="mobileno_error" class="val_error"></div></label>
+    <input type="text" value="" size="35" id="mobile" name="mobile" ng-model="signup.mobile">
+    </div>
+    <div>
+    <label for="app">Are you willing to start executive appointments ? <span class="required">*</span></label>
+    <select class="form-control" id="app" name="app" ng-model="signup.startexcapp">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+    </select>
+    </div>
+    </div>
+    
+    <div class="col-md-6">
+
+
+
+
+
+    <div>
+    <label for="spc">Specialization <span class="required">*</span><div id="spc_error" class="val_error"></div></label>
+    <select class="form-control" id="spc" name="spc" ng-model="signup.specialization">
+    	<option value="BDS">BDS</option>
+    	<option value="MDS - PEDODONTICS">MDS - PEDODONTICS</option>
+    	<option value="MDS - CONSERVATIVE DENTISTRY AND ENDODONTICS">MDS - CONSERVATIVE DENTISTRY AND ENDODONTICS</option>
+    	<option value="MDS - COMMUNITY DENTISTRY /PUBLIC HEALTH">MDS - COMMUNITY DENTISTRY /PUBLIC HEALTH</option>
+    	<option value="MDS - ORAL AND MAXILLOFACIAL SURGERY (OMFS)">MDS - ORAL AND MAXILLOFACIAL SURGERY (OMFS)</option>
+    	<option value="MDS - ORTHODONTICS">MDS - ORTHODONTICS</option>
+    	<option value="MDS - PROSTHODONTICS">MDS - PROSTHODONTICS</option>
+    	<option value="MDS - PERIODONTICS">MDS - PERIODONTICS</option>
+    	<option value="MDS - ORAL MEDICINE AND RADIOLOGY">MDS - ORAL MEDICINE AND RADIOLOGY</option>
+    	<option value="MDS - ORAL PATHOLOGY AND MICROBIOLOGY">MDS - ORAL PATHOLOGY AND MICROBIOLOGY</option>
+    	<option value="PhD - CONSERVATIVE DENTISTRY AND ENDODONTICS">PhD - CONSERVATIVE DENTISTRY AND ENDODONTICS</option>
+    	<option value="PhD - PROSTHODONTICS">PhD - PROSTHODONTICS</option>
+    	<option value="PhD - ORTHODONTICS">PhD - ORTHODONTICS</option>
+    	<option value="PhD - COMMUNITY DENTISTRY /PUBLIC HEALTH">PhD - COMMUNITY DENTISTRY /PUBLIC HEALTH</option>
+    	<option value="PhD - ORAL PATHOLOGY AND MICROBIOLOGY">PhD - ORAL PATHOLOGY AND MICROBIOLOGY</option>
+    	<option value="PhD - ORAL AND MAXILLOFACIAL SURGERY (OMFS)">PhD - ORAL AND MAXILLOFACIAL SURGERY (OMFS)</option>  	
+    </select>
+    </div>
+    <div>
+    <label for="hours">Working Hours <span class="required">*</span><div id="hours_error" class="val_error"></div></label>
+    <input type="text" value="" size="35" id="hours" name="hours" ng-model="signup.hours">
+    <h4 class="dregsmall">Example: Mon-Fri 9.30am � 1.30pm &amp; 5pm- 9pm; sat 11am-4pm</h4>
+    </div>
+    <div>
+    <label for="residential">Residential Address<span class="required">*</span><div id="addr_error" class="val_error"></div></label>
+    <textarea cols="40" rows="6" id="residential" name="residential" ng-model="signup.address"></textarea>
+    </div>
+    <div>
+    <label for="City1">City <span class="required">*</span><div id="city1_error" class="val_error"></div></label>
+    <input type="text" value="" size="35" id="City1" name="City1" ng-model="signup.city">
+    </div>
+    <div>
+    <label for="state1">State <span class="required">*</span></label>
+    <select class="form-control" id="state1" name="state1" ng-model="signup.state">
+    <option value="">Andhra Pradesh</option>
+    <option value="">Arunachal Pradesh</option>
+    <option value="">Assam</option>
+    <option value="">Bihar</option>
+    <option value="">Chhattisgarh</option>
+    <option value="">New Delhi</option>
+    <option value="">Goa</option>
+    <option value="">Gujarat</option>
+    <option value="">Haryana</option>
+    <option value="">Himachal Pradesh</option>
+    <option value="">Jammu and Kashmir</option>
+    <option value="">Jharkhand</option>
+    <option value="">Karnataka</option>
+    <option value="">Kerala</option>
+    <option value="">Madhya Pradesh</option>
+    <option value="">Maharashtra</option>
+    <option value="">Manipur</option>
+    <option value="">Meghalaya</option>
+    <option value="">Mizoram</option>
+    <option value="">Nagaland</option>
+    <option value="">Puducherry</option>
+    <option value="">Punjab</option>
+    <option value="">Rajasthan</option>
+    <option value="">Sikkim</option>
+    <option value="">Tamil Nadu</option>
+    <option value="">Telangana</option>
+    <option value="">Tripura</option>
+    <option value="">Uttar Pradesh</option>
+    <option value="">Uttarakhand</option>
+    <option value="">West Bengal</option>
+    </select>
+    </div>
+    <div>
+    <label for="pin1">Pin <span class="required">*</span><div id="pin1_error" class="val_error"></div></label>
+    <input type="number" value="" size="35" id="pin1" name="pin1" ng-model="signup.pin">
+    </div>
+
+    <div>
+    <label for="cmobile">Clinic Website (if any )<div id="cmobile1_error" class="val_error"></div> </label>
+    <input type="text" value="" size="35" id="cmobile1" name="cmobile1" ng-model="signup.clinicwebsite">
+    </div>
+
+    <div>
+    <label for="mobile">Email <span class="required">*</span><div id="email_error" class="val_error"></div></label>
+    <input type="text" value="" size="35" id="email" name="email" placeholder="Ex:john@example.com" ng-model="signup.email" disabled >
+    </div>
+
+
+
+    </div>
+    </div>                                                       
+                                                        
+                                        
+                                                              
+                  
+    <div class="row dsub">
+    <div class="col-md-12">
+    <div class="dgal">
+    <div class="col-md-6">
+        <button type="submit" class="btn dbtn pull-left" ng-click="save()">Save Changes</button> </div>
+    </div>       
+    </div>
+        </div>
+        
+        
+            
+            </fieldset>
+            </form>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+   
+   </section>

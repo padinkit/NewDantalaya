@@ -1,0 +1,105 @@
+<div class="container">
+	
+	<div>
+
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" ng-class="{active: userActivation}"><a href="javascript:void(0)" aria-controls="home" role="tab" data-toggle="tab" ng-click="toggleTab('userActivation')">User Activation</a></li>
+	    <li role="presentation" ng-class="{active: search}"><a href="javascript:void(0)" aria-controls="profile" role="tab" data-toggle="tab"  ng-click="toggleTab('search')">Search</a></li>
+	  </ul>
+	
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+	    <div role="tabpanel" ng-class="{active: userActivation}" class="tab-pane" id="home">
+			<table class="table table-striped"> 
+				<thead> 
+					<tr>  
+						<th>Username</th> 
+						<th>Profile</th> 
+					</tr> 
+				</thead> 
+				<tbody> 
+					<tr ng-repeat="user in getAccounts"> 
+						<th><a href="javascript:void(0)" ng-click="userDetails(user.username)">{{user.username}}</a></th> 
+						<td>{{user.profile}}</td> 
+						<td><button type="button" class="btn btn-primary" ng-click="activate(user.username)">Activate</button></td>
+						<td><button type="button" class="btn btn-danger" ng-click="reject(user.username)">Reject</button></td>
+					</tr> 
+				</tbody> 
+			</table>
+
+		</div>
+	    <div role="tabpanel" class="tab-pane" id="profile" ng-class="{active: search}">
+	    ` <div>
+	    		<div>
+	    			<input type="checkbox" ng-model="checkbox.patient"> Patient &nbsp;&nbsp;
+	    			<input type="checkbox"  ng-model="checkbox.doctor"> Dentist &nbsp;&nbsp;
+	    			<input type="checkbox"  ng-model="checkbox.surgeon"> House Surgeon &nbsp;&nbsp;
+	    			<input type="checkbox"  ng-model="checkbox.technician"> Lab Technician &nbsp;&nbsp;
+	    			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    			<button type="button" class="btn btn-primary" ng-click="getAllAccounts()">Get Details</button>
+	    		</div>
+	    		<br>
+		  </div>
+		  <table class="table table-striped" ng-if="allUserData.length != 0"> 
+				<thead> 
+					<tr>  
+						<th>Username</th> 
+						<th>Profile</th> 
+					</tr> 
+				</thead> 
+				<tbody> 
+					<tr ng-repeat="user in allUserData" ng-if="user.data.username"> 
+						<th><a href="javascript:void(0)" ng-click="userDetails(user.data.username)">{{user.data.username}}</a></th> 
+						<td>{{user.data.profile}}</td> 
+					</tr> 
+				</tbody> 
+			</table>
+			<h3 ng-if="allUserData.length == 0 && showerror">No Data</h3>
+	    </div>
+	  </div>
+	
+	</div>
+
+</div>
+
+ <div class="modal fade" id="userdetailsModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">User Details</h4>
+        </div>
+        <div class="modal-body">
+          <div class="profilecard">
+              <div class="doctorname"><p>{{userData.data.firstname}}  {{userData.data.lastname}}  ( {{userData.data.specialization}} )</p></div>
+              <hr>
+              <div class="doctormeta">
+                  <div class="doctorphoto">
+                      <img ng-src="{{userData.data.photo ? userData.data.photo : '../images/doctor1.png'}}" alt="">
+                  </div>
+                  <div class="doctordetails">
+                       <div class="doctoraddress">{{userData.data.firstname}}</div>
+                       <div class="doctoraddress">{{userData.data.lastname}}</div>
+                       <div class="doctoraddress">{{userData.data.gender}}</div>
+                       <div class="doctoraddress">{{userData.data.dob}}</div>
+                       <div class="doctoraddress">{{userData.data.address}}</div>
+                       <div class="doctoraddress">{{userData.data.email}}</div>
+                       <div class="doctoraddress">{{userData.data.address}}</div>
+                       <div class="doctoraddress">{{userData.data.address}}</div>
+                       <div class="doctoraddress">{{userData.data.address}}</div>
+                  </div>
+              </div>
+              <hr>
+              <div class="doctorworking">Working hours - {{userData.data.hours}}</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>

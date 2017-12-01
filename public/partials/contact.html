@@ -1,0 +1,112 @@
+<style>
+    form .ng-invalid.ng-dirty { background-color: lightpink; }
+    form .ng-valid.ng-dirty { background-color: lightgreen; }
+    span.summary.ng-invalid { color: red; font-weight: bold; }
+    span.summary.ng-valid { color: green; }
+    span.error {color: red; font-weight: bold;}
+</style>
+<section id="contact" ng-controller="formCtrl">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 dabtc">
+                <h2>Request For Information</h2>
+                <form action="" method="post" id="contactForm" name="contactForm" novalidate>
+                    <fieldset>
+
+                        <div>
+                              <span class="error" ng-show="contactForm.contactName.$invalid && contactForm.contactName.$dirty">
+                                <span ng-show="contactForm.contactName.$error.pattern">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a valid Name
+                                </span>
+                                <span ng-show="contactForm.contactName.$error.required">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a Name
+                                </span>
+                            </span>
+                            <label for="contactName">Name <span class="required">*</span></label>
+                            <input type="text" value="" size="35" id="contactName" name="contactName" ng-pattern="namePattern" required ng-model="$scope.name">
+                        </div>
+
+                        <div>
+                            <span class="error" ng-show="contactForm.contactEmail.$invalid && contactForm.contactEmail.$dirty">
+                                <span ng-show="contactForm.contactEmail.$error.email">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a valid email address
+                                </span>
+                                <span ng-show="contactForm.contactEmail.$error.required">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a email id
+                                </span>
+                            </span>
+                            <label for="contactEmail">Email <span class="required">*</span></label>
+                            <input type="email" value="" size="35" id="contactEmail" name="contactEmail" required autofill-prediction="EMAIL_ADDRESS" ng-model="$scope.email">
+
+                        </div>
+
+                        <div>
+                            <span class="error" ng-show="contactForm.contactSubject.$invalid && contactForm.contactSubject.$dirty">
+                                <span ng-show="contactForm.contactSubject.$error.pattern">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a valid Phone Number
+                                </span>
+                                <span ng-show="contactForm.contactSubject.$error.required">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a Phone Number
+                                </span>
+                            </span>
+                            <label for="contactSubject">Phone<span class="required">*</span></label>
+                            <input type="number" value="" ng-pattern="mobilePattern" required  id="contactSubject" name="contactSubject" autofill-prediction="UNKNOWN_TYPE" ng-model="$scope.phone">
+                        </div>
+
+                        <div>
+                            <span class="error" ng-show="contactForm.contactMessage.$invalid && contactForm.contactMessage.$dirty">
+
+                                <span ng-show="contactForm.contactMessage.$error.required">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a Message
+                                </span>
+                            </span>
+                            <label for="contactMessage">Message <span class="required">*</span></label>
+                            <textarea cols="25" rows="5" required id="contactMessage" name="contactMessage" ng-model="$scope.message"></textarea>
+                        </div>
+
+                        <div class="btn dbtn dbtnc pull-right" ng-disabled="contactForm.$invalid">Submit</div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="col-md-6 dabtc">
+
+                <!--                    <h2>Contact Dantalaya</h2>-->
+
+                <div class="row">
+                    <div class="col-md-12 dcon">
+                        <h1>Dantalaya</h1>
+                        <hr class="dfothr">
+                        <h4>Dental Health Company</h4>
+                        <p>C/o FDC</p>
+                        <p>#38/48, I floor, Bazar Street</p>
+                        <p>Neelasandra, Bangalore-560047 </p>
+                        <p>+91 7975422748</p>
+                        <p>info@dantalaya.com</p>
+                        <p><a href="#">www.dantalaya.com</a></p>
+                        <p>
+                            <a href="https://www.facebook.com/Dantalaya-1918614108360564/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a href="https://twitter.com/dantalayaindia"><i class="fa fa-twitter" aria-hidden="true"></i></i></a>
+                            <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></i></a>
+                            <a href="https://www.youtube.com/channel/UCruMf-0S8ZQkMsZCzfA0EtQ?guided_help_flow=3"><i class="fa fa-youtube" aria-hidden="true"></i></i></a>
+                        </p>
+                    </div>
+                    <!--
+                                            <div class="col-md-5 dcon">
+                                                <img src="../images/MapEmbedNEWMaps.jpg" alt="">
+                                            </div>
+                    -->
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</section>
+
+

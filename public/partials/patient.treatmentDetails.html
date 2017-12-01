@@ -1,0 +1,1020 @@
+<div class="container-fluid patienTtreatment treatment ">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Treatment Details</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="#">Dashboard</a></li>
+				<li class="active">Treatment Details</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="white-box">
+				<div class="row">
+					<div class="col-md-3 col-xs-6 b-r">
+						<strong>Full Name</strong> <br>
+						<p class="text-muted">{{patientData.data.firstname}} {{patientData.data.lastname}}</p>
+					</div>
+					<div class="col-md-3 col-xs-6 b-r">
+						<strong>Mobile</strong> <br>
+						<p class="text-muted">{{patientData.data.phone}}</p>
+					</div>
+					<div class="col-md-3 col-xs-6 b-r">
+						<strong>Email</strong> <br>
+						<p class="text-muted">{{patientData.data.email}}</p>
+					</div>
+					<div class="col-md-3 col-xs-6">
+						<strong>Patient ID</strong> <br>
+						<p class="text-muted">{{patientData._id}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="white-box">
+				<section>
+					<div class="sttabs tabs-style-line">
+						<nav>
+							<ul role="tablist" id="myTabs">
+								<li class=""><a href="#section-line-2" id="currentTreatment"><span>Current
+											Treatment</span></a></li>
+								<li><a href="#section-line-4" id="paymentInfo"><span>Patient
+											Payment Info</span></a></li>
+								<li class=""><a href="#section-line-3" id="treatmentHistory"><span>View
+											Treament History</span></a></li>
+							</ul>
+						</nav>
+						<div class="content-wrap tab-content">
+							<section id="section-line-2" role="tabpanel" class="tab-pane" >
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="white-box">
+											<form class="form-horizontal">
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label col-md-3">Current Treatments</label>
+															<div class="col-md-9">
+																<select class="form-control" ng-model="selectedCurrenTreatmentId" ng-options="x for x in currenTreatmentIds" ng-change="updateCurrentTreatment()"></select>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label col-md-3">Treatment
+																ID:</label>
+															<div class="col-md-9">
+																<p class="form-control-static" style="padding-top: 7px">{{treatmentData._id}}</p>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label col-md-5">Treatment
+																Start Date:</label>
+															<div class="col-md-6">
+																<p class="form-control-static" style="padding-top: 7px">{{treatment.startdate | date}}</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">New Comments</label>
+													<div class="col-md-12">
+														<textarea class="form-control" rows="4" ng-model="treatment.newcomments" disabled></textarea>
+													</div>
+												</div>
+												<!-- <div class="form-group">
+													<label class="col-md-12" for="tdate">Treatment
+														Update Date </label>
+													<div class="col-md-12">
+														<input type="text" id="tdate" name="tdate"
+															class="form-control mydatepicker"
+															placeholder="enter your birth date" value="12/10/2017">
+													</div>
+												</div> -->
+												<hr>
+												<form class="form-horizontal">
+												<div class="form-group">
+													<label class="col-md-12">Chief Complaint</label>
+													<div class="col-md-12">
+														<textarea class="form-control" rows="4" ng-model="treatment.chiefcomplaint" disabled></textarea>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">History of present illness</label>
+													<div class="col-md-12">
+														<textarea class="form-control" rows="3" ng-model="treatment.historyofpresentillness" disabled></textarea>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Medical History</label>
+														<div class="col-md-12">
+															<select class="form-control"
+															multiple="multiple"
+															data-placeholder="Choose all that is applicable"
+															tabindex="-1" size="4" ng-model="treatment.medicalhistory" disabled>
+															<option>Diabetes</option>
+															<option>BP</option>
+															<option>Asthma</option>
+															<option>Allergy</option>
+															<option>Thyroid Related</option>
+															<option>Bleeding Disorders</option>
+															<option>Cardiac Disease</option>
+															<option>Pregnancy</option>
+															<option>Habits</option>
+															<option>Other</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Habits</label>
+													<div class="col-md-12">
+														<input type="text" class="form-control" placeholder="Habits" ng-model="treatment.habits" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Occlusion</label>
+													<div class="col-md-12">
+														<input type="text" class="form-control"
+															placeholder="Occlusion" ng-model="treatment.occlusion" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Any Other Info</label>
+													<div class="col-md-12">
+														<input type="text" class="form-control"
+															placeholder="Other Info" ng-model="treatment.otherinfo" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Investigations</label>
+													<div class="col-md-12">
+														<input type="text" class="form-control"
+															placeholder="Investigations" ng-model="treatment.investigations" disabled>
+													</div>
+												</div>
+												
+												<div class="form-group">
+													<label class="col-md-12">Teeth Notation Table</label>
+													<div class="dental-history">
+														<div class="teeth-notation-table">
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="pointer" ng-click="openDentalBox('55')"><b ng-repeat="(key, value) in treatment.teethnotation[55]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('54')"><b ng-repeat="(key, value) in treatment.teethnotation[54]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('53')"><b ng-repeat="(key, value) in treatment.teethnotation[53]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('52')"><b ng-repeat="(key, value) in treatment.teethnotation[52]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('51')"><b ng-repeat="(key, value) in treatment.teethnotation[51]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('61')"><b ng-repeat="(key, value) in treatment.teethnotation[61]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('62')"><b ng-repeat="(key, value) in treatment.teethnotation[62]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('63')"><b ng-repeat="(key, value) in treatment.teethnotation[63]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('64')"><b ng-repeat="(key, value) in treatment.teethnotation[64]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('65')"><b ng-repeat="(key, value) in treatment.teethnotation[65]" ng-if="value">{{key}}</b></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class=""><label>55</label></span>
+																<span class=""><label>54</label></span>
+																<span class=""><label>53</label></span>
+																<span class=""><label>52</label></span>
+																<span class=""><label>51</label></span>
+																<span class=""><label>61</label></span>
+																<span class=""><label>62</label></span>
+																<span class=""><label>63</label></span>
+																<span class=""><label>64</label></span>
+																<span class=""><label>65</label></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+															<div>
+																<span class=""><label>18</label></span>
+																<span class=""><label>17</label></span>
+																<span class=""><label>16</label></span>
+																<span class=""><label>15</label></span>
+																<span class=""><label>14</label></span>
+																<span class=""><label>13</label></span>
+																<span class=""><label>12</label></span>
+																<span class=""><label>11</label></span>
+																<span class=""><label>21</label></span>
+																<span class=""><label>22</label></span>
+																<span class=""><label>23</label></span>
+																<span class=""><label>24</label></span>
+																<span class=""><label>25</label></span>
+																<span class=""><label>26</label></span>
+																<span class=""><label>27</label></span>
+																<span class=""><label>28</label></span>
+															</div>
+															<div>
+																<span class="pointer" ng-click="openDentalBox('18')"><b ng-repeat="(key, value) in treatment.teethnotation[18]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('17')"><b ng-repeat="(key, value) in treatment.teethnotation[17]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('16')"><b ng-repeat="(key, value) in treatment.teethnotation[16]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('15')"><b ng-repeat="(key, value) in treatment.teethnotation[15]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('14')"><b ng-repeat="(key, value) in treatment.teethnotation[14]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('13')"><b ng-repeat="(key, value) in treatment.teethnotation[13]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('12')"><b ng-repeat="(key, value) in treatment.teethnotation[12]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('11')"><b ng-repeat="(key, value) in treatment.teethnotation[11]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('21')"><b ng-repeat="(key, value) in treatment.teethnotation[21]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('22')"><b ng-repeat="(key, value) in treatment.teethnotation[22]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('23')"><b ng-repeat="(key, value) in treatment.teethnotation[23]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('24')"><b ng-repeat="(key, value) in treatment.teethnotation[24]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('25')"><b ng-repeat="(key, value) in treatment.teethnotation[25]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('26')"><b ng-repeat="(key, value) in treatment.teethnotation[26]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('27')"><b ng-repeat="(key, value) in treatment.teethnotation[27]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('28')"><b ng-repeat="(key, value) in treatment.teethnotation[28]" ng-if="value">{{key}}</b></span>
+															</div>
+															<div>
+																<span class="pointer" ng-click="openDentalBox('48')"><b ng-repeat="(key, value) in treatment.teethnotation[48]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('47')"><b ng-repeat="(key, value) in treatment.teethnotation[47]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('46')"><b ng-repeat="(key, value) in treatment.teethnotation[46]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('45')"><b ng-repeat="(key, value) in treatment.teethnotation[45]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('44')"><b ng-repeat="(key, value) in treatment.teethnotation[44]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('43')"><b ng-repeat="(key, value) in treatment.teethnotation[43]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('42')"><b ng-repeat="(key, value) in treatment.teethnotation[42]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('41')"><b ng-repeat="(key, value) in treatment.teethnotation[41]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('31')"><b ng-repeat="(key, value) in treatment.teethnotation[31]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('32')"><b ng-repeat="(key, value) in treatment.teethnotation[32]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('33')"><b ng-repeat="(key, value) in treatment.teethnotation[33]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('34')"><b ng-repeat="(key, value) in treatment.teethnotation[34]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('35')"><b ng-repeat="(key, value) in treatment.teethnotation[35]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('36')"><b ng-repeat="(key, value) in treatment.teethnotation[36]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('37')"><b ng-repeat="(key, value) in treatment.teethnotation[37]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('38')"><b ng-repeat="(key, value) in treatment.teethnotation[38]" ng-if="value">{{key}}</b></span>
+															</div>
+															<div>
+																<span class=""><label>48</label></span>
+																<span class=""><label>47</label></span>
+																<span class=""><label>46</label></span>
+																<span class=""><label>45</label></span>
+																<span class=""><label>44</label></span>
+																<span class=""><label>43</label></span>
+																<span class=""><label>42</label></span>
+																<span class=""><label>41</label></span>
+																<span class=""><label>31</label></span>
+																<span class=""><label>32</label></span>
+																<span class=""><label>33</label></span>
+																<span class=""><label>34</label></span>
+																<span class=""><label>35</label></span>
+																<span class=""><label>36</label></span>
+																<span class=""><label>37</label></span>
+																<span class=""><label>38</label></span>
+															</div>
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class=""><label>85</label></span>
+																<span class=""><label>84</label></span>
+																<span class=""><label>83</label></span>
+																<span class=""><label>82</label></span>
+																<span class=""><label>81</label></span>
+																<span class=""><label>71</label></span>
+																<span class=""><label>72</label></span>
+																<span class=""><label>73</label></span>
+																<span class=""><label>74</label></span>
+																<span class=""><label>75</label></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="pointer" ng-click="openDentalBox('85')"><b ng-repeat="(key, value) in treatment.teethnotation[85]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('84')"><b ng-repeat="(key, value) in treatment.teethnotation[84]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('83')"><b ng-repeat="(key, value) in treatment.teethnotation[83]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('82')"><b ng-repeat="(key, value) in treatment.teethnotation[82]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('81')"><b ng-repeat="(key, value) in treatment.teethnotation[81]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('71')"><b ng-repeat="(key, value) in treatment.teethnotation[71]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('72')"><b ng-repeat="(key, value) in treatment.teethnotation[72]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('73')"><b ng-repeat="(key, value) in treatment.teethnotation[73]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('74')"><b ng-repeat="(key, value) in treatment.teethnotation[74]" ng-if="value">{{key}}</b></span>
+																<span class="pointer" ng-click="openDentalBox('75')"><b ng-repeat="(key, value) in treatment.teethnotation[75]" ng-if="value">{{key}}</b></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+														</div>
+														<div class="ml15">
+															<label>D - DECAY, GD - GROSSLY DECAYED, R - FILLED/RESTORED, M - MISSING, F - FRACTURED, RS - ROOTSTUMP, Mo - MOBILE </label>
+														</div>
+													</div>
+												</div>
+												
+												<div class="form-group">
+													<label class="col-md-12" for="input-file-now">X-Ray</label>
+													<div class="col-md-12">
+														<div class="dropify-wrapper">
+															<div class="dropify-message">
+																<span class="file-icon"></span>
+																<p>Drag and drop a file here or click</p>
+																<p class="dropify-error">Ooops, something wrong
+																	appended.</p>
+															</div>
+															<div class="dropify-loader"></div>
+															<div class="dropify-errors-container">
+																<ul></ul>
+															</div>
+															<input type="file" id="input-file-now" class="dropify">
+															<div class="dropify-preview">
+																<span class="dropify-render"></span>
+																<div class="dropify-infos">
+																	<div class="dropify-infos-inner">
+																		<p class="dropify-filename">
+																			<span class="file-icon"></span> <span
+																				class="dropify-filename-inner"></span>
+																		</p>
+																		<p class="dropify-infos-message">Drag and drop or
+																			click to replace</p>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Diagnosis</label>
+													<div class="col-md-12">
+														<textarea  class="form-control"
+															placeholder="Diagnosis" rows="4" ng-model="treatment.diagnosis" disabled></textarea>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12">Consulting Fees</label>
+													<div class="col-md-12">
+														<input type="number" class="form-control"
+															placeholder="Consulting Fees" ng-model="treatment.consultingfees" disabled>
+													</div>
+												</div>
+													<div class="form-group">
+													<label class="col-md-12">Treatment plan</label>
+													<div class="col-md-12">
+														
+														<div ng-if="treatment.showTreatment" class="show-treatment">
+															<div class="form-group">
+																<label class="col-md-12">Treatment plan</label>
+																<div class="col-md-12">
+																	 <textarea class="form-control" rows="4" ng-model="treatment.treatmentplan" disabled></textarea>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-md-12">Treatment Estimated Cost</label>
+																<div class="col-md-12">
+																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
+																</div>
+															</div>
+															
+															
+															<div class="form-group">
+																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" disabled/> Patient Accepted Treatment</label>
+															</div>
+															
+															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
+																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
+																	<div class="form-group" ng-class="{'mb0':!$last}">
+																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<div class="col-md-12">
+																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
+																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis" disabled></textarea>
+																		</div>
+																	</div>
+																	
+																	<div class="form-group" ng-class="{'mb0':!$last}">
+																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span></label>
+																		<div class="col-md-12">
+																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
+																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient" disabled>
+																		</div>
+																	</div>
+																</div>
+																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
+																<br>
+																<button class="pull-right btn btn-success" ng-click="payOnline()">Pay Online</button>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+												
+												<div class="form-group">
+													<label class="col-md-12">Prescription</label>
+													<div class="col-md-12">
+														<div class="prescription ml40">
+															<div ng-if="treatment.prescription && treatment.prescription.length !== 0">
+																<table class="table table-striped">
+																  <thead>
+																  	<tr>
+																  		<th>#</th>
+																  		<th>Prescription</th>
+																  		<th>Schedule</th>
+																  		<th></th>
+																  	</tr>
+																  </thead>
+																  <tbody>
+																  	<tr ng-repeat="pres in treatment.prescription track by $index">
+																  		<td>{{$index + 1}}</td>
+																  		<td>{{pres.prescription}}</td>
+																  		<td>{{pres.schedule}}</td>
+																  	</tr>
+																  </tbody>
+																</table>
+															</div>
+															<div class="row">
+																<div>
+																	<label class="col-md-6">Prescription</label>	
+																    <label class="col-md-6" for="tdate">Schedule</label>	
+																</div>
+																<div>
+																	<div class="col-md-6">
+																		<input type="text" id="tdate" name="tdate"
+																				class="form-control mydatepicker"
+																				placeholder="Prescription" ng-model="newpresciption.prescription" disabled>
+																	</div>	
+																	<div class="col-md-6">
+																		<input type="text" id="tdate" name="tdate"
+																				class="form-control mydatepicker"
+																				placeholder="Schedule" ng-model="newpresciption.schedule" disabled>
+																	</div>			
+																</div>											
+															</div>
+															<br>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-12" for="tdate">Next
+														Appointment </label>
+													<div class="col-md-12">
+														<input type="text" id="tdate" name="tdate"
+															class="form-control mydatepicker"
+															placeholder="Next Appointment Date" ng-model="treatment.nextappointment" disabled>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</section>
+							<section id="section-line-3" role="tabpanel" class="tab-pane" >
+								<div class="white-box">
+									<h3 class="box-title">
+										Recent Treatment History
+									</h3>
+									<div class="">
+										 <button id='toggleFiltering' ng-click="toggleFiltering()" class="btn btn-success">Toggle Filtering</button>
+  										 <div ng-if="showAllTreatments" id="grid1" ui-grid="gridOptions"  ui-grid-selection class="grid"></div>
+									</div>									
+								</div>
+							</section>
+							<section id="section-line-4" role="tabpanel" class="tab-pane" >
+										<div ng-if="showAllPayments" id="grid1" ui-grid="gridOptionsPayments"  ui-grid-selection class="grid"></div>
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="treatmentModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+
+			<div class="row">
+									<div class="col-sm-12">
+										<div class="white-box">
+											<form class="form-horizontal">
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label col-md-3">Treatment
+																ID:</label>
+															<div class="col-md-9">
+																<p class="form-control-static" style="padding-top: 7px">{{treatmentData._id}}</p>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="control-label col-md-5">Treatment
+																Start Date:</label>
+															<div class="col-md-6">
+																<p class="form-control-static" style="padding-top: 7px">{{treatment.startdate | date}}</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="treatment-modal">
+													<div class="form-group">
+														<label class="col-md-12">New Comments</label>
+														<div class="col-md-12">
+															<textarea class="form-control" rows="4" ng-model="treatment.newcomments" disabled></textarea>
+														</div>
+													</div>
+													<!-- <div class="form-group">
+														<label class="col-md-12" for="tdate">Treatment
+															Update Date </label>
+														<div class="col-md-12">
+															<input type="text" id="tdate" name="tdate"
+																class="form-control mydatepicker"
+																placeholder="enter your birth date" value="12/10/2017">
+														</div>
+													</div> -->
+													<hr>
+													<div class="form-group">
+														<label class="col-md-12">Chief Complaint</label>
+														<div class="col-md-12">
+															<textarea class="form-control" rows="4" ng-model="treatment.chiefcomplaint" disabled></textarea>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">History of present illness</label>
+														<div class="col-md-12">
+															<textarea class="form-control" rows="3" ng-model="treatment.historyofpresentillness" disabled></textarea>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Medical History</label>
+															<div class="col-md-12">
+																<select class="form-control" disabled
+																multiple="multiple"
+																data-placeholder="Choose all that is applicable"
+																tabindex="-1" size="4" ng-model="treatment.medicalhistory">
+																<option>Diabetes</option>
+																<option>BP</option>
+																<option>Asthma</option>
+																<option>Allergy</option>
+																<option>Thyroid Related</option>
+																<option>Bleeding Disorders</option>
+																<option>Cardiac Disease</option>
+																<option>Pregnancy</option>
+																<option>Habits</option>
+																<option>Other</option>
+															</select>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Habits</label>
+														<div class="col-md-12">
+															<input type="text" class="form-control" placeholder="Habits" ng-model="treatment.habits" disabled>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Occlusion</label>
+														<div class="col-md-12">
+															<input type="text" class="form-control"
+																placeholder="Occlusion" ng-model="treatment.occlusion" disabled>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Any Other Info</label>
+														<div class="col-md-12">
+															<input type="text" class="form-control"
+																placeholder="Other Info" ng-model="treatment.otherinfo" disabled >
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Investigations</label>
+														<div class="col-md-12">
+															<input type="text" class="form-control"
+																placeholder="Investigations" ng-model="treatment.investigations" disabled>
+														</div>
+													</div>
+													<div class="form-group">
+													<label class="col-md-12">Teeth Notation Table</label>
+													<div class="dental-history">
+														<div class="teeth-notation-table">
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[55]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[54]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[53]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[52]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[51]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[61]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[62]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[63]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[64]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[65]" ng-if="value">{{key}}</b></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class=""><label>55</label></span>
+																<span class=""><label>54</label></span>
+																<span class=""><label>53</label></span>
+																<span class=""><label>52</label></span>
+																<span class=""><label>51</label></span>
+																<span class=""><label>61</label></span>
+																<span class=""><label>62</label></span>
+																<span class=""><label>63</label></span>
+																<span class=""><label>64</label></span>
+																<span class=""><label>65</label></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+															<div>
+																<span class=""><label>18</label></span>
+																<span class=""><label>17</label></span>
+																<span class=""><label>16</label></span>
+																<span class=""><label>15</label></span>
+																<span class=""><label>14</label></span>
+																<span class=""><label>13</label></span>
+																<span class=""><label>12</label></span>
+																<span class=""><label>11</label></span>
+																<span class=""><label>21</label></span>
+																<span class=""><label>22</label></span>
+																<span class=""><label>23</label></span>
+																<span class=""><label>24</label></span>
+																<span class=""><label>25</label></span>
+																<span class=""><label>26</label></span>
+																<span class=""><label>27</label></span>
+																<span class=""><label>28</label></span>
+															</div>
+															<div>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[18]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[17]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[16]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[15]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[14]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[13]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[12]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[11]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[21]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[22]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[23]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[24]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[25]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[26]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[27]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[28]" ng-if="value">{{key}}</b></span>
+															</div>
+															<div>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[48]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[47]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[46]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[45]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[44]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[43]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[42]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[41]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[31]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[32]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[33]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[34]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[35]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[36]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[37]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[38]" ng-if="value">{{key}}</b></span>
+															</div>
+															<div>
+																<span class=""><label>48</label></span>
+																<span class=""><label>47</label></span>
+																<span class=""><label>46</label></span>
+																<span class=""><label>45</label></span>
+																<span class=""><label>44</label></span>
+																<span class=""><label>43</label></span>
+																<span class=""><label>42</label></span>
+																<span class=""><label>41</label></span>
+																<span class=""><label>31</label></span>
+																<span class=""><label>32</label></span>
+																<span class=""><label>33</label></span>
+																<span class=""><label>34</label></span>
+																<span class=""><label>35</label></span>
+																<span class=""><label>36</label></span>
+																<span class=""><label>37</label></span>
+																<span class=""><label>38</label></span>
+															</div>
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class=""><label>85</label></span>
+																<span class=""><label>84</label></span>
+																<span class=""><label>83</label></span>
+																<span class=""><label>82</label></span>
+																<span class=""><label>81</label></span>
+																<span class=""><label>71</label></span>
+																<span class=""><label>72</label></span>
+																<span class=""><label>73</label></span>
+																<span class=""><label>74</label></span>
+																<span class=""><label>75</label></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+															<div>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[85]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[84]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[83]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[82]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[81]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[71]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[72]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[73]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[74]" ng-if="value">{{key}}</b></span>
+																<span><b ng-repeat="(key, value) in treatment.teethnotation[75]" ng-if="value">{{key}}</b></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+																<span class="grey"></span>
+															</div>
+														</div>
+														<div class="ml15">
+															<label>D - DECAY, GD - GROSSLY DECAYED, R - FILLED/RESTORED, M - MISSING, F - FRACTURED, RS - ROOTSTUMP, Mo - MOBILE </label>
+														</div>
+													</div>
+												</div>
+													<div class="form-group">
+														<label class="col-md-12" for="input-file-now">X-Ray</label>
+														<div class="col-md-12">
+															<div class="dropify-wrapper">
+																<div class="dropify-message">
+																	<span class="file-icon"></span>
+																	<p>Drag and drop a file here or click</p>
+																	<p class="dropify-error">Ooops, something wrong
+																		appended.</p>
+																</div>
+																<div class="dropify-loader"></div>
+																<div class="dropify-errors-container">
+																	<ul></ul>
+																</div>
+																<input type="file" id="input-file-now" class="dropify">
+																<div class="dropify-preview">
+																	<span class="dropify-render"></span>
+																	<div class="dropify-infos">
+																		<div class="dropify-infos-inner">
+																			<p class="dropify-filename">
+																				<span class="file-icon"></span> <span
+																					class="dropify-filename-inner"></span>
+																			</p>
+																			<p class="dropify-infos-message">Drag and drop or
+																				click to replace</p>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Diagnosis</label>
+														<div class="col-md-12">
+															<textarea class="form-control"
+																placeholder="Diagnosis"  rows="4" ng-model="treatment.diagnosis" disabled></textarea>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Consulting Fees</label>
+														<div class="col-md-12">
+															<input type="number" class="form-control"
+																placeholder="Treatment costs" ng-model="treatment.consultingfees" disabled>
+														</div>
+													</div>
+														<div class="form-group">
+													<label class="col-md-12">Treatment plan</label>
+													<div class="col-md-12">
+														<div ng-if="treatment.showTreatment" class="show-treatment">
+															<div class="form-group">
+																<label class="col-md-12">Treatment plan</label>
+																<div class="col-md-12">
+																	 <textarea class="form-control" rows="4" ng-model="treatment.treatmentplan"></textarea>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-md-12">Treatment Estimated Cost</label>
+																<div class="col-md-12">
+																	<input type="number" class="form-control"ng-model="treatment.treatmentcost"/>
+																</div>
+															</div>
+															
+															
+															<div class="form-group">
+																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
+															</div>
+															
+															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
+																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment" ng-if="!$last">
+																	<div class="form-group" ng-class="{'mb0':!$last}">
+																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<div class="col-md-12">
+																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
+																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
+																		</div>
+																	</div>
+																	
+																	<div class="form-group" ng-class="{'mb0':!$last}">
+																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span></label>
+																		<div class="col-md-12">
+																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
+																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															
+														</div>
+														
+													</div>
+												</div>
+													
+													<div class="form-group">
+													<label class="col-md-12">Prescription</label>
+													<div class="col-md-12">
+														<div class="prescription ml40">
+															<div ng-if="treatment.prescription && treatment.prescription.length !== 0">
+																<table class="table table-striped">
+																  <thead>
+																  	<tr>
+																  		<th>#</th>
+																  		<th>Prescription</th>
+																  		<th>Schedule</th>
+																  	</tr>
+																  </thead>
+																  <tbody>
+																  	<tr ng-repeat="pres in treatment.prescription track by $index">
+																  		<td>{{$index + 1}}</td>
+																  		<td>{{pres.prescription}}</td>
+																  		<td>{{pres.schedule}}</td>
+																  	</tr>
+																  </tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+													<div class="form-group">
+														<label class="col-md-12" for="tdate">Next
+															Appointment </label>
+														<div class="col-md-12">
+															<input type="text" id="tdate" name="tdate"
+																class="form-control mydatepicker"
+																placeholder="Next Appointment Date" ng-model="treatment.nextappointment" disabled>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<h4 style="text-align: center;"><a href="javascript:void(0)" ng-click="paymentsInfo(treatment.treatmentanalysislist)">Payments Info</a></h4>			
+													</div>
+													</div>
+											</form>
+										</div>
+									</div>
+								</div>
+		   </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="allPaymentsModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Payments Info</h4>
+      </div>
+      <div class="modal-body dental-popup">
+      	  <div  id="grid1" ng-if="showAllPymentsModal"  ui-grid="gridOptionsPaymentsModal"  ui-grid-selection class="grid"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="dentalBox">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Details of {{currentTooth}}</h4>
+      </div>
+      <div class="modal-body dental-popup">
+      	  <fieldset>
+		    <legend>Dental History</legend>
+				<input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['D']"> D - DECAY<br>
+		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['GD']"> GD - GROSSLY DECAYED<br>
+		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['R']">  R - FILLED/RESTORED<br>
+		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['M']"> M - MISSING<br>
+		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['F']"> F - FRACTURED<br>
+		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['RS']"> RS - ROOTSTUMP<br>
+		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['Mo']"> Mo - MOBILE <br>
+		  </fieldset>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="paymentModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Bill Details</h4>
+      </div>
+      <div class="modal-body dental-popup">
+      	 		<div class="form-group row">
+					<label class="col-md-6">Bill ID </label>
+					<span class="col-md-6">
+						{{paymentData._id}}
+					</span>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6">Bill Date</label>
+					<span class="col-md-6">
+						{{paymentData.data.date}}
+					</span>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6">Chief Complaint</label>
+					<span class="col-md-6">
+						{{paymentData.data.chiefcomplaint}}
+					</span>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6">Doctor Name</label>
+					<span class="col-md-6">
+						{{paymentData.data.doctorname}}
+					</span>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6">Patient Name</label>
+					<span class="col-md-6">
+						{{paymentData.data.patientname}}
+					</span>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6">Bill Amount</label>
+					<span class="col-md-6">
+						{{paymentData.data.amount}}
+					</span>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6">Payment Method</label>
+					<span class="col-md-6">
+						{{paymentData.data.paymentmethod}}
+					</span>
+				</div>
+	       		<div>
+       			<div class="pull-right">
+       					<a href="javascript:void(0)" ng-click="printBill(paymentData)">Print Bill</a> &nbsp:&nbsp:&nbsp:&nbsp:
+       					<a href="javascript:void(0)" ng-click="dowloadBill(paymentData)">Download Bill</a>
+       			</div>
+       			<br>
+       			
+       		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
