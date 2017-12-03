@@ -23,18 +23,16 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 				$(document).ready(function() {
 
 			        $("#owl-demo").owlCarousel({
-
-			            slideSpeed: 2000,
+			            slideSpeed: 4000,
 			            paginationSpeed: 400,
 			            singleItem: true,
-			            autoPlay: 2000,
+			            autoPlay: 4000,
 			            stopOnHover: true
-
 
 			        });
 
 			    });
-			}, 300);
+			}, 4000);
 		}
 	})
 	.state("contact",{
@@ -289,10 +287,10 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 
 	        $("#owl-demo").owlCarousel({
 
-	            slideSpeed: 300,
+	            slideSpeed: 400,
 	            paginationSpeed: 400,
 	            singleItem: true,
-	            autoPlay: 2000,
+	            autoPlay: 6000,
 	            stopOnHover: true
 
 

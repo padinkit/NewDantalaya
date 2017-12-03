@@ -1,0 +1,39 @@
+<div class="container">
+				    		<h3>Booked Appointments</h3>
+				    		<p ng-if="userData.data.events.length == 0">No appointments booked</p>
+				    		<div class="row">
+				    			<h4 class="col-md-1">Status: </h4>
+					    		<h5 class="col-md-2"> <input type="checkbox" ng-model="openAppointment"> Still Pending </h5>
+					    		<h5 class="col-md-2"> <input type="checkbox" ng-model="confirmAppointment"> Accepted </h5>
+					    		<h5 class="col-md-2"> <input type="checkbox" ng-model="rejectAppointment"> Rejected </h5>
+				    		</div>
+				    		
+				    		<div class="patient-events row">
+				    			<div ng-repeat="data in userData.data.events" class="events {{data.className}} col-md-2" ng-if=showToggle(data.className)>
+				    				<div>
+				    					<label>Title : </label>
+				    					<span>{{data.title}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Date : </label>
+				    					<span>{{data.start | date}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Doctor Name : </label>
+				    					<span>{{data.doctorName}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Doctor's Ph.No : </label>
+				    					<span>{{data.doctorPhone}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Doctor's Email Id : </label>
+				    					<span>{{data.doctorMail}}</span>
+				    				</div>
+				    				<div>
+				    					<label>Status : </label>
+				    					<span>{{getStatus(data.className)}}</span>
+				    				</div>
+				    			</div>
+				    		</div>
+</div>
