@@ -5,9 +5,9 @@
     <meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Dantalaya</title>
+	<title>Dantalaya | Smiles for all</title>
 	<meta name="keywords" content="Dantalaya">
-	<meta name="description" content="Dantalaya">
+	<meta name="description" content="Welcome to dantalya, we provide smiles for all!">
 	<meta name="subject" content="Dentist">
 	<meta name="language" content="en-us">
 	<meta name="robots" content="index,follow">
@@ -33,7 +33,6 @@
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/colors/megna.css" id="theme" rel="stylesheet">
 	<link href="css/app.css" rel="stylesheet">
-    <title>Welcome to Dantalaya</title>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
     <link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css" type="text/css">
     <link href="css/home.css" rel="stylesheet">
@@ -65,15 +64,15 @@
     <section>
         <div class="container-fluid dtop">
             <div class="row" ng-controller="menubarController">
-                <div class="col-md-8 drightt">
+                <div class="col-md-4">
                     <p class="dtopaddr"><i class="fa fa-phone-square" aria-hidden="true" style="color:#2ecc71;"></i>+91 7975422748 &nbsp; - &nbsp; <i class="fa fa-envelope" aria-hidden="true" style="color: #2ecc71"></i>
                         info@dantalaya.com
                     </p>
                 </div>
 
-                <div class="col-md-4">
-                	 <a href="#/home"  ng-if="!userLoggedin" ng-click="scrollTo('login')">
-                        <div class="btn dbtn"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</div>
+                <div class="col-md-8">
+                	 <a href="#login"  ng-if="!userLoggedin" ng-click="scrollTo('login')">
+                        <div class="btn dbtn" id="loginbutton"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</div>
                     </a>
                     <a href="#/register" ng-if="!userLoggedin">
                         <div class="btn  dbtn"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</div>
@@ -109,7 +108,7 @@
                 </button>
                 <a class="navbar-brand" href="#/home">
                     <div class="dimg">
-                        <img src="images/logo.png" alt="Logo" />
+                        <img src="images/dantalaya_logo.jpg" alt="Logo" />
                     </div>
                 </a>
             </div>
@@ -118,14 +117,13 @@
                 <ul class="nav navbar-nav dnav" ng-controller="middleController">
                     <li class="dlogo">
                         <a class="navbar-brand" href="#/home">
-                            <div class="dimg"><img src="images/logo.png" alt="Logo" /></div>
+                            <div class="dimg"><img src="images/dantalaya_logo.jpg" alt="Logo" /></div>
                         </a>
                     </li>
                     <li class="dlifirst" ng-if="!userLoggedin"><a href="#/home" ng-class="{'current' : getUrl('/home')}">Home</a></li>
                     <li><a href="#/about" ng-if="!userLoggedin" ng-class="{'current' : getUrl('/about')}">About Us</a></li>
-                    <li><a href="#/services" ng-if="!userLoggedin" ng-class="{'current' : getUrl('/services')}">Services</a></li>
+                    <li><a href="#/services" ng-if="!userLoggedin" ng-class="{'current' : getUrl('/services')}">Our Services</a></li>
                     <li><a href="#/specialization" ng-if="!userLoggedin" ng-class="{'current' : getUrl('/specialization')}">Specializations</a></li>
-                    <li><a href="#/gallery" ng-if="!userLoggedin" ng-class="{'current' : getUrl('/gallery')}">Smile Gallery</a></li>
                     <li><a href="#/contact" ng-if="!userLoggedin" ng-class="{'current' : getUrl('/contact')}">Contact Us</a></li>
                     <li ng-hide="userLoggedin">
                         <input tabindex="1" type="text" name="name" class="text dsearch" Placeholder="Search">
@@ -145,7 +143,7 @@
     <!--    Footer-->
 
     <footer>
-        <div class="container-fluid ">
+        <div class="">
             <div class="row dfoot dpad">
                 <div class="col-md-8 dquick">
                     <h3>quick links</h3>
@@ -156,8 +154,7 @@
                             <ul class="dqli">
                                 <li><a href="#/home">Home</a></li>
                                 <li><a href="#/about">About Us</a></li>
-                                <li><a href="#/services">Services</a></li>
-                                <li><a href="#/gallery">Gallery</a></li>
+                                <li><a href="#/services">Our Services</a></li>
                                 <li><a href="#/contact">Contact Us</a></li>
                             </ul>
                         </div>
@@ -167,7 +164,6 @@
                                 <li><a href="#">Sitemap</a></li>
                                 <li><a href="../public/partials/specialization.html">Specializations</a></li>
                                 <li><a href="#">Quality Policy</a></li>
-                                <li><a href="/notice" target="_blank">Notice</a></li>
                                 <li><a href="/privacy" target="_blank">Privacy Policy</a></li>
                             </ul>
                         </div>
@@ -185,13 +181,12 @@
                      <h1>Dantalaya</h1>
                     <hr class="dfothr">
                     <h4>Dental Health Solutions</h4>
-                    <p>C/o FDC</p>
                     <p>#38/48, I floor, Bazar Street</p>
                     <p>Neelasandra, Bangalore-560047 </p>
                     <p>
-                        <a href="https://www.facebook.com/Dantalaya-1918614108360564/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                        <a href="https://twitter.com/dantalayaindia"><i class="fa fa-twitter" aria-hidden="true"></i></i></a>
-                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></i></a>
+                        <a href="https://www.facebook.com/Dantalay/" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        <a href="https://twitter.com/dantalaya" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></i></a>
+                        <a href="https://www.linkedin.com/company/dantalaya/" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></i></a>
                         <a href="https://www.youtube.com/channel/UCruMf-0S8ZQkMsZCzfA0EtQ?guided_help_flow=3
 "><i class="fa fa-youtube" aria-hidden="true"></i></i></a>
                     </p>
@@ -246,6 +241,19 @@
     
     <script src="js/main.js"></script>
     <script src="js/validationService.js"></script>
+    <script>
+    $(document).ready(function(){
+
+      $("#loginbutton").click(function(e){
+        e.preventDefault();
+        $(location).attr('href','http://localhost:5000/#/home');
+        $("#Username").focus();
+    });
+    });
+
+    
+
+    </script>
     
     
     
