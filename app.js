@@ -14,7 +14,8 @@ var express = require('express')
   , LocalStrategy = require('passport-local').Strategy
   , expressSession = require('express-session')
   , nodemailer = require('nodemailer')
-  , xoauth2 = require('xoauth2');
+  , xoauth2 = require('xoauth2')
+  , config = require('./config');
 var fs = require('fs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -72,6 +73,9 @@ passport.use( new LocalStrategy(
           if (user.activated == false) {
               return done(null, false, {alert: 'Account Not Yet Activated'});
           }
+          if ((user.profile==="doctor" || user.profile==="technician" || user.profile==="surgeon") && user.adminactivated == false) {
+              return done(null, false, {alert: 'Account Not Yet Activated By Admin'});
+          }
           return done(null, user);
       }
     );
@@ -92,7 +96,11 @@ app.get('/partials/:filename', routes.partials);
 
 
 
-function sendmail(req ,user,  key, email){
+function sendmail(req ,user,  key, email, profile){
+	var extra;
+	if(profile !=='patient'){
+		extra = 'Once email Verfication is done, await Dantalaya Admin activation to avail all the Sevices.';
+	}
 	var mailOptions = {
 		    from: 'dantalayaindia@gmail.com', // sender address
 		    to: email, // list of receivers
@@ -100,6 +108,7 @@ function sendmail(req ,user,  key, email){
 		    html:   "<html>" +
 		    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
 		      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
+		      		"<div><p>"+ extra +"</p></div>"+
 		      		"</html>" // html body
 	};
 	
@@ -143,7 +152,7 @@ app.post('/auth/signup',function(req,res){
     	                    res.json({'alert':'Registration error'});
     	                }else{
     	                    res.json({'alert':'Registration success'});
-    	                    sendmail(req,req.body.authInfo.username , randomNo , req.body.contactInfo.email);
+    	                    sendmail(req,req.body.authInfo.username , randomNo , req.body.contactInfo.email , req.body.authInfo.profile);
     	                }
     	            });
     	        }
@@ -254,6 +263,25 @@ app.post('/admin/activate',function(req, res){
 					    if (err){
 					    	res.status(404).send("failure");
 					    }
+					    var mailOptions = {
+							    from: 'dantalayaindia@gmail.com', // sender address
+							    to: user.email, // list of receivers
+							    subject: 'Account Activated', // Subject line
+							    html:   "<html>" +
+							    	  	"<div> <h2>Dantalaya</h2></div>"+
+							    	  	"<div><p>Your Account Has been Activated</p></div><br><br>"+
+							      		"<div><p>"+ config.mailText +"</p></div>"+
+							      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
+							      		"</html>" // html body
+						};
+						
+						transporter.sendMail(mailOptions, function(error, info){
+						    if(error){
+						        return console.log(error);
+						    }
+						    console.log('Message sent: ' + info.response);
+						});
+						
 					    res.send("successfully activated");
 					  });
 			}
@@ -268,6 +296,22 @@ app.post('/admin/reject',function(req, res){
 	var userData = model.auth.remove({ 'username' :  req.body.user },
 		function(err, user) {
 			if(!err){				
+				var mailOptions = {
+					    from: 'dantalayaindia@gmail.com', // sender address
+					    to: user.email, // list of receivers
+					    subject: 'Account Rejected', // Subject line
+					    html:   "<html>" +
+					    	  	"<div> <h2>Dantalaya</h2></div>"+
+					      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
+					      		"</html>" // html body
+				};
+				
+				transporter.sendMail(mailOptions, function(error, info){
+				    if(error){
+				        return console.log(error);
+				    }
+				    console.log('Message sent: ' + info.response);
+				});
 			    res.send("successfully rejected");
 			}
 			else{

@@ -61,18 +61,25 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 dregpad">
-                                            <div>
                                                 <label for="aadhaar">Aadhaar number (Optional) <div id="aadhaar_error" class="val_error"></div></label>
                                                 <input type="text" value="" size="35" id="aadhaar" name="aadhaar" ng-model="signup.aadhaarno">
-                                            </div>
-                                            <div>
-                                                <label for="residential">Residential Address<span class="required">*</span><div id="addr_error" class="val_error"></div></label>
-                                                <textarea cols="40" rows="6" id="residential" name="residential" ng-model="signup.address" ></textarea>
-                                            </div>
-                                        </div>
+                                        </div>    
                                         <div class="col-md-6">
+                                            <label for="residential">Residential Address<span class="required">*</span><div id="addr_error" class="val_error"></div></label>
+                                            <textarea cols="40" rows="6" id="residential" name="residential" ng-model="signup.address" ></textarea>
                                         </div>
+                                        
+                                        
                                     </div>
+                                    <div class="row">
+                                    <div class="col-md-6 dregpad nri">
+                                        	<div>
+                                                <label for="aadhaar">NRI (Non - Residential Indian)</label> 
+                                                <input type="checkbox" id="nri" name="nri" ng-model="signup.nri">
+                                            </div>
+                                        </div>
+                                        
+                                       </div>
                                     <div class="row">
                                         <div class="col-md-6 dregpad">
                                             <div>
@@ -83,7 +90,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label for="state">State <span class="required">*</span></label>
-                                                <select class="form-control"  id="state" name="state" ng-model="signup.state" ng-init="signup.state='Andhra Pradesh'">
+                                                <select class="form-control"  id="state" name="state" ng-model="signup.state" ng-init="signup.state='Andhra Pradesh'" ng-if="!signup.nri">
                                                     <option value="Andhra Pradesh">Andhra Pradesh</option>
                                                     <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                                                     <option value="Assam">Assam</option>
@@ -115,6 +122,13 @@
                                                     <option value="Uttarakhand">Uttarakhand</option>
                                                     <option value="West Bengal">West Bengal</option>
                                                 </select>
+                                                <input type="text" size="35" id="state" name="state" ng-model="signup.state" ng-if="signup.nri">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 dregpad" ng-if="signup.nri">
+                                            <div>
+                                                <label for="country">Country </label>
+                                                <input type="text" value="" size="35" id="country" name="country" ng-model="signup.country" >
                                             </div>
                                         </div>
                                         <div class="col-md-6">

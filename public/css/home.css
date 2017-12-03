@@ -1857,3 +1857,12 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 .navbar-header {
     background: #fff !important;
 }
+.width170{
+	width: 170px;
+}
+.nri label{
+	width: auto !important;
+}
+.nri input{
+	height: 28px;
+}

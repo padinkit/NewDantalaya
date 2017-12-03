@@ -32,6 +32,17 @@
         <h4 class="modal-title">Confirm Appointment</h4>
       </div>
       <div class="modal-body">
+      	<div>
+      		 <fieldset>
+   				 <legend><h5>Details</h5></legend>{{currentEvent}}
+		      		<div><label class="width170">Description  : </label> {{currentEvent.title}}</div>
+		      		<div><label class="width170">Patient Name : </label> {{currentEvent.patientName}}</div>
+		      		<div><label class="width170">Date Of Appointment : </label> {{ formatDate(currentEvent.start) | date}}</div>
+		      		<div><label class="width170">Patient Phone No : </label> {{currentEvent.patientPhone}}</div>
+		      		<div><label class="width170">Patient Email : </label> {{currentEvent.patientMail}}</div>
+      		</fieldset>
+      	</div>
+      	<br>
         <p>Do you want to Confirm the appointment</p>
       </div>
       <div class="modal-footer">

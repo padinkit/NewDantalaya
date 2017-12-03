@@ -221,6 +221,12 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 		templateUrl:"partials/patient.payment.html",
 		params : { data : {} },
 		controller : "PatientPaymentController"
+	})
+	.state("patientAppointment",{
+		url:'/patientAppointment',
+		templateUrl:"partials/patient.appointments.html",
+		params : { data : {} },
+		controller : "patientAppointmenttController"
 	});
 	
 	toastr.options.positionClass = "toast-top-center";
@@ -346,6 +352,35 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 		});
 	};
 	
+});
+
+
+app.controller('patientAppointmenttController',function($scope, $http, $state, $rootScope){
+	
+	$scope.getStatus = function (data) {
+		if(data == 'openAppointment'){
+			return 'Open';
+		}
+		else if(data == 'rejectAppointment'){
+			return 'Rejected'
+		}
+		else{
+			return 'Accepted';
+		}
+	};
+	
+	
+	$scope.showToggle = function(data){
+		if($scope[data]){
+			return true;
+		}
+		else if(!$scope.openAppointment && !$scope.confirmAppointment && !$scope.rejectAppointment){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 });
 
 app.controller('dashboardController',function($scope, $http, $state, $rootScope){
@@ -617,7 +652,7 @@ app.controller('doctorRegisterController',function($scope, $http, validationServ
 				}
 				else{
 					$('#signupModal').modal('toggle');
-					toastr.success('Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once it�s verified.');
+					toastr.success('Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once its verified.');
 					$state.go('home');
 				}	
 			},function(err){
@@ -658,7 +693,7 @@ app.controller('technicianRegisterController',function($scope, $http, validation
 				}
 				else{
 					$('#signupModal').modal('toggle');
-					toastr.success('Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once it�s verified.');
+					toastr.success('Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once its verified.');
 					$state.go('home');
 					
 				}	
@@ -701,7 +736,7 @@ app.controller('surgeonRegisterController',function($scope, $http, validationSer
 				}
 				else{
 					$('#signupModal').modal('toggle');
-					toastr.success('Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once it�s verified.');
+					toastr.success('Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once its verified.');
 					$state.go('home');
 					
 				}	
@@ -755,6 +790,8 @@ app.controller('profileController',function($scope, $http, $rootScope, $state){
 	
 	$http.post('/getprofile', {userid: $rootScope.userId} ).then(function(data){
 		$scope.signup = data.data.data;
+		
+		$scope.signup.dob = new Date($scope.signup.dob);
 	},function(err){
 		toastr.error(err);
 	});	
@@ -1722,8 +1759,11 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		},
 		eventClick: function(calEvent, jsEvent, view) {
 		    if(calEvent.className.includes('openAppointment')){
+		   
 		    	$('#confirmDialog').modal('show');
-		    	$scope.currentEvent = calEvent;
+		     	$scope.currentEvent = calEvent;
+		    	$scope.$apply();
+		    
 		    }
 		},
 		defaultView: 'month',
@@ -1767,6 +1807,9 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		 });
 	}
 	
+	$scope.formatDate = function(data) {
+		return new Date(data);
+	}
 	$scope.changeAppointMentStatus = function(status){
 		$scope.newAllEventData = [];
 		
@@ -1783,7 +1826,7 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 					patientName: obj.patientName,
 					title: obj.title,
 	                doctorMail: obj.doctorMail,
-	                patientMail: obj.doctorMail,
+	                patientMail: obj.patientMail,
 	                patientPhone: obj.patientPhone,
 	                doctorPhone: obj.doctorPhone,
 	                id: obj.id

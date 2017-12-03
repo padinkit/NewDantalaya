@@ -4,56 +4,29 @@
 	               <div class="col-md-12" ng-if="userType == 'patient'">
 	                    <div class="container tile">
 		    	    <div class="row home" ng-if="!showdoctor">
-			    		<div class="col-md-8">
-			    			<div>
+			    			<div class="col-md-4">
 					    		<a class="treatmenttile" href="#/patientTreatmentDetails">
 					    			<h3>Treatment Details</h3>
 					    		</a>
 				    		</div>
 				    		
-				    		<div>
+				    		<div  class="col-md-4">
 				    			<a class="treatmenttile" ng-click= "searchdoctor()" href="javascript:void(0)">
 					    			<h3> Search for Doctors</h3>
 					    		</a>
 				    		</div>
-				    	</div>
+				    		
+				    		<div  class="col-md-4">
+					    		<a class="treatmenttile" href="#/patientAppointment">
+					    			<h3>Booked Appointments</h3>
+					    		</a>
+				    		</div>
 				    	<!-- <div class="col-md-4">
 				    		<a class="treatmenttile" href="#!/details">
 				    			<h3>Payment Details</h3>
 				    		</a>
 				    	</div>  -->
-				    	<div class="col-md-3 col-md-offset-1">
-				    		<h4>Booked Appointments</h4>
-				    		<p ng-if="userData.data.events.length == 0">No appointments booked</p>
-				    		<div class="patient-events">
-				    			<div ng-repeat="data in userData.data.events" class="events {{data.className}}">
-				    				<div>
-				    					<label>Title : </label>
-				    					<span>{{data.title}}</span>
-				    				</div>
-				    				<div>
-				    					<label>Date : </label>
-				    					<span>{{data.start | date}}</span>
-				    				</div>
-				    				<div>
-				    					<label>Doctor Name : </label>
-				    					<span>{{data.doctorName}}</span>
-				    				</div>
-				    				<div>
-				    					<label>Doctor's Ph.No : </label>
-				    					<span>{{data.doctorPhone}}</span>
-				    				</div>
-				    				<div>
-				    					<label>Doctor's Email Id : </label>
-				    					<span>{{data.doctorMail}}</span>
-				    				</div>
-				    				<div>
-				    					<label>Status : </label>
-				    					<span>{{getStatus(data.className)}}</span>
-				    				</div>
-				    			</div>
-				    		</div>
-				    	</div>
+				    	
 			    	</div>
 	    	        </div>
 	               </div>
