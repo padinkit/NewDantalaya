@@ -51,7 +51,8 @@
 						</nav>
 						<div class="content-wrap tab-content">
 							<section id="section-line-2" role="tabpanel" class="tab-pane" >
-								<div class="row">
+								<div ng-if="!treatment"><label>Current Treatment Not Available</label></div>
+								<div class="row" ng-if="treatment">
 									<div class="col-sm-12">
 										<div class="white-box">
 											<form class="form-horizontal">
@@ -88,7 +89,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.newcomments">
 													<label class="col-md-12">New Comments</label>
 													<div class="col-md-12">
 														<textarea class="form-control" rows="4" ng-model="treatment.newcomments" disabled></textarea>
@@ -105,13 +106,13 @@
 												</div> -->
 												<hr>
 												<form class="form-horizontal">
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.chiefcomplaint">
 													<label class="col-md-12">Chief Complaint</label>
 													<div class="col-md-12">
 														<textarea class="form-control" rows="4" ng-model="treatment.chiefcomplaint" disabled></textarea>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.historyofpresentillness">
 													<label class="col-md-12">History of present illness</label>
 													<div class="col-md-12">
 														<textarea class="form-control" rows="3" ng-model="treatment.historyofpresentillness" disabled></textarea>
@@ -137,27 +138,27 @@
 														</select>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.habits">
 													<label class="col-md-12">Habits</label>
 													<div class="col-md-12">
 														<input type="text" class="form-control" placeholder="Habits" ng-model="treatment.habits" disabled>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.occlusion">
 													<label class="col-md-12">Occlusion</label>
 													<div class="col-md-12">
 														<input type="text" class="form-control"
 															placeholder="Occlusion" ng-model="treatment.occlusion" disabled>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.otherinfo">
 													<label class="col-md-12">Any Other Info</label>
 													<div class="col-md-12">
 														<input type="text" class="form-control"
 															placeholder="Other Info" ng-model="treatment.otherinfo" disabled>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.investigations">
 													<label class="col-md-12">Investigations</label>
 													<div class="col-md-12">
 														<input type="text" class="form-control"
@@ -320,52 +321,29 @@
 													</div>
 												</div>
 												
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.xray">
 													<label class="col-md-12" for="input-file-now">X-Ray</label>
 													<div class="col-md-12">
-														<div class="dropify-wrapper">
-															<div class="dropify-message">
-																<span class="file-icon"></span>
-																<p>Drag and drop a file here or click</p>
-																<p class="dropify-error">Ooops, something wrong
-																	appended.</p>
-															</div>
-															<div class="dropify-loader"></div>
-															<div class="dropify-errors-container">
-																<ul></ul>
-															</div>
-															<input type="file" id="input-file-now" class="dropify">
-															<div class="dropify-preview">
-																<span class="dropify-render"></span>
-																<div class="dropify-infos">
-																	<div class="dropify-infos-inner">
-																		<p class="dropify-filename">
-																			<span class="file-icon"></span> <span
-																				class="dropify-filename-inner"></span>
-																		</p>
-																		<p class="dropify-infos-message">Drag and drop or
-																			click to replace</p>
-																	</div>
-																</div>
-															</div>
-														</div>
+														<div>
+									           					<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
+									           				</div>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.diagnosis">
 													<label class="col-md-12">Diagnosis</label>
 													<div class="col-md-12">
 														<textarea  class="form-control"
 															placeholder="Diagnosis" rows="4" ng-model="treatment.diagnosis" disabled></textarea>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.consultingfees">
 													<label class="col-md-12">Consulting Fees</label>
 													<div class="col-md-12">
 														<input type="number" class="form-control"
 															placeholder="Consulting Fees" ng-model="treatment.consultingfees" disabled>
 													</div>
 												</div>
-													<div class="form-group">
+													<div class="form-group" ng-if="treatment.showTreatment" >
 													<label class="col-md-12">Treatment plan</label>
 													<div class="col-md-12">
 														
@@ -408,14 +386,14 @@
 																</div>
 																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
 																<br>
-																<button class="pull-right btn btn-success" ng-click="payOnline()">Pay Online</button>
+																<!-- <button class="pull-right btn btn-success" ng-click="payOnline()">Pay Online</button> -->
 															</div>
 														</div>
 														
 													</div>
 												</div>
 												
-												<div class="form-group">
+												<div class="form-group" ng-if="treatment.prescription" >
 													<label class="col-md-12">Prescription</label>
 													<div class="col-md-12">
 														<div class="prescription ml40">
@@ -460,7 +438,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="form-group">
+												<div class="form-group"  ng-if="treatment.nextappointment">
 													<label class="col-md-12" for="tdate">Next
 														Appointment </label>
 													<div class="col-md-12">
@@ -468,6 +446,9 @@
 															class="form-control mydatepicker"
 															placeholder="Next Appointment Date" ng-model="treatment.nextappointment" disabled>
 													</div>
+												</div>
+												<div class="form-group">
+													<button class="pull-right btn btn-success" onclick="window.print()">Print</button>
 												</div>
 											</form>
 										</div>
@@ -1018,3 +999,6 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<style>
+	 @page { size: landscape; }
+</style>

@@ -276,33 +276,14 @@
 												<div class="form-group">
 													<label class="col-md-12" for="input-file-now">X-Ray</label>
 													<div class="col-md-12">
-														<div class="dropify-wrapper">
-															<div class="dropify-message">
-																<span class="file-icon"></span>
-																<p>Drag and drop a file here or click</p>
-																<p class="dropify-error">Ooops, something wrong
-																	appended.</p>
-															</div>
-															<div class="dropify-loader"></div>
-															<div class="dropify-errors-container">
-																<ul></ul>
-															</div>
-															<input type="file" id="input-file-now" class="dropify">
-															<button type="button" class="dropify-clear">Remove</button>
-															<div class="dropify-preview">
-																<span class="dropify-render"></span>
-																<div class="dropify-infos">
-																	<div class="dropify-infos-inner">
-																		<p class="dropify-filename">
-																			<span class="file-icon"></span> <span
-																				class="dropify-filename-inner"></span>
-																		</p>
-																		<p class="dropify-infos-message">Drag and drop or
-																			click to replace</p>
-																	</div>
-																</div>
-															</div>
-														</div>
+														<div>
+									           				<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
+									           			</div>
+									           			 
+									           			 <br>
+									           			 <label class=""><small>*Upload Photo of size less than 1 MB </small></label>
+											        	 <input type="file" ng-model="treatment.xray" accept="image/*"  app-filereader style="margin: 0px;" size="1024000"/>	        	 
+											        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 1 MB</small></p>
 													</div>
 												</div>
 												<div class="form-group">
@@ -696,33 +677,14 @@
 												<div class="form-group">
 													<label class="col-md-12" for="input-file-now">X-Ray</label>
 													<div class="col-md-12">
-														<div class="dropify-wrapper">
-															<div class="dropify-message">
-																<span class="file-icon"></span>
-																<p>Drag and drop a file here or click</p>
-																<p class="dropify-error">Ooops, something wrong
-																	appended.</p>
-															</div>
-															<div class="dropify-loader"></div>
-															<div class="dropify-errors-container">
-																<ul></ul>
-															</div>
-															<input type="file" id="input-file-now" class="dropify">
-															<button type="button" class="dropify-clear">Remove</button>
-															<div class="dropify-preview">
-																<span class="dropify-render"></span>
-																<div class="dropify-infos">
-																	<div class="dropify-infos-inner">
-																		<p class="dropify-filename">
-																			<span class="file-icon"></span> <span
-																				class="dropify-filename-inner"></span>
-																		</p>
-																		<p class="dropify-infos-message">Drag and drop or
-																			click to replace</p>
-																	</div>
-																</div>
-															</div>
-														</div>
+														<div>
+									           				<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
+									           			</div>
+									           			 
+									           			 <br>
+									           			 <label class=""><small>*Upload Photo of size less than 1 MB </small></label>
+											        	 <input type="file" ng-model="treatment.xray" accept="image/*"  app-filereader style="margin: 0px;" size="1024000"/>	        	 
+											        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 1 MB</small></p>
 													</div>
 												</div>
 												<div class="form-group">
@@ -888,7 +850,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Modal title</h4>
+        <h4 class="modal-title">Treat Details History</h4>
       </div>
       <div class="modal-body">
 
@@ -1150,34 +1112,12 @@
 													<div class="form-group">
 														<label class="col-md-12" for="input-file-now">X-Ray</label>
 														<div class="col-md-12">
-															<div class="dropify-wrapper">
-																<div class="dropify-message">
-																	<span class="file-icon"></span>
-																	<p>Drag and drop a file here or click</p>
-																	<p class="dropify-error">Ooops, something wrong
-																		appended.</p>
-																</div>
-																<div class="dropify-loader"></div>
-																<div class="dropify-errors-container">
-																	<ul></ul>
-																</div>
-																<input type="file" id="input-file-now" class="dropify">
-																<button type="button" class="dropify-clear">Remove</button>
-																<div class="dropify-preview">
-																	<span class="dropify-render"></span>
-																	<div class="dropify-infos">
-																		<div class="dropify-infos-inner">
-																			<p class="dropify-filename">
-																				<span class="file-icon"></span> <span
-																					class="dropify-filename-inner"></span>
-																			</p>
-																			<p class="dropify-infos-message">Drag and drop or
-																				click to replace</p>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
+															<div>
+									           					<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
+									           				</div>
+									           			</div>
+									           			 
+									 
 													</div>
 													<div class="form-group">
 														<label class="col-md-12">Diagnosis</label>
@@ -1198,20 +1138,20 @@
 													<div class="col-md-12">
 														<div>
 														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none"/> 
-														  <button type="button" class="btn btn-default" ng-click="treatment.showTreatment = true"><span ng-if="treatment.showTreatment" class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp Avail Treatment</button>
+														  <button type="button" class="btn btn-default" ng-click="treatment.showTreatment = true" disabled><span ng-if="treatment.showTreatment" class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp Avail Treatment</button>
 														</div>
 														
 														<div ng-if="treatment.showTreatment" class="show-treatment">
 															<div class="form-group">
 																<label class="col-md-12">Treatment plan</label>
 																<div class="col-md-12">
-																	 <textarea class="form-control" rows="4" ng-model="treatment.treatmentplan"></textarea>
+																	 <textarea class="form-control" rows="4" ng-model="treatment.treatmentplan" disabled></textarea>
 																</div>
 															</div>
 															<div class="form-group">
 																<label class="col-md-12">Treatment Estimated Cost</label>
 																<div class="col-md-12">
-																	<input type="number" class="form-control"ng-model="treatment.treatmentcost"/>
+																	<input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
 																</div>
 															</div>
 															
@@ -1226,7 +1166,7 @@
 																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
 																		<div class="col-md-12">
 																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
-																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
+																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis" disabled></textarea>
 																		</div>
 																	</div>
 																	
@@ -1234,7 +1174,7 @@
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
-																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
+																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient" disabled>
 																		</div>
 																	</div>
 																</div>

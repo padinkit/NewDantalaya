@@ -389,6 +389,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		var params = $scope.searchparam;
 		$http.post('/searchdetails', params ).then(function(data){
 			$scope.results = data.data;
+			$scope.resultReturned = true;
 		},function(err){
 			toastr.error('Search Error');
 		});
@@ -436,6 +437,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 					    navLinks: true, // can click day/week names to navigate views
 						selectable: true,
 						selectHelper: true,
+						longpressDelay : 10,
 						select: function(start, end) {
 							if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 					        	return false;
@@ -839,7 +841,7 @@ app.directive('appFilereader', function($q) {
 
                 element.bind('change', function(e) {
                     var element = e.target;
-                    if(element.files[0].size  > 15360){
+                    if(element.files[0].size  > attrs.size){
                     	scope.$emit('fileSizeError');
                     	return false;
                     }
@@ -1063,7 +1065,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		  e.preventDefault()
 		  $(this).tab('show')
 		})
-	
+	$scope.treatmentHistory = [];
 	$scope.patientData = $rootScope.userData;
 	
 	$scope.payOnline = function(){
@@ -1140,11 +1142,23 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 			$http.post('/viewTreatment',{data : $scope.patientData.data.treatments}).then(function(data){
 				$scope.allTreatments = data.data;	
 				//$scope.gridOptions.data = data.data;
-				
+				$scope.allTreatments.map(function(obj){
+					if(Object.keys($scope.patientData.data.currenttreatment)){
+						Object.keys($scope.patientData.data.currenttreatment).map(function(objs){
+							if($scope.patientData.data.currenttreatment[objs] !== obj._id){
+								$scope.treatmentHistory.push(obj);
+							}
+						});
+					}
+					else{
+						$scope.treatmentHistory = $scope.allTreatments;
+					}
+					
+				});
 				
 				$scope.gridOptions = {
 					    enableFiltering: false,
-					    data :  data.data,
+					    data :  $scope.treatmentHistory,
 					    enableRowSelection: true,
 					    enableRowHeaderSelection: false,
 					    multiSelect: false,
@@ -1368,6 +1382,12 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 });
 
 app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$state, $stateParams, uiGridConstants) {
+	
+	$scope.$on('fileSizeError',function(){
+		$scope.showError = true;
+		$scope.$apply();
+	});
+	
 	$('#myTabs a').click(function (e) {
 		  e.preventDefault()
 		  $(this).tab('show')
@@ -1768,6 +1788,7 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 	    navLinks: true, // can click day/week names to navigate views
 		selectable: true,
 		selectHelper: true,
+		longpressDelay : 10,
 		select: function(start, end) {
 			if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 	        	return false;

@@ -441,14 +441,18 @@ app.post('/searchdetails', function(req, res){
 	
 	if(type !== 'technician' && type !== 'surgeon'){
 		model.user.find({$and : [{ $or: [ {"data.cliniccity" : new RegExp(val, 'i') } , {"data.clinicaddress" : new RegExp(val, 'i') },{"data.clinicstate" : new RegExp(val, 'i') },{"data.clinicpin" : new RegExp(val, 'i') } , {"data.specialization" : speciality} ] },{ "data.profile": "doctor" }]}, 
-		  function(err, user) {
-		           res.send(user);
+		  function(err, details) {
+		           res.send(details);
+		 }).catch(function (err) {
+			 res.send(err);
 		 });
 	}
 	else{
 		model.user.find({$and : [{ $or: [ {"data.city" : new RegExp(val, 'i') } , {"data.address" : new RegExp(val, 'i') },{"data.state" : new RegExp(val, 'i') },{"data.pin" : new RegExp(val, 'i') } ] },{ "data.profile": type }]}, 
-		  function(err, user) {
-		           res.send(user);
+		  function(err, details) {
+		           res.send(details);
+		 }).catch(function (err) {
+			 res.send(err);
 		 });
 	}
 	
