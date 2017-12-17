@@ -13,11 +13,11 @@ mongoose.connect(config.host,function(){
 	    key : String,
 	    email : String
 });
-	
+
 	var userSchema = new mongoose.Schema({
-		data: mongoose.Schema.Types.Mixed     
+		data: mongoose.Schema.Types.Mixed
 	});
-	
+
 	var dbModel = {};
 	dbModel.auth = mongoose.model('authSchema',authSchema ,'authSchema');
 	dbModel.user = mongoose.model('userSchema',userSchema ,'userSchema');
