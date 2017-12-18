@@ -101,6 +101,11 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 		templateUrl:"partials/activation.html",
 		controller: "activationController"
 	})
+	.state("updatePayment",{
+		url:'/updatePayment',
+		templateUrl:"partials/updatePayment.html",
+		controller: "updatePaymentController"
+	})
 	.state("forgetpassword",{
 		url:'/forgetpassword',
 		templateUrl:"partials/forgetpassword.html",
@@ -505,6 +510,21 @@ app.controller('activationController',function($scope, $http, $state, $rootScope
 	
 });
 
+
+app.controller('updatePaymentController',function($scope, $http, $state, $rootScope, $stateParams , $location){
+	var params = $location.search();
+	$http.post('/updatePayment', {id : params.payment_request_id} ).then(function(data){
+		$scope.ActivationText = "Your Payment Is Successful";
+		$scope.showLogin = true;
+		$('.immoral-modal-container').hide();
+	},function(err){
+		$scope.ActivationText = err.data;
+		console.log(err);
+	});
+	
+});
+
+
 app.controller('admindashController',function($scope, $http, $state, $rootScope, $stateParams , $location){
 	$scope.userActivation = true;
 	$scope.checkbox = {}; 
@@ -792,6 +812,8 @@ app.controller('profileController',function($scope, $http, $rootScope, $state){
 		$scope.signup = data.data.data;
 		
 		$scope.signup.dob = new Date($scope.signup.dob);
+		
+		$scope.bank = $scope.signup.bank;
 	},function(err){
 		toastr.error(err);
 	});	
@@ -803,6 +825,27 @@ app.controller('profileController',function($scope, $http, $rootScope, $state){
 			toastr.error(err);
 		});	
 	};
+	
+	$scope.openBankModal = function(){
+		 $('#bankdetailsmodal').modal('show');
+	};
+	
+	$scope.updateBankDetails = function(){
+		$scope.error = false;
+		if($scope.bankForm.$valid){
+			if($scope.bank.bankaccno !== $scope.bank.rebankaccno){
+				$scope.error = true;
+				return;
+			}
+			var bankdetails = angular.copy($scope.bank);
+			delete bankdetails.rebankaccno;
+			$http.post('/updateBankDetails', {userid: $rootScope.userId , bankdata : bankdetails, userdata : $scope.signup} ).then(function(data){
+				toastr.success('Bank Details Updated Successfully');
+			},function(err){
+				$scope.apierror = err.data;
+			});	
+		}
+	}; 
 });
 
 app.controller('changePassController',function($scope, $http, $rootScope, $state){
@@ -1083,59 +1126,63 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		$scope.bill.paymentmethod = 'onlinepayment';
 		$scope.bill.amount = $scope.pendingAmount.amountLeft;
 		
-		$http.post('/payOnline',{id: $scope.treatmentData._id , data : $scope.bill}).then(function(data){		
-			var payment_request = data.data.payment_request;
+		var paymentRequestData = {
+				'purpose': 'Pay',
+				'amount': $('#payAmount').val(),
+				'buyer_name': $scope.bill.patientname,
+				/*'email': $rootScope.userData.data.email,
+				'phone': $rootScope.userData.data.mobile,*/
+				/*'send_email': 'True',
+				'send_sms': 'True'*/
+				
+		};
+		
+		$http.post('/payOnline',{doctorusername: $scope.treatmentData.data.doctorusername , data : paymentRequestData}).then(function(data){		
+			var payment_request = JSON.parse(data.data.data);
+			var instamojoUsername = data.data.username;
 			$scope.paymentId = payment_request.id;
 			Instamojo.open(payment_request.longurl);
 			
+	 
+
+			$scope.bill = {};
+			$scope.bill.profile = 'bill';
+			$scope.bill.date = new Date;
+			$scope.bill.chiefcomplaint = $scope.treatmentData.data.chiefcomplaint;
+			$scope.bill.patientname = $rootScope.userData.data.firstname + " " + $rootScope.userData.data.lastname;
+			$scope.bill.patientemail = $rootScope.userData.data.email;
+			$scope.bill.doctorname = $scope.treatmentData.data.name;
+			$scope.bill.paymentmethod = 'onlinepayment';
+			$scope.bill.amount = $('#payAmount').val();
+			$scope.bill.instamojoPaymentRequestId = $scope.paymentId;
+			$scope.bill.status = 'initiated';
 			
-			/*$(document).on('click','body *',function(){
-			    if($scope.paymentId){
-			    	$http.post('/checkPayment',{id: $scope.paymentId}).then(function(datas){
-			    		if(datas.data.success){
-			    			
-			    			$scope.bill = {};
-			    			$scope.bill.profile = 'bill';
-			    			$scope.bill.date = new Date;
-			    			$scope.bill.chiefcomplaint = $scope.treatmentData.data.chiefcomplaint;
-			    			$scope.bill.patientname = $rootScope.userData.data.firstname + " " + $rootScope.userData.data.lastname;
-			    			$scope.bill.patientemail = $rootScope.userData.data.email;
-			    			$scope.bill.doctorname = $scope.treatmentData.data.name;
-			    			$scope.bill.paymentmethod = 'onlinepayment';
-			    			$scope.bill.amount = $scope.pendingAmount.amountLeft;
-			    			$scope.bill.instamojoid = $scope.paymentId;
-			    			
-			    			$scope.paymentId = undefined;
-			    			$http.post('/addBill',{id: $scope.treatmentData._id , data : $scope.bill}).then(function(data){
-			    				var obj = $scope.treatmentData.data.treatmentanalysislist;
-			    				
-			    				obj[obj.length-1].billid = data.data._id;
-			    				obj[obj.length-1].date = data.data.data.date;
-			    				obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
-			    				obj[obj.length-1].amountpaidbypatient = $scope.bill.amount;
-			    				
-			    				obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
-			    				$scope.updateTreatmentDetails();
-			    			});
-			    			
-			    			
-			    			
-			    		}
-			    		
-			    	});
-			    }
-			});*/
-			
-			
-			$scope.updateTreatmentDetails = function (close){
-				$http.post('/editDetails',{id: $scope.treatmentData._id ,data: $scope.treatmentData.data, close: close}).then(function(data){
-					console.log('updats done');
-				 });
+			$http.post('/addBill',{id: $scope.treatmentData._id , data : $scope.bill}).then(function(data){
+				var obj = $scope.treatmentData.data.treatmentanalysislist;
 				
-			};
-			//toastr.success("Payment Successfull"); 
+				obj[obj.length-1].billid = data.data._id;
+				obj[obj.length-1].date = data.data.data.date;
+				obj[obj.length-1].instamojoPaymentRequestId = $scope.paymentId;
+				obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
+				obj[obj.length-1].amountpaidbypatient = $scope.bill.amount;
+				obj[obj.length-1].status = 'initiated';
+				
+				obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
+				$scope.updateTreatmentDetails();
+	
+				$http.post('/addToPaymentQueue',{id: $scope.treatmentData._id , paymentRequestId : $scope.paymentId, username: instamojoUsername}).then(function(data){
+			
+				});
 		 });
+		});
 	}
+	
+	$scope.updateTreatmentDetails = function (close){
+		$http.post('/editDetails',{id: $scope.treatmentData._id ,data: $scope.treatmentData.data, close: close}).then(function(data){
+			console.log('updats done');
+		 });
+		
+	};
 	
 	function getAllTreatments (){
 		if($scope.patientData){
@@ -1356,7 +1403,9 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 	    $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
 	  };
 	  
-	  
+	  $scope.showPaymentFn = function(){
+		  $scope.showPayment = true;
+	  }
 	  
 	  $scope.calculatePendingAmount = function(){
 		  $scope.pendingAmount = {amountLeft: null , limit: ''}
@@ -1376,6 +1425,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		  else{
 			  $scope.pendingAmount.limit = "onpar"
 		  }
+		  $scope.payAmount = angular.copy($scope.pendingAmount.amountLeft);
 		  return  $scope.pendingAmount.amountLeft;
 	  }
 	

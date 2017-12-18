@@ -22,6 +22,11 @@
 		        	 <input type="file" ng-model="signup.photo" accept="image/*"  app-filereader style="margin: 0px;" size="15360"/>	        	 
 		        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 15 KB</small></p>
            		</div>
+           		
+           		<div class="col-md-6 dregpad">
+           			<p style="color: #f49203;font-weight: bold;" ng-if="!signup.bank">Bank Details not updated. Kindly Update them to recieve Online Payments</p>
+           			<button type="submit" class="btn dbtn pull-right" ng-click="openBankModal()">Update Bank Details</button> </div>
+           		</div>
 	        </div>
 
             <div class="row">
@@ -283,4 +288,45 @@
             </div>
             </div>
    
+   
+    <div class="modal fade" tabindex="-1" role="dialog" id="bankdetailsmodal">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Update Bank Details</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<form id="bankForm" name="bankForm">
+	         <div>
+			    <label for="pin1">Account Holder's Name</label>
+			    <input type="text" value="" size="35"  ng-model="bank.accholdername" required>
+		    </div>
+		    <div>
+			    <label for="pin1">Bank Account Number</label>
+			    <input type="text" value="" size="35"  ng-model="bank.bankaccno" required>
+		    </div>
+		    <div>
+			    <label for="pin1">Re-enter Bank Account Number</label>
+			    <input type="text" value="" size="35"  ng-model="bank.rebankaccno" required>
+		    </div>
+		    <div>
+			    <label for="pin1">IFSC Code</label>
+			    <input type="text" value="" size="35"  ng-model="bank.ifsccode" required>
+		    </div>
+		    
+		    <p class="bg-warning pa5" ng-if="error">Kindly Check if both Account numbers are same</p>
+		    
+		    <p class="bg-warning pa5" ng-if="apierror" ng-repeat="(key, value) in apierror">{{key}} : {{value[0]}}</p>
+		    
+		    <div class="modal-footer">
+		      	<button type="submit" class="btn btn-primary" ng-click="updateBankDetails()">Update Bank Details</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		   </form>
+	      </div>
+	      
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
    </section>

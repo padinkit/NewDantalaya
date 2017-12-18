@@ -164,25 +164,48 @@ app.post('/auth/signup',function(req,res){
 });
 
 app.post('/payOnline', function(req, res){
-	var headers = { 'X-Api-Key': '5513828b2ef00debcaec7c6e6770e11b', 'X-Auth-Token': '3b0c130bc9eb2ff8c5774dffde376e17'}
-	var payload = {
-	  purpose: 'Treatment Payment',
-	  amount: req.body.data.amount,
-	  buyer_name: req.body.data.patientname,
-	  send_email: true,
-	  //webhook : "http://webhook.site/455b3d20-a1a5-4e2b-88ee-626a8afcfdfc",
-	  //redirect_url: "http://" +req.get('host') + "/#/updatePayment",
-	  email: req.body.data.patientemail,
-	  }
-
-	request.post('https://www.instamojo.com/api/1.1/payment-requests/', {form: payload,  headers: headers}, function(error, response, body){
-	  if(!error && response.statusCode == 201){
-	    res.send(body);
-	  }
-	  else{
-		  res.send(body);
-	  }
-	})
+	model.user.findOne({ "data.username": req.body.doctorusername},function(err, detailss){
+			if (err) {
+		           res.send(err);
+		        }else{
+		        	var values = detailss._doc.data;
+		        	    	
+		        		var payloadAuthRefreshUser = {
+							  'grant_type': 'password',
+							  'client_id': config.instamojo.clientid,
+							  'client_secret': config.instamojo.clientsecret,
+						      'username': values.bank.instamojo.username,
+						      'password': 'dantalaya1234'
+						  };
+		        		
+		        		var paymentRequestData =  req.body.data;
+		        		paymentRequestData.redirect_url = "http://" +req.get('host') + "/#/updatePayment",
+						  
+						  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
+							  if(!error && response.statusCode !== 400){
+								var body3 = JSON.parse(body3);
+							    
+							    var headersUpdateAccount = {'Authorization' : 'Bearer '+ body3.access_token};
+							    
+							    request.post('https://api.instamojo.com/v2/payment_requests/', {headers: headersUpdateAccount, form: paymentRequestData}, function(error, response, body4){
+									  if(!error && response.statusCode !== 400){
+									    res.send({data: body4, username: values.bank.instamojo.username});				
+									  }
+									  else{
+										res.status(400).send(body4);
+									  }
+								    
+								  });
+							  }
+							  else{
+								res.status(400).send(body3);
+							  }
+						    
+						  });
+		        	
+		        }
+		
+		});
 });
 
 
@@ -198,9 +221,7 @@ app.post('/checkPayment', function(req, res){
 	});
 });
 
-app.post('/updatePayment', function(req,res){
-	console.log(req);
-});
+
 
 app.post('/auth/activate',function(req, res){	
 	var userData = model.auth.findOne({ 'username' :  req.body.user },
@@ -520,6 +541,160 @@ app.get('/notice', function (req, res) {
 		 				});
 	 	      }
 	    );
+ });
+ 
+ app.post('/updateBankDetails', function(req, res){
+
+	// var headers = { 'X-Api-Key': config.instamojo.clientid, 'X-Auth-Token': config.instamojo.authtoken}
+	 	var bankdata = req.body.bankdata;
+	 	
+	 	if(req.body.userdata.bank){		    
+		    var payloadAuthRefreshUser = {
+		    		  'grant_type': 'password',
+					  'client_id': config.instamojo.clientid,
+					  'client_secret': config.instamojo.clientsecret,
+				      'username':req.body.userdata.bank.instamojo.username,
+				      'password': 'dantalaya1234'
+				  };
+				  
+				  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
+					  if(!error && response.statusCode !== 400){
+						var body3 = JSON.parse(body3);
+					    var payloadUpdateAccount = {
+				    		 'account_holder_name': bankdata.accholdername,
+				    	      'account_number': bankdata.bankaccno,
+				    	      'ifsc_code': bankdata.ifsccode
+						  };
+					    
+					    var headersUpdateAccount = {'Authorization' : 'Bearer '+ body3.access_token};
+					    
+					    request.put('https://api.instamojo.com/v2/users/'+ bankdata.instamojo.id +'/inrbankaccount/', {headers: headersUpdateAccount, form: payloadUpdateAccount}, function(error, response, body4){
+							  if(!error && response.statusCode !== 400){
+							    
+								  model.user.findOne({ "data.username": req.body.userid},function(err, detailss){
+				    	     			if (err) {
+				    	     		           res.send(err);
+				    	     		        }else{
+				    	     		        	var values = detailss._doc.data;
+				    	     		        	values.bank = bankdata;
+				    	     		        	model.user.update({ "data.username": req.body.userid},{"data" :values },function(err){
+				    	     		    	        if (err) {
+				    	     		    	           res.send('error');
+				    	     		    	        }else{
+				    	     		    	        	res.send('success');
+				    	     		    	        }
+				    	     		    	    });	
+				    	     		        }
+				    	     		
+				    	     		});
+			
+							  }
+							  else{
+								res.status(400).send(body4);
+							  }
+						    
+						  });
+					  }
+					  else{
+						res.status(400).send(body3);
+					  }
+				    
+				  });
+	 	}
+	 	else{
+			var payload = {
+				 'grant_type': 'client_credentials',
+			     'client_id': config.instamojo.clientid,
+			     'client_secret': config.instamojo.clientsecret
+			  };
+			
+			var payloadCreateUser = {
+				 'email': req.body.userdata.email,
+			     'password': 'dantalaya1234',
+			     'phone': req.body.userdata.mobile,
+			     'referrer': 'Dantalayaindia',
+			  };
+			
+			
+			request.post('https://api.instamojo.com/oauth2/token/', {form: payload}, function(error, response, body){
+			  if(!error && response.statusCode !== 400){
+				var body = JSON.parse(body);
+			    var access_token = body.access_token;
+			    var headersCreateUser = { 'Authorization' : 'Bearer '+ access_token};
+			    
+			    request.post('https://api.instamojo.com/v2/users/', {headers: headersCreateUser ,form: payloadCreateUser}, function(error, response, body1){
+			    	if(!error && response.statusCode !== 400){
+					  var body1 = JSON.parse(body1);
+					  var payloadAuthUser = {
+						  'grant_type': 'password',
+						  'client_id': config.instamojo.clientid,
+						  'client_secret': config.instamojo.clientsecret,
+					      'username': body1.username,
+					      'password': 'dantalaya1234',
+					  };
+					  bankdata.instamojo = {};
+					  bankdata.instamojo.username = body1.username;
+					  bankdata.instamojo.id = body1.id;
+					  
+					  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthUser}, function(error, response, body2){
+						  if(!error && response.statusCode !== 400){
+							var body2 = JSON.parse(body2);
+						    bankdata.instamojo.access_token = body2.access_token;
+						    bankdata.instamojo.refresh_token = body2.refresh_token;
+						    
+						    var payloadUpdateAccount = {
+					    		 'account_holder_name': bankdata.accholdername,
+					    	      'account_number': bankdata.bankaccno,
+					    	      'ifsc_code': bankdata.ifsccode
+							  };
+						    
+						    var headersUpdateAccount = {'Authorization': 'Bearer '+ body2.access_token};
+						    
+						    request.put('https://api.instamojo.com/v2/users/'+ bankdata.instamojo.id +'/inrbankaccount/', {headers: headersUpdateAccount, form: payloadUpdateAccount}, function(error, response, body5){
+								  if(!error && response.statusCode !== 400){
+									  
+									  model.user.findOne({ "data.username": req.body.userid},function(err, detailss){
+					    	     			if (err) {
+					    	     		           res.send(err);
+					    	     		        }else{
+					    	     		        	var values = detailss._doc.data;
+					    	     		        	values.bank = bankdata;
+					    	     		        	model.user.update({ "data.username": req.body.userid},{"data" :values },function(err){
+					    	     		    	        if (err) {
+					    	     		    	           res.send('error');
+					    	     		    	        }else{
+					    	     		    	        	res.send('success');
+					    	     		    	        }
+					    	     		    	    });	
+					    	     		        }
+					    	     		
+					    	     		});
+				
+								  }
+								  else{
+									res.status(400).send(body5);
+								  }
+							    
+							  });
+						  }
+						  else{
+							res.status(400).send(body2);
+						  }
+					    
+					  });
+				  }
+				  else{
+					  res.status(400).send(body1);
+				  }
+				});
+					
+			  }
+			  else{
+				  res.status(400).send(body);
+			  }
+			});
+		 
+	 	}
  });
  
  app.post('/changepassword', function(req, res){
@@ -935,37 +1110,133 @@ app.get('/notice', function (req, res) {
 	            res.json({'alert':'Registration error'});
 	        }else{
 	        	res.send(doc);
-	        	/*model.user.findOne({ "_id": req.body.id},function(err, details){
-	    			if (err) {
-	    		           res.send('error');
-	    		        }else{
-	    		        	var values = details._doc.data;
-	    		        	
-	    		        	if(typeof values['bills'] == 'object' ){
-	    		        		
-	    		        		if(values.bills.includes(req.body.patientId)){
-	    			        		res.send('Bill is Already Added');
-	    			        		return;
-	    			        	}
-	    		        		
-	    		        		values['bills'].push(newId);
-	    		        	}
-	    		        	else{
-	    		        		values['bills']= [];
-	    		        		values['bills'].push(newId);
-	    		        	}
-	    		    		
-	    		        	model.user.update({ "_id": req.body.id},{"data" :values },function(err){
-	    		    	        if (err) {
-	    		    	           res.send('error');
-	    		    	        }else{
-	    		    	        	res.send(doc);
-	    		    	        }
-	    		    	    });	
-	    		        }
-	    		});*/
 	        }
 	    });
+
+});
+ 
+ 
+ app.post('/addToPaymentQueue', function(req, res){
+	 model.paymentQueue.findOne({},function(err, details){
+		var values = details._doc.data;
+		if(!values){
+			values = {};
+		}
+		values[req.body.paymentRequestId] = {};
+		values[req.body.paymentRequestId].treatmentId = req.body.id;
+		values[req.body.paymentRequestId].instamojoUsername = req.body.username;
+		model.paymentQueue.update({},{"data" :values },function(err){
+	        if (err) {
+	           res.send(err);
+	        }else{
+	        	res.send('success');
+	        }
+	    });	
+	 });
+});
+ 
+ 
+app.post('/updatePayment', function(req,res){
+	var value;
+	 model.paymentQueue.findOne({},function(err, details){
+	 value = details._doc.data;
+		
+		/*
+		var payloadAuthRefreshUser = {
+	    		  'grant_type': 'password',
+				  'client_id': config.instamojo.clientid,
+				  'client_secret': config.instamojo.clientsecret,
+			      'username':value[req.body.id].username,
+			      'password': 'dantalaya1234'
+			  };
+			  
+			  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
+				  if(!error && response.statusCode !== 400){
+					var body3 = JSON.parse(body3);
+				    
+				    var headersUpdateAccount = {'Authorization' : 'Bearer '+ body3.access_token};
+				    
+				    request.get('https://api.instamojo.com/v2/payment_requests/'+ req.body.id , {headers: headersUpdateAccount}, function(error, response, body4){
+						  if(!error && response.statusCode !== 400){
+							  model.user.findOne({ "data.username": req.body.userid},function(err, detailss){
+			    	     			if (err) {
+			    	     		           res.send(err);
+			    	     		        }else{
+			    	     		        	var values = detailss._doc.data;
+			    	     		        	values.bank = bankdata;
+			    	     		        	model.user.update({ "data.username": req.body.userid},{"data" :values },function(err){
+			    	     		    	        if (err) {
+			    	     		    	           res.send('error');
+			    	     		    	        }else{
+			    	     		    	        	res.send('success');
+			    	     		    	        }
+			    	     		    	    });	
+			    	     		        }
+			    	     		
+			    	     		});
+		
+						  }
+						  else{
+							res.status(400).send(body4);
+						  }
+					    
+					  });
+				  }
+				  else{
+					res.status(400).send(body3);
+				  }
+			    
+			  });*/
+		
+			
+		model.user.findOne({ "_id": value[req.body.id].treatmentId},function(err, detailss){
+			var billId;
+			if (err) {
+		           res.send('error');
+		        }else{
+		        	var values = detailss._doc.data;
+		        	values['treatmentanalysislist'].map(function(obj, index){
+		        		if(obj.instamojoPaymentRequestId == req.body.id){
+		        			values['treatmentanalysislist'][index].status = "Completed";
+		        			billId = values['treatmentanalysislist'][index].billid;
+		        		}
+		        	});
+		        	model.user.update({ "_id": value[req.body.id].treatmentId},{"data" :values },function(err){
+		    	        if (err) {
+		    	           res.send('error');
+		    	        }else{
+		    	        	model.user.findOne({ "_id": billId},function(err, billDetails){
+				    	        if (err) {
+				    	           res.send('error');
+				    	        }else{
+				    	        	var billValues =  billDetails._doc.data;
+				    	        	billValues.status = "Completed";
+				    	        	model.user.update({ "_id": billId},{"data" :billValues },function(err){
+						    	        if (err) {
+						    	           res.send('error');
+						    	        }else{
+						    	        	delete value[req.body.id];
+						    	        	
+						    	        	model.paymentQueue.update({},{"data" :value },function(err){
+					    		    	        if (err) {
+					    		    	           res.send('error');
+					    		    	        }else{
+					    		    	        	res.send('success');
+					    		    	        }
+					    		    	    });	
+						    	        	
+						    	        }
+						    	    });	
+				    	        }
+				    	    });
+		    	        }
+		    	    });	
+		        }
+		});
+		
+		
+		
+	 });
 
 });
  
