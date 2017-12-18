@@ -68,10 +68,9 @@
 
 body {
     font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    background-color: #FDFDFD;
     line-height: 1.42857143;
     color: #000;
-    font-size: 16px;    
+    font-size: 16px;
 }
 
 a {
@@ -291,6 +290,22 @@ img {
     display: none;
 }
 
+.navbar-center{
+  width: 100%
+}
+
+.navbar-center .navbar-brand{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-center .dimg{
+  height: auto !important;
+  margin-top: 0px !important;
+}
+
 .navbar-toggle {
     padding: 10px 10px;
     margin-top: 25px;
@@ -350,7 +365,7 @@ img {
     .dtopaddr {
         display: none;
     }
-    
+
     .navbar .dnav>li>a {
         margin: 0px 0px;
         padding: 5px;
@@ -646,6 +661,13 @@ footer h1 h2 h3 h4{
     padding-right: 0px;
 }
 
+@media screen and (max-width: 30em) {
+    .dreggrid .col-md-6 {
+        padding-left: 0px;
+    }
+}
+
+
 .dsub {
     padding-right: 70px;
 }
@@ -765,6 +787,11 @@ footer h1 h2 h3 h4{
     text-align: left;
     font-size: 17px;
     line-height: 31px;
+    margin-right: 20px;
+}
+
+.dserlileft li{
+  margin-bottom: 15px;
 }
 
 .dserli li {
@@ -1138,6 +1165,18 @@ footer h1 h2 h3 h4{
     margin-top: 0px;
 }
 
+@media screen and (max-width: 30em) {
+  .search-doctor input,
+  .search-doctor textarea,
+  .search-doctor select {
+    width: 100%;
+  }
+
+  .search-doctor h1{
+    margin-top: 70px;
+  }
+}
+
 .search-doctor input:focus,
 .search-doctor textarea:focus,
 .search-doctor select:focus {
@@ -1184,6 +1223,7 @@ footer h1 h2 h3 h4{
     align-items: flex-start;
 }
 
+
 .profilecard hr {
     width: 100%;
 }
@@ -1195,6 +1235,22 @@ footer h1 h2 h3 h4{
 .doctorname {
     margin: 20px;
     margin-bottom: -10px;
+}
+
+@media screen and (max-width: 30em) {
+  .patient-db p{
+    font-size: 17px;
+  }
+  .doctoraddress{
+    font-size: 16px !important;
+  }
+  .doctorphoto{
+    padding: 0px 15px;
+  }
+  .doctorworking{
+    margin: 10px !important;
+    font-size: 17px !important;
+  }
 }
 
 .doctorphoto img {
@@ -1292,6 +1348,15 @@ footer h1 h2 h3 h4{
     width: 35%;
 }
 
+@media screen and (max-width: 45em) {
+  .forgot-pass form {
+      width: 100%;
+  }
+  .dashboard-top-logo{
+    display: none;
+  }
+}
+
 .forgot-pass .dbtn {
     float: right;
     margin-right: 0px;
@@ -1379,6 +1444,12 @@ footer h1 h2 h3 h4{
 
 #pricelisttable {
     width: 600px;
+}
+
+@media screen and (max-width: 40em) {
+  #pricelisttable {
+      width: 100%;
+  }
 }
 
 .ser-bullet {
@@ -1875,6 +1946,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 	display: inline-block;
 	text-align: center;
 	padding: 25px;
+  margin-top: 120px;
 }
 .prescription{
 	padding: 20px;
@@ -1931,4 +2003,91 @@ table{
 }
 .pa5{
 	padding: 5px;
+}
+
+.card {
+  background-color: #9ca1c6;
+  width: 500px;
+  height: 750px;
+  margin: 10px auto;
+  box-shadow: 1px 1px 10px 1px #ffffff;
+
+}
+
+.card hr{
+  border-top: 1px solid #ffffff;
+}
+
+.card-header {
+  overflow: hidden;
+  width: 100%;
+  max-height: 500px;
+}
+
+.card-header img{
+  width: 46%;
+  height: 30%;
+  border-radius: 29%;
+  margin-left: 25%;
+  margin-top: 10px;
+  border: 4px solid #ffffff;
+
+
+}
+
+.card-content {
+  width: 85%;
+  margin: 35px auto;
+}
+
+.card span {
+  font-weight: bold;
+}
+
+.card-content h3 {
+  font-size: 25px;
+  margin-bottom: 0;
+  color: #303F9F;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 30px;
+  padding-left: 100px
+}
+
+.card-content h4 {
+  font-size: 14px;
+  margin-top: 0;
+  color: #FF5252;
+  font-family: 'Montserrat', sans-serif;
+  padding-left: 100px;
+}
+
+.card-content p {
+  color: #ffffff;
+  font-size: 22px;
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+.card-footer {
+  border-top: solid 1px #B6B6B6;
+  padding: 5px;
+}
+
+.card-footer ul {
+  padding: 0;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+
+.card-footer ul li{
+  display: inline-block;
+  list-style: none;
+  margin: 5px;
+}
+
+.card-footer ul li i {
+  font-size: 2em;
+  color: #3F51B5;
 }

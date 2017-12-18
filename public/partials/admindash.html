@@ -1,37 +1,39 @@
 <div class="container">
-	
+
 	<div>
 
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs" role="tablist">
 	    <li role="presentation" ng-class="{active: userActivation}"><a href="javascript:void(0)" aria-controls="home" role="tab" data-toggle="tab" ng-click="toggleTab('userActivation')">User Activation</a></li>
 	    <li role="presentation" ng-class="{active: search}"><a href="javascript:void(0)" aria-controls="profile" role="tab" data-toggle="tab"  ng-click="toggleTab('search')">Search</a></li>
+
+
 	  </ul>
-	
+
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div role="tabpanel" ng-class="{active: userActivation}" class="tab-pane" id="home">
-			<table class="table table-striped"> 
-				<thead> 
-					<tr>  
-						<th>Username</th> 
-						<th>Profile</th> 
-					</tr> 
-				</thead> 
-				<tbody> 
-					<tr ng-repeat="user in getAccounts"> 
-						<th><a href="javascript:void(0)" ng-click="userDetails(user.username)">{{user.username}}</a></th> 
-						<td>{{user.profile}}</td> 
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>Profile</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="user in getAccounts">
+						<th><a href="javascript:void(0)" ng-click="userDetails(user.username)">{{user.username}}</a></th>
+						<td>{{user.profile}}</td>
 						<td><button type="button" class="btn btn-primary" ng-click="activate(user.username)">Activate</button></td>
 						<td><button type="button" class="btn btn-danger" ng-click="reject(user.username)">Reject</button></td>
-					</tr> 
-				</tbody> 
+					</tr>
+				</tbody>
 			</table>
 
 		</div>
 	    <div role="tabpanel" class="tab-pane" id="profile" ng-class="{active: search}">
-	    ` <div>
-	    		<div>
+	    <!-- `<div> -->
+	    		<!-- <div>
 	    			<input type="checkbox" ng-model="checkbox.patient"> Patient &nbsp;&nbsp;
 	    			<input type="checkbox"  ng-model="checkbox.doctor"> Dentist &nbsp;&nbsp;
 	    			<input type="checkbox"  ng-model="checkbox.surgeon"> House Surgeon &nbsp;&nbsp;
@@ -40,32 +42,154 @@
 	    			<button type="button" class="btn btn-primary" ng-click="getAllAccounts()">Get Details</button>
 	    		</div>
 	    		<br>
-		  </div>
-		  <table class="table table-striped" ng-if="allUserData.length != 0"> 
-				<thead> 
-					<tr>  
-						<th>Username</th> 
-						<th>Profile</th> 
-					</tr> 
-				</thead> 
-				<tbody> 
-					<tr ng-repeat="user in allUserData" ng-if="user.data.username"> 
-						<th><a href="javascript:void(0)" ng-click="userDetails(user.data.username)">{{user.data.username}}</a></th> 
-						<td>{{user.data.profile}}</td> 
-					</tr> 
-				</tbody> 
+		  </div> -->
+		  <!-- <table class="table table-striped" ng-if="allUserData.length != 0">
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>Profile</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="user in allUserData" ng-if="user.data.username">
+						<th><a href="javascript:void(0)" ng-click="userDetails(user.data.username)">{{user.data.username}}</a></th>
+						<td>{{user.data.profile}}</td>
+					</tr>
+				</tbody>
 			</table>
-			<h3 ng-if="allUserData.length == 0 && showerror">No Data</h3>
+			<h3 ng-if="allUserData.length == 0 && showerror">No Data</h3> -->
+			<section id="dpreg">
+				<div class="row">
+					<div class="col-md-6">
+						<label for="usersearch">Search Users</label>
+						<input id="usersearch" type="text" value="" ng-model="userEmail" size="35" >
+					</div>
+					<div class="col-md-6">
+						 <button type="submit" class="btn dbtn" style="margin: 22px -70px; padding: 16px 40px;" ng-click="searchUser(userEmail)">search</button>
+					</div>
+				</div>
+				<div class="" ng-show="userNotFound">
+					No Records Found !
+				</div>
+				<div ng-if="showUserData != null" class="row">
+					<div ng-if="showUserData.data.profile == 'patient' ">
+						<div class="card">
+							<div class="card-header">
+								<img src="images/pat.png" alt="">
+							</div>
+							<div class="card-content">
+								<h3>{{showUserData.data.firstname + " " + showUserData.data.lastname}}</h3>
+								<h4>{{showUserData.data.gender}}</h4>
+								<hr style="cardhr">
+								<p>Date Of Birth : <span>{{showUserData.data.dob | date:'dd-MM-yyyy'}}</span></p>
+								<p>Mobile : <span>{{showUserData.data.mobile}}</span></p>
+								<p>Email : <span>{{showUserData.data.email}}</span></p>
+								<p>Address : <span>{{showUserData.data.address}}</span></p>
+								<p>State : <span>{{showUserData.data.state}}</span></p>
+								<p>City : <span>{{showUserData.data.city}}</span></p>
+								<p>Zip Code : <span>{{showUserData.data.pin}}</span></p>
+							</div>
+						</div>
+					</div>
+					<div ng-if="showUserData.data.profile == 'doctor' ">
+						<div class="card" style="height: 1400px; width: 750px">
+							<div class="card-header">
+								<img src="images/doc.png" alt="">
+							</div>
+							<div class="card-content">
+								<h3>{{showUserData.data.firstname + " " + showUserData.data.lastname}}</h3>
+								<h4>{{showUserData.data.gender}}</h4>
+								<hr style="cardhr">
+								<p>DCI No : <span>{{showUserData.data.dci}}</span> </p>
+								<p>Qualification : <span>{{showUserData.data.qualification}}</span></p>
+								<p>Specialization : <span>{{showUserData.data.specialization}}</span></p>
+								<p>Experience : <span>{{showUserData.data.exp}}</span> </p>
+								<p>Date Of Birth : <span>{{showUserData.data.dob | date:'dd-MM-yyyy'}}</span></p>
+								<p>Mobile : <span>{{showUserData.data.mobile}}</span></p>
+								<p>Email : <span>{{showUserData.data.email}}</span></p>
+								<p>Address : <span>{{showUserData.data.address}}</span></p>
+								<p>State : <span>{{showUserData.data.state}}</span></p>
+								<p>City : <span>{{showUserData.data.city}}</span></p>
+								<p>Zip Code : <span>{{showUserData.data.pin}}</span></p>
+								<p>Clinic Name : <span>{{showUserData.data.clinicname}}</span></p>
+								<p>Clinic Address : <span>{{showUserData.data.clinicaddress}}</span></p>
+								<p>Clinic Contact : <span>{{showUserData.data.cliniccontact}}</span></p>
+								<p>Working Hours : <span>{{showUserData.data.hours}}</span></p>
+								<p>Clinic State : <span>{{showUserData.data.clinicstate}}</span></p>
+								<p>Clinic City : <span>{{showUserData.data.cliniccity}}</span></p>
+								<p>Clinic Zip Code : <span>{{showUserData.data.clinicpin}}</span></p>
+								<p>Website : <span>{{showUserData.data.clinicwebsite}}</span></p>
+
+
+
+							</div>
+						</div>
+					</div>
+
+					<div ng-if="showUserData.data.profile == 'surgeon' ">
+						<div class="card" style="height: 800px">
+							<div class="card-header">
+								<img src="images/sur.png" alt="">
+							</div>
+							<div class="card-content">
+								<h3>{{showUserData.data.firstname + " " + showUserData.data.lastname}}</h3>
+								<h4>{{showUserData.data.gender}}</h4>
+								<hr style="cardhr">
+								<p>Date Of Birth : <span>{{showUserData.data.dob | date:'dd-MM-yyyy'}}</span></p>
+								<p>Mobile : <span>{{showUserData.data.mobile}}</span></p>
+								<p>Email : <span>{{showUserData.data.email}}</span></p>
+								<p>Address : <span>{{showUserData.data.address}}</span></p>
+								<p>State : <span>{{showUserData.data.state}}</span></p>
+								<p>City : <span>{{showUserData.data.city}}</span></p>
+								<p>Zip Code : <span>{{showUserData.data.pin}}</span></p>
+								<p>Internship Start : <span>{{showUserData.data.internshipstartdate | date:'dd-MM-yyyy'}}</span> </p>
+								<p>Internship End : <span>{{showUserData.data.intershipcompdate | date:'dd-MM-yyyy'}}</span> </p>
+							</div>
+						</div>
+					</div>
+
+					<div ng-if="showUserData.data.profile == 'technician' ">
+						<div class="card" style="height: 900px">
+							<div class="card-header">
+								<img src="images/lab.png" alt="">
+							</div>
+							<div class="card-content">
+								<h3>{{showUserData.data.firstname + " " + showUserData.data.lastname}}</h3>
+								<h4>{{showUserData.data.gender}}</h4>
+								<hr style="cardhr">
+								<p>Date Of Birth : <span>{{showUserData.data.dob | date:'dd-MM-yyyy'}}</span></p>
+								<p>Mobile : <span>{{showUserData.data.mobile}}</span></p>
+								<p>Email : <span>{{showUserData.data.email}}</span></p>
+								<p>Address : <span>{{showUserData.data.address}}</span></p>
+								<p>State : <span>{{showUserData.data.state}}</span></p>
+								<p>City : <span>{{showUserData.data.city}}</span></p>
+								<p>Zip Code : <span>{{showUserData.data.pin}}</span></p>
+								<p>Lab Name : <span>{{showUserData.data.labname}}</span></p>
+								<p>Working Hours : <span>{{showUserData.data.hours}}</span></p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+
+				</div>
+
+
+
+			</section>
 	    </div>
 	  </div>
-	
+
+
 	</div>
+
 
 </div>
 
  <div class="modal fade" id="userdetailsModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -100,6 +224,6 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>

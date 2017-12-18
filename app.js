@@ -57,9 +57,9 @@ if ('development' == app.get('env')) {
 }
 
 passport.use( new LocalStrategy(
-  function(username, password, done) { 
+  function(username, password, done) {
     // check in mongo if a user with username exists or not
-	  model.auth.findOne({ 'username' :  username }, 
+	  model.auth.findOne({ 'username' :  username },
       function(err, user) {
 		  if (err) {
               return done(err);
@@ -84,7 +84,7 @@ passport.use( new LocalStrategy(
 passport.serializeUser(function(user, done) {
 	  done(null, user._id);
 	});
-	 
+
 passport.deserializeUser(function(id, done) {
 	model.auth.findById(id, function(err, user) {
     done(err, user);
@@ -111,7 +111,7 @@ function sendmail(req ,user,  key, email, profile){
 		      		"<div><p>"+ extra +"</p></div>"+
 		      		"</html>" // html body
 	};
-	
+
 	transporter.sendMail(mailOptions, function(error, info){
 	    if(error){
 	        return console.log(error);
@@ -119,7 +119,7 @@ function sendmail(req ,user,  key, email, profile){
 	    console.log('Message sent: ' + info.response);
 	});
 }
-app.post('/auth/login', passport.authenticate('local'),function(req, res){	
+app.post('/auth/login', passport.authenticate('local'),function(req, res){
     res.json(req.user);
 });
 
@@ -133,11 +133,11 @@ app.post('/auth/signup',function(req,res){
 	req.body.authInfo.email = req.body.contactInfo.email;
 	var randomNo = Math.random().toString(36).slice(2);
 	req.body.authInfo.key = randomNo;
-	
+
 	var authData = new model.auth(req.body.authInfo);
-	
+
     var userData =  new model.user({data : req.body.contactInfo});
-    
+
       model.auth.find({username : req.body.authInfo.username},function(err, list){
     	if(list.length !== 0){
     		res.json({'alert':'userIDError'});
@@ -157,10 +157,10 @@ app.post('/auth/signup',function(req,res){
     	            });
     	        }
     	    });
-    	}	
+    	}
     });
-    
-    
+
+
 });
 
 app.post('/payOnline', function(req, res){
@@ -223,7 +223,7 @@ app.post('/checkPayment', function(req, res){
 
 
 
-app.post('/auth/activate',function(req, res){	
+app.post('/auth/activate',function(req, res){
 	var userData = model.auth.findOne({ 'username' :  req.body.user },
 		function(err, user) {
 			if(!err){
@@ -236,7 +236,7 @@ app.post('/auth/activate',function(req, res){
 		    	        }else{
 		    	        	res.send('success');
 		    	        }
-		    	    });	
+		    	    });
 					user.save(function (err) {
 					    if (err){
 					    	res.status(404).send("failure");
@@ -257,7 +257,25 @@ app.post('/auth/activate',function(req, res){
 });
 
 
-app.post('/getuserDetails',function(req, res){	
+
+app.post('/searchuser',function(req, res){
+	var userData = model.user.findOne({ 'data.username' :  req.body.user },
+		function(err, user) {
+			if(!err){
+        console.log(user);
+				res.send(user);
+			}
+			else{
+				res.status(404).send("failure");
+			}
+	    }
+  );
+});
+
+
+
+
+app.post('/getuserDetails',function(req, res){
 	var userData = model.user.findOne({ 'data.username' :  req.body.user },
 		function(err, user) {
 			if(!err){
@@ -275,7 +293,10 @@ app.post('/getuserDetails',function(req, res){
 
 
 
-app.post('/admin/activate',function(req, res){	
+
+
+
+app.post('/admin/activate',function(req, res){
 	var userData = model.auth.findOne({ 'username' :  req.body.user },
 		function(err, user) {
 			if(!err){
@@ -295,14 +316,14 @@ app.post('/admin/activate',function(req, res){
 							      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
 							      		"</html>" // html body
 						};
-						
+
 						transporter.sendMail(mailOptions, function(error, info){
 						    if(error){
 						        return console.log(error);
 						    }
 						    console.log('Message sent: ' + info.response);
 						});
-						
+
 					    res.send("successfully activated");
 					  });
 			}
@@ -313,10 +334,10 @@ app.post('/admin/activate',function(req, res){
   );
 });
 
-app.post('/admin/reject',function(req, res){	
+app.post('/admin/reject',function(req, res){
 	var userData = model.auth.remove({ 'username' :  req.body.user },
 		function(err, user) {
-			if(!err){				
+			if(!err){
 				var mailOptions = {
 					    from: 'dantalayaindia@gmail.com', // sender address
 					    to: user.email, // list of receivers
@@ -326,7 +347,7 @@ app.post('/admin/reject',function(req, res){
 					      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
 					      		"</html>" // html body
 				};
-				
+
 				transporter.sendMail(mailOptions, function(error, info){
 				    if(error){
 				        return console.log(error);
@@ -342,7 +363,7 @@ app.post('/admin/reject',function(req, res){
   );
 });
 
-app.get('/getaccounts',function(req, res){	
+app.get('/getaccounts',function(req, res){
 	var userData = model.auth.find({ 'adminactivated' :  false },{username :1 , profile: 1 },
 		function(err, user) {
 			if(!err){
@@ -355,15 +376,15 @@ app.get('/getaccounts',function(req, res){
   );
 });
 
-app.post('/getAllAccounts',function(req, res){	
+app.post('/getAllAccounts',function(req, res){
 	model.user.find({ "data.profile" : { $in: req.body.data } } ,function(err, details){
   		 if (err) {
   	           res.send('error');
   	        }else{
-  	        	res.send(details);	       	        
+  	        	res.send(details);
   	        }
-  	 
-  	});	 
+
+  	});
 })
 
 function sendPasswordmail(req, user, pass, email){
@@ -380,7 +401,7 @@ function sendPasswordmail(req, user, pass, email){
 		      		"<a href='http://" +req.get('host') + "/'><b>Go to Dantalaya Website</b></a>" +
 		      		"</html>" // html body
 	};
-	
+
 	transporter.sendMail(mailOptions, function(error, info){
 	    if(error){
 	        return console.log(error);
@@ -406,7 +427,7 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 		    	  	"</div>"+
 		      		"</html>" // html body
 	};
-	
+
 	transporter.sendMail(mailOptions, function(error, info){
 	    if(error){
 	        return console.log(error);
@@ -415,7 +436,7 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 	});
 }
 
-app.post('/auth/forgotPassword',function(req, res){	
+app.post('/auth/forgotPassword',function(req, res){
 	var userData = model.auth.findOne({ 'username' :  req.body.username },
 		function(err, user) {
 			if(!err){
@@ -436,7 +457,7 @@ app.post('/appointmentmail',function(req,res){
 		 var mail = req.body.data.doctorMail;
 		 var from = "Doctor";
 	 }
-	 
+
 	 else{
 		 var name = req.body.data.doctorName;
 		 var mail = req.body.data.patientMail;
@@ -450,18 +471,18 @@ app.post('/appointmentmail',function(req,res){
 	 }
 	 sendappointmentmail( req.body.data.title , name , req.body.data.start, req.body.data.end , mail,text, from);
 		res.send('success');
-});		
-			
-		
+});
+
+
 
 app.post('/searchdetails', function(req, res){
-	
+
 	var type = req.body.userstype;
 	var speciality = req.body.speciality;
 	var val =  req.body.location;
-	
+
 	if(type !== 'technician' && type !== 'surgeon'){
-		model.user.find({$and : [{ $or: [ {"data.cliniccity" : new RegExp(val, 'i') } , {"data.clinicaddress" : new RegExp(val, 'i') },{"data.clinicstate" : new RegExp(val, 'i') },{"data.clinicpin" : new RegExp(val, 'i') } , {"data.specialization" : speciality} ] },{ "data.profile": "doctor" }]}, 
+		model.user.find({$and : [{ $or: [ {"data.cliniccity" : new RegExp(val, 'i') } , {"data.clinicaddress" : new RegExp(val, 'i') },{"data.clinicstate" : new RegExp(val, 'i') },{"data.clinicpin" : new RegExp(val, 'i') } , {"data.specialization" : speciality} ] },{ "data.profile": "doctor" }]},
 		  function(err, details) {
 		           res.send(details);
 		 }).catch(function (err) {
@@ -469,24 +490,24 @@ app.post('/searchdetails', function(req, res){
 		 });
 	}
 	else{
-		model.user.find({$and : [{ $or: [ {"data.city" : new RegExp(val, 'i') } , {"data.address" : new RegExp(val, 'i') },{"data.state" : new RegExp(val, 'i') },{"data.pin" : new RegExp(val, 'i') } ] },{ "data.profile": type }]}, 
+		model.user.find({$and : [{ $or: [ {"data.city" : new RegExp(val, 'i') } , {"data.address" : new RegExp(val, 'i') },{"data.state" : new RegExp(val, 'i') },{"data.pin" : new RegExp(val, 'i') } ] },{ "data.profile": type }]},
 		  function(err, details) {
 		           res.send(details);
 		 }).catch(function (err) {
 			 res.send(err);
 		 });
 	}
-	
+
 });
 
 app.post('/searchpatientdetails', function(req, res){
 	var email = req.body.email;
 
 	var phone = parseInt(req.body.phone);
-	model.user.find({$and : [{$or: [ { "data.email" : email }, { "data.mobile" : phone }]},{ "data.profile": 'patient' }]}, 
+	model.user.find({$and : [{$or: [ { "data.email" : email }, { "data.mobile" : phone }]},{ "data.profile": 'patient' }]},
 
 	function(err, user) {
-		
+
 		if(user.length !== 0){
         res.send(user);
 		}
@@ -522,21 +543,21 @@ app.get('/notice', function (req, res) {
 
  app.post('/getprofile', function(req, res){
 	 console.log(req.body.userid);
-	 model.user.findOne({'data.username': req.body.userid}, 
+	 model.user.findOne({'data.username': req.body.userid},
 	 	      function(err, user) {
 	                    res.send(user);
 	 	      }
 	    );
  });
- 
+
  app.post('/profilesave', function(req, res){
 	 console.log(req.body.userid);
-	 model.user.findOne({'data.username': req.body.userid}, 
+	 model.user.findOne({'data.username': req.body.userid},
 	 	      function(err, user) {
 		 			user.data = req.body.data;
-		 			
+
 		 			user.save(function(err, thor) {
-		 				  if (err) return console.error(err); 
+		 				  if (err) return console.error(err);
 		 				  res.send('success');
 		 				});
 	 	      }
@@ -697,23 +718,24 @@ app.get('/notice', function (req, res) {
 	 	}
  });
  
+
  app.post('/changepassword', function(req, res){
 	 console.log(req.body.userid);
-	 model.auth.findOne({'username': req.body.userid}, 
+	 model.auth.findOne({'username': req.body.userid},
 	 	      function(err, user) {
 		 			if(req.body.data.oldpass !== user.password ){
 		 				res.send('failure');
 		 			}
 		 			user.password = req.body.data.newpass;
-		 			
+
 		 			user.save(function(err, thor) {
-		 				  if (err) return console.error(err); 
+		 				  if (err) return console.error(err);
 		 				  res.send('success');
 		 				});
 	 	      }
 	    );
  });
- 
+
  app.post('/addpatients', function(req, res){
 	 var patientdata = new model.user({data: req.body});
 	 var email = req.body.email;
@@ -729,51 +751,51 @@ app.get('/notice', function (req, res) {
 				        }else{
 				        	res.send('success');
 				        }
-				    });	
+				    });
 					}
 	 });
-	 
+
 	 });
- 
- 
- 
+
+
+
  app.post('/addPatientToDoctor', function(req, res){
 	 model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 			if (err) {
 		           res.send('error');
 		        }else{
 		        	var values = details._doc.data;
-		        	
+
 		        	if(typeof values['patients'] == 'object' ){
-		        		
+
 		        		if(values.patients.includes(req.body.patientId)){
 			        		res.send('Patient is Already Added');
 			        		return;
 			        	}
-		        		
+
 		        		values['patients'].push( req.body.patientId);
 		        	}
 		        	else{
 		        		values['patients']= [];
 		        		values['patients'].push( req.body.patientId);
 		        	}
-		    		
+
 		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
 		    	        if (err) {
 		    	           res.send('error');
 		    	        }else{
 		    	        	res.send('success');
 		    	        }
-		    	    });	
+		    	    });
 		        }
-		
+
 		});
  });
-	 
+
  app.post('/addNewPatient', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
-	  
-	  
+
+
 	  model.user.find({ "data.email": req.body.data.email},function(err, acc){
 		  if(acc.length != 0){
 			  res.send({emailAlreadyPresent : true});
@@ -786,48 +808,48 @@ app.get('/notice', function (req, res) {
 			        if (err) {
 			            res.json({'alert':'Registration error'});
 			        }else{
-			        	
+
 			        	model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 			    			if (err) {
 			    		           res.send('error');
 			    		        }else{
 			    		        	var values = details._doc.data;
-			    		        	
+
 			    		        	if(typeof values['patients'] == 'object' ){
-			    		        		
+
 			    		        		if(values.patients.includes(req.body.patientId)){
 			    			        		res.send('Patient is Already Added');
 			    			        		return;
 			    			        	}
-			    		        		
+
 			    		        		values['patients'].push(newId);
 			    		        	}
 			    		        	else{
 			    		        		values['patients']= [];
 			    		        		values['patients'].push(newId);
 			    		        	}
-			    		    		
+
 			    		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
 			    		    	        if (err) {
 			    		    	           res.send('error');
 			    		    	        }else{
 			    		    	        	res.send({success: true,data: doc});
 			    		    	        }
-			    		    	    });	
+			    		    	    });
 			    		        }
-			    		
+
 			    		});
-			            
+
 			        }
-			    });  
+			    });
 		  }
-		  
+
 	  });
-	    
-		
-  
+
+
+
  });
- 
+
  app.post('/addNewPatientasDependant', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
 	          req.body.data.dependant = true;
@@ -836,43 +858,43 @@ app.get('/notice', function (req, res) {
 					console.log(newId);
 			        if (err) {
 			            res.json({'alert':'Registration error'});
-			        }else{		        	
+			        }else{
 			        	model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 			    			if (err) {
 			    		           res.send('error');
 			    		        }else{
 			    		        	var values = details._doc.data;
-			    		        	
+
 			    		        	if(typeof values['patients'] == 'object' ){
-			    		        		
+
 			    		        		if(values.patients.includes(req.body.patientId)){
 			    			        		res.send('Patient is Already Added');
 			    			        		return;
 			    			        	}
-			    		        		
+
 			    		        		values['patients'].push(newId);
 			    		        	}
 			    		        	else{
 			    		        		values['patients']= [];
 			    		        		values['patients'].push(newId);
 			    		        	}
-			    		    		
+
 			    		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
 			    		    	        if (err) {
 			    		    	           res.send('error');
 			    		    	        }else{
 			    		    	        	res.send({success: true,data: doc});
 			    		    	        }
-			    		    	    });	
+			    		    	    });
 			    		        }
-			    		
+
 			    		});
-			            
+
 			        }
-			    });  
+			    });
 });
- 
- 
+
+
  app.post('/viewAllPatients', function(req, res){
 	 model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 		 if (err) {
@@ -883,55 +905,55 @@ app.get('/notice', function (req, res) {
 		       		 if (err) {
 		       	           res.send('error');
 		       	        }else{
-		       	        	res.send(details);	       	        
+		       	        	res.send(details);
 		       	        }
-		       	 
+
 		       	 });
-	        
+
 	        }
-	 
+
 	 });
-	  
+
  });
- 
- 
+
+
  app.post('/viewTreatment', function(req, res){
 	 if(req.body.doctorusername){
 		 model.user.find({ _id : { $in: req.body.data }, 'data.doctorusername' : req.body.doctorusername } ,function(err, details){
 	   		 if (err) {
 	   	           res.send('error');
 	   	        }else{
-	   	        	res.send(details);	       	        
+	   	        	res.send(details);
 	   	        }
-	   	 
-	   	 }); 
+
+	   	 });
 	 }
 	 else{
 		 model.user.find({ _id : { $in: req.body.data } } ,function(err, details){
 	   		 if (err) {
 	   	           res.send('error');
 	   	        }else{
-	   	        	res.send(details);	       	        
+	   	        	res.send(details);
 	   	        }
-	   	 
-	   	 }); 
+
+	   	 });
 	 }
-		  
+
  });
- 
+
  app.post('/viewPayments', function(req, res){
 		model.user.find({ _id : { $in: req.body.data } } ,function(err, details){
 	   		 if (err) {
 	   	           res.send('error');
 	   	        }else{
-	   	        	res.send(details);	       	        
+	   	        	res.send(details);
 	   	        }
-	   	 
-	   	 });	  
+
+	   	 });
 });
- 
- 
- 
+
+
+
  app.post('/updateEvents', function(req, res){
 	 model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 			if (err) {
@@ -939,7 +961,7 @@ app.get('/notice', function (req, res) {
 		        }else{
 		        	var values = details._doc.data;
 		        	values['events'] = req.body.data;
-		    		
+
 		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
 		    	        if (err) {
 		    	           res.send('error');
@@ -962,41 +984,41 @@ app.get('/notice', function (req, res) {
 		    	     		        	else{
 		    	     		        		values['events'][index].className = 'rejectAppointment';
 		    	     		        	}
-	    	     		    		
+
 		    	     		        	model.user.update({ _id : req.body.patientId},{"data" :values },function(err){
 		    	     		    	        if (err) {
 		    	     		    	           res.send('error');
 		    	     		    	        }else{
 		    	     		    	        	res.send('success');
 		    	     		    	        }
-		    	     		    	    });	
+		    	     		    	    });
 		    	     		        }
-		    	     		
-		    	     		});  
+
+		    	     		});
 		    	        }
-		    	    });	
+		    	    });
 		        }
-		
-		});  
+
+		});
  });
- 
- 
+
+
  app.post('/addEvent', function(req, res){
 	 model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 			if (err) {
 		           res.send('error');
 		        }else{
 		        	var values = details._doc.data;
-		        	
+
 		        	if(typeof values['events'] == 'object' ){
-		        		
+
 		        		values['events'].push( req.body.data);
 		        	}
 		        	else{
 		        		values['events']= [];
 		        		values['events'].push( req.body.data);
 		        	}
-		    		
+
 		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
 		    	        if (err) {
 		    	           res.send('error');
@@ -1006,35 +1028,35 @@ app.get('/notice', function (req, res) {
 		    	     		           res.send('error');
 		    	     		        }else{
 		    	     		        	var values = detailss._doc.data;
-		    	     		        	
+
 		    	     		        	if(typeof values['events'] == 'object' ){
-		    	     		        		
+
 		    	     		        		values['events'].push( req.body.data);
 		    	     		        	}
 		    	     		        	else{
 		    	     		        		values['events']= [];
 		    	     		        		values['events'].push( req.body.data);
 		    	     		        	}
-		    	     		    		
+
 		    	     		        	model.user.update({ "data.username": req.body.patientId},{"data" :values },function(err){
 		    	     		    	        if (err) {
 		    	     		    	           res.send('error');
 		    	     		    	        }else{
 		    	     		    	        	res.send('success');
 		    	     		    	        }
-		    	     		    	    });	
+		    	     		    	    });
 		    	     		        }
-		    	     		
+
 		    	     		});
 
 		    	        }
-		    	    });	
+		    	    });
 		        }
-		
-		});  
+
+		});
  });
- 
- 
+
+
  app.post('/viewEvents', function(req, res){
 	 model.user.findOne({ "data.username": req.body.doctorId }, {'data.events' : 1},function(err, details){
 			if (err) {
@@ -1042,44 +1064,44 @@ app.get('/notice', function (req, res) {
 		        }else{
 		        	res.send(details);
 		        }
-		
-		});  
- });
- 
 
- 
- 
- 
+		});
+ });
+
+
+
+
+
  app.post('/addTreatment', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
-	    
+
 		userData.save(function(err, doc){
 			var newId = (doc._id).toString();
 			console.log(newId);
 	        if (err) {
 	            res.json({'alert':'Registration error'});
 	        }else{
-	        	
+
 	        	model.user.findOne({ "_id": req.body.id},function(err, details){
 	    			if (err) {
 	    		           res.send(err);
 	    		        }else{
 	    		        	var values = details._doc.data;
-	    		        	
+
 	    		        	if(typeof values['treatments'] == 'object' ){
-	    		        		
+
 	    		        		if(values.treatments.includes(req.body.patientId)){
 	    			        		res.send('Treatment is Already Added');
 	    			        		return;
 	    			        	}
-	    		        		
+
 	    		        		values['treatments'].push(newId);
 	    		        	}
 	    		        	else{
 	    		        		values['treatments']= [];
 	    		        		values['treatments'].push(newId);
 	    		        	}
-	    		        	if(typeof values['currenttreatment'] == 'object' ){	
+	    		        	if(typeof values['currenttreatment'] == 'object' ){
 	    		        		values['currenttreatment'][req.body.data.doctoruserid] = newId
 	    		        	}
 	    		        	else{
@@ -1092,17 +1114,17 @@ app.get('/notice', function (req, res) {
 	    		    	        }else{
 	    		    	        	res.send(doc);
 	    		    	        }
-	    		    	    });	
+	    		    	    });
 	    		        }
 	    		});
 	        }
 	    });
- 
+
 });
- 
+
  app.post('/addBill', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
-	    
+
 		userData.save(function(err, doc){
 			var newId = (doc._id).toString();
 			console.log(newId);
@@ -1114,6 +1136,7 @@ app.get('/notice', function (req, res) {
 	    });
 
 });
+
  
  
  app.post('/addToPaymentQueue', function(req, res){
@@ -1240,7 +1263,6 @@ app.post('/updatePayment', function(req,res){
 
 });
  
- 
  app.post('/closeTreatment', function(req, res){
 	        	model.user.findOne({ "_id": req.body.id},function(err, details){
 	    			if (err) {
@@ -1254,30 +1276,30 @@ app.post('/updatePayment', function(req,res){
 	    		    	        }else{
 	    		    	        	res.send('success');
 	    		    	        }
-	    		    	    });	
+	    		    	    });
 	    		        }
 	    		});
 });
- 
- 
+
+
  app.post('/editDetails', function(req, res){
 	 console.log(req.body.userid);
-	 model.user.findOne({'_id': req.body.id}, 
+	 model.user.findOne({'_id': req.body.id},
 	 	      function(err, user) {
-		 			user.data = req.body.data;	 			
+		 			user.data = req.body.data;
 		 			user.save(function(err, thor) {
-		 				  if (err) return console.error(err); 
+		 				  if (err) return console.error(err);
 		 				  res.send('success');
 		 				});
 	 	      }
 	    );
  });
- 
- 
- 
- 
 
- 
+
+
+
+
+
 https.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
