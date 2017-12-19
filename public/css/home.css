@@ -2096,3 +2096,17 @@ table{
 input.ng-invalid.ng-dirty{
     border: 1px solid red;
 }
+
+.videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+}
+.videoWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 8%;
+    width: 82%;
+    height: 70%;
+}
