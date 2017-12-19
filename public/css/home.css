@@ -2091,3 +2091,8 @@ table{
   font-size: 2em;
   color: #3F51B5;
 }
+
+
+input.ng-invalid.ng-dirty{
+    border: 1px solid red;
+}
