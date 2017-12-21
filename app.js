@@ -262,7 +262,8 @@ app.post('/searchuser',function(req, res){
 	var userData = model.user.findOne({ 'data.username' :  req.body.user },
 		function(err, user) {
 			if(!err){
-        console.log(user);
+				console.log(user);
+				console.log(user.data.events[0]);
 				res.send(user);
 			}
 			else{

@@ -565,10 +565,13 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 
 	$scope.searchUser = function (userEmail) {
 		$http.post('/searchuser', {user :userEmail } ).then(function(data){
-			console.log(data.data);
 			if(data.data != ""){
 				$scope.userNotFound = false;
 				$scope.showUserData  = data.data;
+				if($scope.showUserData.data.profile == 'patient'){
+					$scope.userCurrentTreatmentIds= Object.keys($scope.showUserData.data.currenttreatment);
+					//$scope.userCurrentTreatments = data.data
+				}
 			}else{
 				$scope.showUserData = null;
 				$scope.userNotFound = true;
