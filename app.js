@@ -36,7 +36,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5500);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -266,7 +266,8 @@ app.post('/searchuser',function(req, res){
 	var userData = model.user.findOne({ 'data.username' :  req.body.user },
 		function(err, user) {
 			if(!err){
-        console.log(user);
+				console.log(user);
+				console.log(user.data.events[0]);
 				res.send(user);
 			}
 			else{
