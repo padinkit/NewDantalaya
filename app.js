@@ -109,6 +109,7 @@ function sendmail(req ,user,  key, email, profile){
 		    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
 		      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
 		      		"<div><p>"+ extra +"</p></div>"+
+		      		"<div><p>"+ config.mailText +"</p></div>"+
 		      		"</html>" // html body
 	};
 
@@ -179,7 +180,10 @@ app.post('/payOnline', function(req, res){
 						  };
 		        		
 		        		var paymentRequestData =  req.body.data;
-		        		paymentRequestData.redirect_url = "http://" +req.get('host') + "/#/updatePayment",
+		        		paymentRequestData.redirect_url = "http://" +req.get('host') + "/#/updatePayment";
+		        		paymentRequestData.partner_fee_type = "percent";
+		        		paymentRequestData.partner_fee = config.partner_fee;
+		        		
 						  
 						  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
 							  if(!error && response.statusCode !== 400){
@@ -312,7 +316,7 @@ app.post('/admin/activate',function(req, res){
 							    html:   "<html>" +
 							    	  	"<div> <h2>Dantalaya</h2></div>"+
 							    	  	"<div><p>Your Account Has been Activated</p></div><br><br>"+
-							      		"<div><p>"+ config.mailText +"</p></div>"+
+							      		"<div><p>"+ config.doctormailText +"</p></div>"+
 							      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
 							      		"</html>" // html body
 						};
