@@ -259,15 +259,29 @@ app.run(function($rootScope, $http, $state) {
 
 		$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
 			$rootScope.userData = data.data;
+			$rootScope.fetchedUserData = true;
+			$rootScope.$broadcast('fetchedUserData');
 		},function(err){
 			console.log(err);
 		});
 	},function(err){
 		console.log('login error');
 	});
-
+	  $('.nav a').on('click', function(){ 
+            $(".navbar-toggle").trigger( "click" );
+    });
 });
 
+
+app.controller('navcontroller',function($scope, $location){
+	setTimeout(function(){ 
+		$('.nav a').on('click', function(){ 
+			$(".navbar-toggle").trigger( "click" );
+		});
+	}, 300);
+		
+
+});
 
 app.controller('middleController',function($scope, $location){
 
@@ -389,6 +403,38 @@ app.controller('patientAppointmenttController',function($scope, $http, $state, $
 app.controller('dashboardController',function($scope, $http, $state, $rootScope){
 	$scope.results = [];
 	$scope.searchparam = {};
+	$scope.allDetailsFromEmail = [];
+	$scope.selectedUserFromEmail;
+	
+	function getAllDetailsFromEmail(){
+		if($rootScope.userType == 'patient' && $rootScope.fetchedUserData){
+			$http.post('/getAllDetailsFromEmail',{email: $rootScope.userData.data.email}).then(function(data){
+				data.data.map(function(obj, index){
+					if(!obj.data.dependant){
+						obj.self = true;
+						obj.selfname = "(Self)";
+						$scope.allDetailsFromEmail.push(obj);
+						$scope.selectedUserFromEmail = obj;
+						$scope.selectedUser = String(index);
+					}
+					else{
+						$scope.allDetailsFromEmail.push(obj);
+					}
+				});
+				
+			},function(err){
+				toastr.error(err);
+			});
+		}
+	}
+	getAllDetailsFromEmail();
+	$scope.$on('fetchedUserData', getAllDetailsFromEmail);
+	
+	$scope.changeUser = function(each){
+		$scope.selectedUserFromEmail = $scope.allDetailsFromEmail[parseInt(each)];
+		$rootScope.userData = $scope.selectedUserFromEmail;
+	};
+	
 	$scope.search = function(){
 		$scope.searchsubmit = true;
 		var params = $scope.searchparam;
@@ -811,6 +857,7 @@ app.controller('menubarController',function($scope, $http, $rootScope, $state , 
 		$http.get('/auth/logout').then(function(data){
 			console.log('logout success');
 			$state.go('home');
+			$rootScope.userType = undefined;
 		},function(err){
 			console.log(err);
 		});
@@ -1264,6 +1311,9 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 				}
 
 				var paymentIds = [];
+				if(!$scope.treatment){
+					return;
+				}
 				$scope.treatment.treatmentanalysislist.forEach(function(obj){
 					if(obj.billid){
 						paymentIds.push(obj.billid);
@@ -1459,7 +1509,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 });
 
 app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$state, $stateParams, uiGridConstants) {
-
+	$scope.treatmentHistory =[];
 	$scope.$on('fileSizeError',function(){
 		$scope.showError = true;
 		$scope.$apply();
@@ -1478,11 +1528,23 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			$http.post('/viewTreatment',{data : $scope.patientData.data.treatments , doctorusername: $rootScope.userData.data.username}).then(function(data){
 				$scope.allTreatments = data.data;
 				//$scope.gridOptions.data = data.data;
+				$scope.allTreatments.map(function(obj){
+					if(Object.keys($scope.patientData.data.currenttreatment)){
+						Object.keys($scope.patientData.data.currenttreatment).map(function(objs){
+							if($scope.patientData.data.currenttreatment[objs] !== obj._id){
+								$scope.treatmentHistory.push(obj);
+							}
+						});
+					}
+					else{
+						$scope.treatmentHistory = $scope.allTreatments;
+					}
 
+				});
 
 				$scope.gridOptions = {
 					    enableFiltering: false,
-					    data :  data.data,
+					    data :  $scope.treatmentHistory,
 					    enableRowSelection: true,
 					    enableRowHeaderSelection: false,
 					    multiSelect: false,
@@ -1854,7 +1916,14 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		},
 		eventClick: function(calEvent, jsEvent, view) {
 		    if(calEvent.className.includes('openAppointment')){
+		    	$scope.showAction = true;
+		    	$('#confirmDialog').modal('show');
+		     	$scope.currentEvent = calEvent;
+		    	$scope.$apply();
 
+		    }
+		    else{
+		    	$scope.showAction = false;
 		    	$('#confirmDialog').modal('show');
 		     	$scope.currentEvent = calEvent;
 		    	$scope.$apply();

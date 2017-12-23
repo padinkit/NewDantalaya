@@ -97,7 +97,7 @@
     </section>
 
 
-    <nav class="navbar navbar-default " ng-if="userType != 'doctor'">
+    <nav class="navbar navbar-default " ng-if="userType != 'doctor'" ng-controller="navcontroller">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" ng-class="{'navbar-toggle collapsed': userType != 'patient','navbar-toggle collapsed hide': userType == 'patient'}" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
