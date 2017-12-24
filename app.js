@@ -348,6 +348,7 @@ app.post('/admin/reject',function(req, res){
 					    html:   "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2></div>"+
 					      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
+					      		"<div><p>For any queries  email info@dantalaya.com</p></div>" +
 					      		"</html>" // html body
 				};
 
@@ -516,6 +517,18 @@ app.post('/searchpatientdetails', function(req, res){
 		}
 		else{
 			 res.json({'alert':"Account doesn't exists"});
+		 }
+	});
+});
+
+app.post('/getAllDetailsFromEmail', function(req, res){
+	model.user.find({ "data.email" : req.body.email},
+	function(err, user) {
+		if(user.length !== 0){
+			res.send(user);
+		}
+		else{
+			 res.status(400).send(err);
 		 }
 	});
 });
