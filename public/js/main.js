@@ -562,6 +562,8 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 
 	$scope.showUserData = null;
 	$scope.userNotFound = false;
+	$scope.userSelectedCurrentTreatmentId = null;
+	$scope.userTreatmentId = null;
 
 	$scope.searchUser = function (userEmail) {
 		$http.post('/searchuser', {user :userEmail } ).then(function(data){
@@ -570,8 +572,28 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 				$scope.showUserData  = data.data;
 				if($scope.showUserData.data.profile == 'patient'){
 					$scope.userCurrentTreatmentIds= Object.keys($scope.showUserData.data.currenttreatment);
-					//$scope.userCurrentTreatments = data.data
-				}
+					$scope.userSelectedCurrentTreatmentId = $scope.userCurrentTreatmentIds[0];
+					$scope.userTreatmentId = $scope.showUserData.data.currenttreatment[$scope.userSelectedCurrentTreatmentId];
+					console.log($scope.showUserData.data.currenttreatment[$scope.userSelectedCurrentTreatmentId])
+					$http.post('/userviewtreatment', {treatment :$scope.showUserData.data.treatments } ).then(function(data){
+						$scope.allTreatments = data.data;
+
+						$scope.treatmentData = $scope.allTreatments.find(function(value, index) {
+							return value._id == $scope.showUserData.data.currenttreatment[$scope.userCurrentTreatmentIds[0]];
+						});
+						$scope.treatment = $scope.treatmentData.data;
+
+
+					},function(err){
+						console.log(err);
+					});
+
+
+
+
+
+
+					}
 			}else{
 				$scope.showUserData = null;
 				$scope.userNotFound = true;

@@ -266,8 +266,6 @@ app.post('/searchuser',function(req, res){
 	var userData = model.user.findOne({ 'data.username' :  req.body.user },
 		function(err, user) {
 			if(!err){
-				console.log(user);
-				console.log(user.data.events[0]);
 				res.send(user);
 			}
 			else{
@@ -946,6 +944,31 @@ app.get('/notice', function (req, res) {
 
  });
 
+
+app.post('/userviewtreatment', function(req, res){
+	if(req.body.doctorusername){
+		model.user.find({ _id : { $in: req.body.data }, 'data.doctorusername' : req.body.doctorusername } ,function(err, details){
+			if (err) {
+				res.send('error');
+			}else{
+				res.send(details);
+			}
+
+		});
+	}
+	else{
+		model.user.find({ _id : { $in: req.body.treatment } } ,function(err, details){
+			if (err) {
+				res.send('error');
+			}else{
+				console.log(details)
+				res.send(details);
+			}
+
+		});
+	}
+
+});
  app.post('/viewPayments', function(req, res){
 		model.user.find({ _id : { $in: req.body.data } } ,function(err, details){
 	   		 if (err) {
