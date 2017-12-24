@@ -620,7 +620,6 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 					$scope.userCurrentTreatmentIds= Object.keys($scope.showUserData.data.currenttreatment);
 					$scope.userSelectedCurrentTreatmentId = $scope.userCurrentTreatmentIds[0];
 					$scope.userTreatmentId = $scope.showUserData.data.currenttreatment[$scope.userSelectedCurrentTreatmentId];
-					console.log($scope.showUserData.data.currenttreatment[$scope.userSelectedCurrentTreatmentId])
 					$http.post('/userviewtreatment', {treatment :$scope.showUserData.data.treatments } ).then(function(data){
 						$scope.allTreatments = data.data;
 
