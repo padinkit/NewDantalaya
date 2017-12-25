@@ -1176,6 +1176,47 @@ app.get('/notice', function (req, res) {
 	 });
 });
  
+ app.post('/addToChargeSheet', function(req, res){
+	 model.chargeSheetSchema.findOne({"month": req.body.month, "year": req.body.year },function(err, details){
+		if(details){
+			var values = details._doc.data;
+			if(!values){
+				values = {};
+			}
+			if(values[req.body.doctorid]){
+				values[req.body.doctorid].push(req.body.id.data);
+			}
+			else{
+				values[req.body.doctorid] = [];
+				values[req.body.doctorid].push(req.body.id.data);
+			}				
+			model.paymentQueue.update({"month": req.body.month, "year": req.body.year },{"data" :values , "chargeSheetCreated" : false },function(err){
+		        if (err) {
+		           res.send(err);
+		        }else{
+		        	res.send('success');
+		        }
+		    });	
+			
+		 }
+		else{
+			var values = {};
+			values[req.body.doctorid] = [];
+			values[req.body.doctorid].push(req.body.id.data);
+			 var chargeSheetData =  new model.user({"month": req.body.month, "year": req.body.year , "chargeSheetCreated" : false, "data" :values  });
+				userData.save(function(err, doc){
+					var newId = (doc._id).toString();
+					console.log(newId);
+			        if (err) {
+			            res.json({'alert':'Registration error'});
+			        }else{
+			        	res.send(doc);
+			        }
+			    });
+		}
+		
+	 });
+});
  
 app.post('/updatePayment', function(req,res){
 	var value;

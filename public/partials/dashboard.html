@@ -190,5 +190,32 @@
 	</div>
     
     
+     <div class="modal fade" tabindex="-1" role="dialog" id="newEventTitleModal">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Book an Appointment</h4>
+	      </div>
+	      <div class="modal-body">
+	         <div class="white-box">
+				 <div class="dregpad">
+                     <div>
+                         <label for="labname">Appoinment Brief Title</label>
+                         <input type="text" value="" size="35" id="newEventTitle" name="newEventTitle" ng-model="newEventTitle">
+                     </div><br>
+                     <div class="bg-warning pa5" ng-if="titleError">Appoinment Brief Title cannot be empty<div>
+                 </div>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-default" ng-click="newEventAdding()">Book Appointment</button>
+	        <button type="button" class="btn btn-default" ng-click="closeEventAddingModal()">Close</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
+ 
+  
     
  </section> 

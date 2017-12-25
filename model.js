@@ -22,11 +22,20 @@ mongoose.connect(config.host,function(){
 		data: mongoose.Schema.Types.Mixed     
 	});
 	
+	var chargeSheetSchema = new mongoose.Schema({
+		data: mongoose.Schema.Types.Mixed,
+		month: String,
+		year: String,
+		chargeSheetCreated: Boolean,
+	});
+	
+	
 
 	var dbModel = {};
 	dbModel.auth = mongoose.model('authSchema',authSchema ,'authSchema');
 	dbModel.user = mongoose.model('userSchema',userSchema ,'userSchema');
 	dbModel.paymentQueue = mongoose.model('paymentQueueSchema',paymentQueueSchema ,'paymentQueueSchema');
+	dbModel.chargeSheetSchema = mongoose.model('chargeSheetSchema',chargeSheetSchema ,'chargeSheetSchema');
 
 
 module.exports = dbModel;
