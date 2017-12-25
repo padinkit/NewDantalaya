@@ -489,8 +489,9 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 						editable: true,
 						selectable: true,
 						selectHelper: true,
+						timezone: false,
 						longpressDelay : 10,
-						select: function(start, end) {
+						dayClick: function(start) {
 							if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 					        	return false;
 					        }
@@ -498,7 +499,6 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 							var eventData;
 							eventData = {
 								start: start,
-								end: end,
 								className: 'openAppointment',
 								patientId:  $rootScope.userData._id,
 								patientName: $rootScope.userData.data.firstname + " " +$rootScope.userData.data.lastname,
@@ -511,7 +511,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 								id: $rootScope.userData.data.username + new Date().valueOf()
 							};
 							$scope.eventData = eventData;
-							showEventAddingModal();
+							showEventAddingModal(start);
 							
 						},
 						editable: true,
@@ -525,11 +525,16 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 
 	};
 	
-	function showEventAddingModal(){
+	function showEventAddingModal(start){
 		$scope.newEventTitle = undefined;
+		$scope.newEventDate = {};
+		$scope.newEventDate.start = start;
+		$scope.newEventDate.end = moment(start).add(30, 'm');
 		$('#newEventTitleModal').modal('show');
 		$('#newEventTitleModal').addClass('z2010');
 		$('.modal-backdrop').addClass('z2000');
+		$scope.$apply();
+		
 	};
 
 	$scope.newEventAdding = function(){
@@ -538,6 +543,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 			return;
 		}
 		$scope.eventData.title = $scope.newEventTitle;
+		$scope.eventData.end =  $scope.newEventDate.end;
 		addEvent();
 		$('#calendar').fullCalendar('unselect');
 		$('#newEventTitleModal').modal('hide');
@@ -1920,11 +1926,11 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 	  $scope.addPrescription = function (){
 		  if(!$scope.treatment.prescription){
 			  $scope.treatment.prescription = [];
-			  $scope.treatment.prescription.push($scope.newpresciption);
+			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
 		  }
 		  else if($scope.treatment.prescription.length == 0){
 			  $scope.treatment.prescription = [];
-			  $scope.treatment.prescription.push($scope.newpresciption);
+			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
 		  }
 		  else{
 			  $scope.treatment.prescription.push($scope.newpresciption);
@@ -1981,6 +1987,7 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		selectable: true,
 		selectHelper: true,
 		longpressDelay : 10,
+		timezone: false,
 		select: function(start, end) {
 			if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 	        	return false;

@@ -194,7 +194,6 @@
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title">Book an Appointment</h4>
 	      </div>
 	      <div class="modal-body">
@@ -203,8 +202,17 @@
                      <div>
                          <label for="labname">Appoinment Brief Title</label>
                          <input type="text" value="" size="35" id="newEventTitle" name="newEventTitle" ng-model="newEventTitle">
-                     </div><br>
-                     <div class="bg-warning pa5" ng-if="titleError">Appoinment Brief Title cannot be empty<div>
+                     </div>
+                   <!--   <div>
+                         <label for="labname">Start Time</label>
+                         {{newEventDate.start | date}}
+                     </div> -->
+                     <!-- <div>
+                         <label for="labname">End Time</label>
+                         <input type="date" value="" size="35" id="newEventTitle" name="newEventTitle" ng-model="newEventDate.end">
+                     </div> -->
+                     <br>
+                     <div class="bg-warning pa5" ng-if="titleError">Appoinment Brief Title cannot be empty</div>
                  </div>
 			</div>
 	      </div>
