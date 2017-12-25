@@ -2132,3 +2132,13 @@ input.ng-invalid.ng-dirty{
 .z2010{
 	z-index: 2010 !important;
 }
+.mobile .mobilehidden,.mobileshown{
+	display: none;
+}
+.mobile .mobileshown{
+	display: block;
+}
+.mobilelogo{
+	margin: 10%;
+    text-align: center;
+}
