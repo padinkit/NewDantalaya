@@ -401,6 +401,7 @@ app.controller('patientAppointmenttController',function($scope, $http, $state, $
 });
 
 app.controller('dashboardController',function($scope, $http, $state, $rootScope){
+	
 	$scope.results = [];
 	$scope.searchparam = {};
 	$scope.allDetailsFromEmail = [];
@@ -485,38 +486,33 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 							right: 'month,agendaWeek,agendaDay'
 						},
 						defaultView: 'agendaWeek',
-					    navLinks: true, // can click day/week names to navigate views
+						editable: true,
 						selectable: true,
 						selectHelper: true,
+						timezone: false,
 						longpressDelay : 10,
-						select: function(start, end) {
+						dayClick: function(start) {
 							if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 					        	return false;
 					        }
-
-							var title = prompt('Event Title:');
+							
 							var eventData;
-							if (title) {
-								eventData = {
-									title: title,
-									start: start,
-									end: end,
-									className: 'openAppointment',
-									patientId:  $rootScope.userData._id,
-									patientName: $rootScope.userData.data.firstname + " " +$rootScope.userData.data.lastname,
-									doctorUser: $scope.selected.username,
-									doctorName: $scope.selected.firstname + " " + $scope.selected.lastname,
-									doctorMail: $scope.selected.email,
-									patientMail: $rootScope.userData.data.email,
-									patientPhone: $rootScope.userData.data.mobile,
-									doctorPhone: $scope.selected.mobile,
-									id: $rootScope.userData.data.username + new Date().valueOf()
-								};
-								$scope.eventData = eventData;
-								addEvent();
-							}
-
-							$('#calendar').fullCalendar('unselect');
+							eventData = {
+								start: start,
+								className: 'openAppointment',
+								patientId:  $rootScope.userData._id,
+								patientName: $rootScope.userData.data.firstname + " " +$rootScope.userData.data.lastname,
+								doctorUser: $scope.selected.username,
+								doctorName: $scope.selected.firstname + " " + $scope.selected.lastname,
+								doctorMail: $scope.selected.email,
+								patientMail: $rootScope.userData.data.email,
+								patientPhone: $rootScope.userData.data.mobile,
+								doctorPhone: $scope.selected.mobile,
+								id: $rootScope.userData.data.username + new Date().valueOf()
+							};
+							$scope.eventData = eventData;
+							showEventAddingModal(start);
+							
 						},
 						editable: true,
 						eventLimit: true,
@@ -528,7 +524,38 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		});
 
 	};
+	
+	function showEventAddingModal(start){
+		$scope.newEventTitle = undefined;
+		$scope.newEventDate = {};
+		$scope.newEventDate.start = start;
+		$scope.newEventDate.end = moment(start).add(30, 'm');
+		$('#newEventTitleModal').modal('show');
+		$('#newEventTitleModal').addClass('z2010');
+		$('.modal-backdrop').addClass('z2000');
+		$scope.$apply();
+		
+	};
 
+	$scope.newEventAdding = function(){
+		if(!$scope.newEventTitle){
+			$scope.titleError = true;
+			return;
+		}
+		$scope.eventData.title = $scope.newEventTitle;
+		$scope.eventData.end =  $scope.newEventDate.end;
+		addEvent();
+		$('#calendar').fullCalendar('unselect');
+		$('#newEventTitleModal').modal('hide');
+		$('.modal-backdrop').removeClass('z2000');
+	};
+	
+	$scope.closeEventAddingModal = function(){
+		$('#newEventTitleModal').modal('hide');
+		$('.modal-backdrop').removeClass('z2000');
+	};
+	
+	
 	function addEvent(){
 		$http.post('/addEvent',{doctorId: $scope.selected.username , patientId:  $rootScope.userId, data : $scope.eventData}).then(function(data){
 			$http.post('/appointmentmail',{origin: "patient" ,data : $scope.eventData}).then(function(data){
@@ -1841,9 +1868,13 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			obj[obj.length-1].billid = data.data._id;
 			obj[obj.length-1].date = data.data.data.date;
 			obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
-
 			obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
-			$scope.updateTreatmentDetails();
+			
+			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount};
+			
+			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData} ).then(function(data){
+				$scope.updateTreatmentDetails();
+			});
 		});
 
 	  };
@@ -1895,11 +1926,11 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 	  $scope.addPrescription = function (){
 		  if(!$scope.treatment.prescription){
 			  $scope.treatment.prescription = [];
-			  $scope.treatment.prescription.push($scope.newpresciption);
+			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
 		  }
 		  else if($scope.treatment.prescription.length == 0){
 			  $scope.treatment.prescription = [];
-			  $scope.treatment.prescription.push($scope.newpresciption);
+			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
 		  }
 		  else{
 			  $scope.treatment.prescription.push($scope.newpresciption);
@@ -1956,6 +1987,7 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		selectable: true,
 		selectHelper: true,
 		longpressDelay : 10,
+		timezone: false,
 		select: function(start, end) {
 			if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 	        	return false;

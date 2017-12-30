@@ -2126,3 +2126,19 @@ input.ng-invalid.ng-dirty{
 .margin-auto{
 	margin: auto;
 }
+.z2000{
+	z-index: 2000 !important;
+}
+.z2010{
+	z-index: 2010 !important;
+}
+.mobile .mobilehidden,.mobileshown{
+	display: none;
+}
+.mobile .mobileshown{
+	display: block;
+}
+.mobilelogo{
+	margin: 10%;
+    text-align: center;
+}
