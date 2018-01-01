@@ -10,6 +10,7 @@
 			</ol>
 		</div>
 	</div>
+	<hr>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="white-box">
@@ -33,7 +34,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div><hr>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="white-box">
@@ -372,7 +373,7 @@
 															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<label class="col-md-10">({{$index + 1}}) Treatment Details</label><span>Date: {{eachTreatment.date | date}}</span>
 																		<div class="col-md-12">
 																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis" disabled></textarea>
