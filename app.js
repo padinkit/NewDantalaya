@@ -15,7 +15,8 @@ var express = require('express')
   , expressSession = require('express-session')
   , nodemailer = require('nodemailer')
   , xoauth2 = require('xoauth2')
-  , config = require('./config');
+  , config = require('./config')
+  , schedule = require('node-schedule');
 var fs = require('fs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -123,6 +124,10 @@ function sendmail(req ,user,  key, email, profile){
 app.post('/auth/login', passport.authenticate('local'),function(req, res){
     res.json(req.user);
 });
+
+
+
+
 
 app.post('/auth/signup',function(req,res){
 	req.body.contactInfo.username = req.body.authInfo.username;
@@ -1207,13 +1212,13 @@ app.post('/userviewtreatment', function(req, res){
 				values = {};
 			}
 			if(values[req.body.doctorid]){
-				values[req.body.doctorid].push(req.body.id.data);
+				values[req.body.doctorid].push(req.body.data);
 			}
 			else{
 				values[req.body.doctorid] = [];
-				values[req.body.doctorid].push(req.body.id.data);
+				values[req.body.doctorid].push(req.body.data);
 			}				
-			model.paymentQueue.update({"month": req.body.month, "year": req.body.year },{"data" :values , "chargeSheetCreated" : false },function(err){
+			model.chargeSheetSchema.update({"month": req.body.month, "year": req.body.year },{"data" :values , "chargeSheetCreated" : false },function(err){
 		        if (err) {
 		           res.send(err);
 		        }else{
@@ -1225,9 +1230,9 @@ app.post('/userviewtreatment', function(req, res){
 		else{
 			var values = {};
 			values[req.body.doctorid] = [];
-			values[req.body.doctorid].push(req.body.id.data);
-			 var chargeSheetData =  new model.user({"month": req.body.month, "year": req.body.year , "chargeSheetCreated" : false, "data" :values  });
-				userData.save(function(err, doc){
+			values[req.body.doctorid].push(req.body.data);
+			 var chargeSheetData =  new model.chargeSheetSchema({"month": req.body.month, "year": req.body.year , "chargeSheetCreated" : false, "data" :values  });
+			 chargeSheetData.save(function(err, doc){
 					var newId = (doc._id).toString();
 					console.log(newId);
 			        if (err) {
@@ -1377,7 +1382,41 @@ app.post('/updatePayment', function(req,res){
 	    );
  });
 
-
+ var monthlyScheduler = schedule.scheduleJob('1 0 1 * *', function(){
+	  var currenMonth = new Date().getMonth();
+	  var neededYear = new Date().getFullYear();
+	  
+	  if(currenMonth == 0){
+		  currenMonth = 12;
+		  neededYear = neededYear -1;
+	  }
+	  var previousMonth = new Date().setMonth(currenMonth-1);
+		
+	  model.chargeSheetSchema.findOne({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },function(err, details){
+			if(details){
+				var values = details._doc;
+				
+				values.total = {};
+				Object.keys(values.data).map(function(obj){
+					var total = parseInt(0);
+					values.data[obj].map(function(each){
+						total = total + parseInt(each.amount);
+					});
+					
+					var serviceAmount = (total * config.partner_fee)/100 ;
+					values.total[obj] = {totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount};
+				});
+				
+				model.chargeSheetSchema.update({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },{"total" :values.total , "chargeSheetCreated" : true },function(err){
+			        if (err) {
+			        }else{
+			        	console.log('Charge Sheet Ran for '+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }));
+			        }
+			        
+			    });	
+			}
+	  });
+});
 
 
 

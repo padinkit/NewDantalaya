@@ -27,6 +27,7 @@ mongoose.connect(config.host,function(){
 		month: String,
 		year: String,
 		chargeSheetCreated: Boolean,
+		total: mongoose.Schema.Types.Mixed
 	});
 	
 	

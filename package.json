@@ -15,6 +15,7 @@
     "fs": "0.0.1-security",
     "mail": "^0.2.3",
     "mongoose": "^4.10.8",
+    "node-schedule": "^1.2.5",
     "nodemailer": "^2.7.2",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",

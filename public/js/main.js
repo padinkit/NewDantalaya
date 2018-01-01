@@ -1214,6 +1214,8 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 
 app.controller("doctorPatientController",function ($scope,$http,$stateParams) {
 	$scope.patientData = $stateParams.data;
+	
+	$scope.patientData.data.dob = new Date($scope.patientData.data.dob);
 
 	$scope.updatePatientDetails = function(){
 		$http.post('/editDetails',{id: $scope.patientData._id , data : $scope.patientData.data}).then(function(data){
@@ -1872,7 +1874,7 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			
 			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount};
 			
-			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData} ).then(function(data){
+			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
 				$scope.updateTreatmentDetails();
 			});
 		});
