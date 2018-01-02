@@ -32,5 +32,6 @@ config.doctormailText = 'Dear Doctors welcome to Dantalaya, the largest network 
 '8) Doctors can make payments to their respective labs to Dantalaya via online payment gateway or they can choose to pay cash. <br><br> '+
 '9) Invoice will be generated for every transaction which can be downloaded and printed. <br><br> '+
 '10) Dantalaya promises to support Doctors in every way to build your practice by constantly upgrading the app with the latest technology and innovations in the field of Dentistry. <br><br> '+
-'11) For any queries email info@dantalaya.com and continue producing smiles for all!!! <br><br> '
+'11) Finance provided for patients will be at the sole discretion of the finance company and Dantalaya is not responsible for rejection of finance towards any treatment. Doctors cannot engage with the finance company directly as this will  attract legal action and the contract with the doctor will be terminated immediately.<br><br> ' +
+'12) For any queries email info@dantalaya.com and continue producing smiles for all!!! <br><br> '
 module.exports = config;
