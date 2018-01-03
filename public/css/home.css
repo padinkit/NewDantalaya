@@ -2142,3 +2142,7 @@ input.ng-invalid.ng-dirty{
 	margin: 10%;
     text-align: center;
 }
+
+.patient-calendar .fc-time-grid-container{
+ 	height: auto !important;
+ }
