@@ -4163,7 +4163,7 @@ $.extend(Grid.prototype, {
         var dayEl;
 
         this.coordMap.build();
-        var cell = this.coordMap.getCell(ev.pageX, ev.pageY);
+        var cell = this.coordMap.getCell(ev.screenX, ev.screenY);
         dayEl = _this.getCellDayEl(cell);
         start = _this.getCellDate(cell);
         view.trigger('dayClick', dayEl[0], start, ev);
