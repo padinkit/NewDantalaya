@@ -101,7 +101,7 @@
                </div>
             </div>
             <div class="row" ng-if="userType == 'patient'">
-                <div class="col-md-6" ng-repeat="result in results">
+                <div class="col-md-6" ng-repeat="result in results" ng-if="!newEventTitleModal">
                     <div class="profilecard">
                         <div class="doctorname"><p style="color: #2F96B4;">Dr.{{result.data.firstname | capitalize}}  {{result.data.lastname | capitalize}}  ( {{result.data.specialization}} )</p></div>
                         <hr>
@@ -170,11 +170,9 @@
 
     
     
-    <div class="modal fade" tabindex="-1" role="dialog" id="appointmentModal">
-	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content">
+	    <div class="modal-content book-appointment" ng-if="newEventTitleModal">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <button type="button" class="close" ng-click="closeBookAppointment()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title">Book Appointment with {{selected.firstname}} {{selected.lastname}}</h4>
 	      </div>
 	      <div class="modal-body">
@@ -183,11 +181,9 @@
 			</div>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-default" ng-click="closeBookAppointment()">Close</button>
 	      </div>
 	    </div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div>
     
     
      <div class="modal fade" tabindex="-1" role="dialog" id="newEventTitleModal">
@@ -201,7 +197,7 @@
 				 <div class="dregpad">
                      <div>
                          <label for="labname">Appoinment Brief Title</label>
-                         <input type="text" value="" size="35" id="newEventTitle" name="newEventTitle" ng-model="newEventTitle">
+                         <input type="text" value="" style="width: 100%" id="newEventTitle" name="newEventTitle" ng-model="newEventTitle">
                      </div>
                    <!--   <div>
                          <label for="labname">Start Time</label>

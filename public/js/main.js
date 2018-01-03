@@ -462,15 +462,17 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		}
 	};
 
+	$scope.closeBookAppointment = function() {
+		$scope.newEventTitleModal = false
+	};
+	
 	$scope.bookAppointment = function(obj){
-		$('#appointmentModal').modal('show');
+		//$('#appointmentModal').modal('show');
+		$scope.newEventTitleModal = true;
 		$('#calendar').fullCalendar('removeEvents');
 		$scope.allEventData = [];
 		$scope.selected = obj;
 
-
-
-		$('#appointmentModal').off('shown.bs.modal').on('shown.bs.modal', function (e) {
 
 			$http.post('/viewEvents',{doctorId: obj.username}).then(function(data){
 					if(data.data){
@@ -521,7 +523,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 
 					$('#calendar').fullCalendar('renderEvents', $scope.allEventData , true);
 			 });
-		});
+	
 
 	};
 	
@@ -531,8 +533,8 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		$scope.newEventDate.start = start;
 		$scope.newEventDate.end = moment(start).add(30, 'm');
 		$('#newEventTitleModal').modal('show');
-		$('#newEventTitleModal').addClass('z2010');
-		$('.modal-backdrop').addClass('z2000');
+		/*$('#newEventTitleModal').addClass('z2010');
+		$('.modal-backdrop').addClass('z2000');*/
 		$scope.$apply();
 		
 	};
@@ -547,12 +549,12 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		addEvent();
 		$('#calendar').fullCalendar('unselect');
 		$('#newEventTitleModal').modal('hide');
-		$('.modal-backdrop').removeClass('z2000');
+		//$('.modal-backdrop').removeClass('z2000');
 	};
 	
 	$scope.closeEventAddingModal = function(){
 		$('#newEventTitleModal').modal('hide');
-		$('.modal-backdrop').removeClass('z2000');
+		//$('.modal-backdrop').removeClass('z2000');
 	};
 	
 	

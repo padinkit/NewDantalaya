@@ -2146,3 +2146,6 @@ input.ng-invalid.ng-dirty{
 .patient-calendar .fc-time-grid-container{
  	height: auto !important;
  }
+ .book-appointment{
+ 	margin: 10px 5%;
+ }
