@@ -2149,3 +2149,9 @@ input.ng-invalid.ng-dirty{
  .book-appointment{
  	margin: 10px 5%;
  }
+ .label-danger {
+    background-color: #d9534f !important;
+}
+.prescription+div a{
+	   box-shadow: none !important;
+}

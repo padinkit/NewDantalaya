@@ -392,7 +392,7 @@
 																	</div>
 																	
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span></label>
+																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
 																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
@@ -400,6 +400,7 @@
 																	</div>
 																</div>
 																<button type="button" class="btn btn-info" ng-click="subaddTreatment(treatment.treatmentanalysislist)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp Add</button>
+																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
 															</div>
 														</div>
 														
@@ -449,7 +450,11 @@
 																</div>											
 															</div>
 															<br>
-															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button>
+															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button> 
+															<div class="pull-right">
+											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
+											       					<a href="javascript:void(0)" ng-click="downloadPrescription(treatment.prescription)">Download Prescription</a>
+											       			</div>
 														</div>
 													</div>
 												</div>
@@ -849,7 +854,7 @@
 																	</div>
 																	
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span></label>
+																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
 																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
@@ -908,6 +913,10 @@
 															</div>
 															<br>
 															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button>
+															<div class="pull-right">
+											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
+											       					<a href="javascript:void(0)" ng-click="downloadPrescription (treatment.prescription)">Download Prescription</a>
+											       			</div>
 														</div>
 													</div>
 												</div>
@@ -1284,7 +1293,7 @@
 																	</div>
 																	
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span></label>
+																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
 																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient" disabled>
@@ -1321,6 +1330,10 @@
 																</table>
 															</div>
 														</div>
+														<div class="pull-right">
+											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
+											       					<a href="javascript:void(0)" ng-click="downloadPrescription(treatment.prescription)">Download Prescription</a>
+											       			</div>
 													</div>
 												</div>
 													<div class="form-group">

@@ -1078,12 +1078,14 @@ app.filter('searchFilter', function() {
   return function(data,search) {
 	  if(search){
 		  var out = data.filter(function(obj){
-			  if(obj.data.username)
-			{
-				  return obj.data.firstname.includes(search) || obj.data.lastname.includes(search);
-			}else{
-				return obj.data.firstname.includes(search) || obj.data.lastname.includes(search) || obj.data.username.includes(search);
-			}
+			  if(obj.data.firstname && obj.data.lastname){
+				  if(!obj.data.username)
+					{
+						  return obj.data.firstname.includes(search) || obj.data.lastname.includes(search);
+					}else{
+						return obj.data.firstname.includes(search) || obj.data.lastname.includes(search) || obj.data.username.includes(search);
+					}
+			  }
 			});
 	    return out;
 	  }
@@ -1239,7 +1241,11 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		/*$scope.a = Instamojo.open("https://instamojo.com/@Dantalayaindia", function(obj){
 			console.log(obj);
 		});*/
-
+		if($scope.pendingAmount.amountLeft < $('#payAmount').val()){
+			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
+			return;
+		}
+		
 		$scope.bill = {};
 		$scope.bill.profile = 'bill';
 		$scope.bill.date = new Date;
@@ -1508,6 +1514,62 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		var docDefinition = formatData(obj)
 		pdfMake.createPdf(docDefinition).print();
 	};
+	
+	function formatPrescriptionData (obj){
+		
+		bodyText = [
+				 	[{text: '#', style: 'tableHeader'},{text: 'Prescription', style: 'tableHeader'}, {text: 'Schedule', style: 'tableHeader'}]
+				];
+	
+		obj.map(function(each, index){
+			bodyText.push([index+1, each.prescription, each.schedule]);
+		});
+		
+		return {
+			content: [
+				        {text: 'Prescription', style: 'header'},
+			  			{
+		  				style: 'tableExample',
+		  				table: {
+		  					widths: ['5%' ,'*','*'],
+		  					headerRows: 1,
+		  					body: bodyText
+		  				},
+		  				layout: 'lightHorizontalLines'
+			  			}
+
+			],
+			styles: {
+				header: {
+					fontSize: 18,
+					bold: true,
+					margin: [0, 0, 0, 10]
+				},
+				subheader: {
+					fontSize: 16,
+					bold: true,
+					margin: [0, 10, 0, 5]
+				},
+				tableExample: {
+					margin: [0, 5, 0, 15]
+				},
+				tableHeader: {
+					bold: true,
+					fontSize: 13,
+					color: 'black'
+				}
+			}
+		};
+	}
+	$scope.downloadPrescription = function (obj){
+		var docDefinition = formatPrescriptionData(obj)
+		pdfMake.createPdf(docDefinition).download('prescription.pdf');
+	};
+
+	$scope.printPrescription  = function (obj){
+		var docDefinition = formatPrescriptionData(obj)
+		pdfMake.createPdf(docDefinition).print();
+	};
 
 	$('#treatmentHistory').click(function(){
 		$scope.showAllTreatments = true;
@@ -1541,7 +1603,10 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		  var pending = $scope.treatment.treatmentcost;;
 		  $scope.treatment.treatmentanalysislist.map(function(obj){
 			  if(obj.amountpaidbypatient){
-				  pending = pending - obj.amountpaidbypatient;
+				  if(obj.status !== "initiated"){
+					 pending = pending - obj.amountpaidbypatient; 
+				  }
+				  
 			  }
 		  });
 		  $scope.pendingAmount.amountLeft = pending;
@@ -1759,6 +1824,8 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			}
 			};
 	}
+	
+	
 
 	$scope.dowloadBill = function (obj){
 		var docDefinition = formatData(obj)
@@ -1767,6 +1834,62 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 
 	$scope.printBill = function (obj){
 		var docDefinition = formatData(obj)
+		pdfMake.createPdf(docDefinition).print();
+	};
+	
+function formatPrescriptionData (obj){
+		
+		bodyText = [
+				 	[{text: '#', style: 'tableHeader'},{text: 'Prescription', style: 'tableHeader'}, {text: 'Schedule', style: 'tableHeader'}]
+				];
+	
+		obj.map(function(each, index){
+			bodyText.push([index+1, each.prescription, each.schedule]);
+		});
+		
+		return {
+			content: [
+				        {text: 'Prescription', style: 'header'},
+			  			{
+		  				style: 'tableExample',
+		  				table: {
+		  					widths: ['5%' ,'*','*'],
+		  					headerRows: 1,
+		  					body: bodyText
+		  				},
+		  				layout: 'lightHorizontalLines'
+			  			}
+
+			],
+			styles: {
+				header: {
+					fontSize: 18,
+					bold: true,
+					margin: [0, 0, 0, 10]
+				},
+				subheader: {
+					fontSize: 16,
+					bold: true,
+					margin: [0, 10, 0, 5]
+				},
+				tableExample: {
+					margin: [0, 5, 0, 15]
+				},
+				tableHeader: {
+					bold: true,
+					fontSize: 13,
+					color: 'black'
+				}
+			}
+		};
+	}
+	$scope.downloadPrescription = function (obj){
+		var docDefinition = formatPrescriptionData(obj)
+		pdfMake.createPdf(docDefinition).download('prescription.pdf');
+	};
+
+	$scope.printPrescription  = function (obj){
+		var docDefinition = formatPrescriptionData(obj)
 		pdfMake.createPdf(docDefinition).print();
 	};
 
@@ -1853,6 +1976,18 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 	  };
 
 	  $scope.subaddTreatment = function(obj){
+		if(!obj[obj.length-1].treatmentanalysis){
+			toastr.warning("Treatment Analysis cannot be Empty");
+			return;
+		}
+		if(!obj[obj.length-1].amountpaidbypatient){
+			toastr.warning("Amount Paid by Patient cannot be Empty");
+			return;
+		}
+		if($scope.pendingAmount.amountLeft < obj[obj.length-1].amountpaidbypatient){
+			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
+			return;
+		}
 		if(!$scope.treatmentData){
 			$scope.addTreatment(true, obj);
 			return;
@@ -1889,7 +2024,9 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 		  var pending = $scope.treatment.treatmentcost;;
 		  $scope.treatment.treatmentanalysislist.map(function(obj){
 			  if(obj.amountpaidbypatient){
-				  pending = pending - obj.amountpaidbypatient;
+				  if(obj.status !== "initiated"){
+					  pending = pending - obj.amountpaidbypatient;
+				  }
 			  }
 		  });
 		  $scope.pendingAmount.amountLeft = pending;
@@ -1937,8 +2074,9 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
 		  }
 		  else{
-			  $scope.treatment.prescription.push($scope.newpresciption);
+			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
 		  }
+		  $scope.newpresciption = {prescription : '', schedule: ''};
 
 	  };
 
