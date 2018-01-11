@@ -8,6 +8,11 @@ config.instamojo = {
 		clientid : 'iVkE93WnpeWeWReb69TUv18fOuLWW464hviOayyK',
 		clientsecret: 'If157QrIeBTVfBjtUg4f0V7gGlQbewtk6bHdeSrpWFY0Jlj72hri17KaLtrpFZcVhbCx0lxf5T3G3BY4UJ1QBXyx1PikXB9DYPUaJB6inWJcSK8PQpqvxDaDcbU3Aszr'
 };
+config.aws = {
+		region : 'us-west-2',
+		accessKeyId: 'AKIAIARDQVMU3VF7TIKA',
+		secretAccessKey: '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'
+};
 config.partner_fee = 6;
 
 config.mailText = 'Dantalaya, "the largest network of Dental Practitioners and oral health care service providers", is an online referral platform offering solutions to the Dental problems in India.<br><br>'+

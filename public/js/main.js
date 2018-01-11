@@ -520,8 +520,10 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 						eventLimit: true,
 						events: $scope.allEventData
 					});
-
-					$('#calendar').fullCalendar('renderEvents', $scope.allEventData , true);
+					$scope.allEventData.map(function(obj){
+						$('#calendar').fullCalendar('renderEvent', obj , true);
+					});
+					
 			 });
 	
 
@@ -1191,7 +1193,9 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 		$http.post('/viewEvents',{doctorId: $rootScope.userId}).then(function(data){
 			if(data.data.data){
 				$scope.allEventData = data.data.data.events;
-				$('#calendar').fullCalendar('renderEvents', $scope.allEventData , true);
+				$scope.allEventData.map(function(obj){
+					$('#calendar').fullCalendar('renderEvent', obj , true);
+				});
 					var todayDate = new Date();
 					$scope.allEventData.map(function(obj){
 						var selectDate = new Date(obj.start);
@@ -1209,6 +1213,8 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 			selectable: true,
 			selectHelper: true,
 			eventLimit: true,
+			timezone: false,
+			longpressDelay : 10,
 			events: $scope.allEventData,
 			height: 700
 		});
@@ -2097,7 +2103,9 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 	$scope.currentEvent ;
 	$http.post('/viewEvents',{doctorId: $rootScope.userId}).then(function(data){
 		$scope.allEventData = data.data.data.events;
-		$('#calendar').fullCalendar('renderEvents', $scope.allEventData , true);
+		$scope.allEventData.map(function(obj){
+			$('#calendar').fullCalendar('renderEvent', obj , true);
+		});
 	 });
 
 
@@ -2163,7 +2171,9 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 	function updateEvent(status){
 		$http.post('/updateEvents',{doctorId: $rootScope.userId , data : $scope.newAllEventData, eventId : $scope.currentEvent.id, status: status, patientId : $scope.currentEvent.patientId }).then(function(data){
 			$('#calendar').fullCalendar('removeEvents');
-			$('#calendar').fullCalendar('renderEvents', $scope.newAllEventData , true);
+			$scope.newAllEventData.map(function(obj){
+				$('#calendar').fullCalendar('renderEvent', obj , true);
+			});
 		 });
 	}
 

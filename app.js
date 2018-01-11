@@ -16,7 +16,8 @@ var express = require('express')
   , nodemailer = require('nodemailer')
   , xoauth2 = require('xoauth2')
   , config = require('./config')
-  , schedule = require('node-schedule');
+  , schedule = require('node-schedule')
+  , AWS = require('aws-sdk');;
 var fs = require('fs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -95,7 +96,27 @@ passport.deserializeUser(function(id, done) {
 app.get('/', routes.index);
 app.get('/partials/:filename', routes.partials);
 
+AWS.config.region = config.aws.region;
+AWS.config.update({
+      accessKeyId: config.aws.accessKeyId ,
+      secretAccessKey: config.aws.secretAccessKey,
+});
 
+var sns = new AWS.SNS();
+
+function sendSms(msg, phn, sub){
+	var params = {
+		    Message: msg,
+		    MessageStructure: 'string',
+		    PhoneNumber: phn,
+		    Subject: sub
+		};
+
+		sns.publish(params, function(err, data) {
+		    if (err) console.log(err, err.stack); // an error occurred
+		    else     console.log(data);           // successful response
+		});
+};
 
 function sendmail(req ,user,  key, email, profile){
 	var extra;
