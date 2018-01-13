@@ -103,6 +103,7 @@ AWS.config.update({
 });
 
 var sns = new AWS.SNS();
+var ses = new AWS.SES();
 sns.setSMSAttributes(
    {
       attributes : {

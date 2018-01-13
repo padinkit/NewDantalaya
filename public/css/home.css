@@ -2155,3 +2155,22 @@ input.ng-invalid.ng-dirty{
 .prescription+div a{
 	   box-shadow: none !important;
 }
+.doctorOverlay{
+	background: #4d4a4a;
+	opacity: 0.9;
+	position: absolute;
+	z-index: 1000;
+	text-align: center;
+	width: 100vw;
+	height: 100vh;
+}
+
+.doctorOverlay p, .doctorOverlay a{
+	color: white;
+    margin-top: 30vh;
+    font-size: 27px;
+}
+.doctorOverlay a{	    
+	border: 1px solid;
+	padding: 7px;
+}

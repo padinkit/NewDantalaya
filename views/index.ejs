@@ -96,8 +96,11 @@
             </div>
         </div>
     </section>
-
-
+	
+	<div class="doctorOverlay" ng-style="{ 'display' : nobank ? 'block' : 'none' }" style="display:none;">
+		<p>Kindly Update Your Bank Details to Receieve Payments from patients and fully access the features of Danatalaya</p>
+		<a href="#/doctorprofile">Go To Profile Page</a>
+	</div>
     <nav class="navbar navbar-default mobilehidden" ng-if="userType != 'doctor'" ng-controller="navcontroller">
         <div class="container-fluid">
             <div class="navbar-header">

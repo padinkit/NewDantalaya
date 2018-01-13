@@ -260,6 +260,10 @@ app.run(function($rootScope, $http, $state) {
 		$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
 			$rootScope.userData = data.data;
 			$rootScope.fetchedUserData = true;
+
+			if(!$rootScope.userData.data.bank){
+				$rootScope.nobank = true;
+			}
 			$rootScope.$broadcast('fetchedUserData');
 		},function(err){
 			console.log(err);
@@ -359,6 +363,10 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 
 			$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
 				$rootScope.userData = data.data;
+				
+				if(!$rootScope.userData.data.bank){
+					$rootScope.nobank = true;
+				}
 			},function(err){
 				console.log(err);
 			});
@@ -924,6 +932,7 @@ app.controller('menubarController',function($scope, $http, $rootScope, $state , 
 });
 
 app.controller('profileController',function($scope, $http, $rootScope, $state){
+	$rootScope.nobank = false;
 	$scope.signup = {};
 	$scope.signup.photo = "../images/doctor1.png";
 
