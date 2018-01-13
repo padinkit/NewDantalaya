@@ -2174,6 +2174,18 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 			$scope.newAllEventData.map(function(obj){
 				$('#calendar').fullCalendar('renderEvent', obj , true);
 			});
+			var message;
+			if(status == 'accept'){
+				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
+			}
+			else{
+				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
+			}
+			
+			$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Danatalaya Appointment'}).then(function(data){
+				
+			});
+			
 		 });
 	}
 

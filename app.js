@@ -103,6 +103,17 @@ AWS.config.update({
 });
 
 var sns = new AWS.SNS();
+sns.setSMSAttributes(
+   {
+      attributes : {
+                      DefaultSMSType : "Transactional"
+                }
+},
+function(error){
+              if(error){
+                console.log(error);
+               }
+ });
 
 function sendSms(msg, phn, sub){
 	var params = {
@@ -117,6 +128,9 @@ function sendSms(msg, phn, sub){
 		    else     console.log(data);           // successful response
 		});
 };
+app.post('/sendSms',function(req,res){
+	sendSms(req.body.message, req.body.phone, req.body.subject);
+});
 
 function sendmail(req ,user,  key, email, profile){
 	var extra;
