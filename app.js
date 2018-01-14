@@ -38,7 +38,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -211,7 +211,7 @@ app.post('/payOnline', function(req, res){
 		           res.send(err);
 		        }else{
 		        	var values = detailss._doc.data;
-		        	    	
+
 		        		var payloadAuthRefreshUser = {
 							  'grant_type': 'password',
 							  'client_id': config.instamojo.clientid,
@@ -219,37 +219,37 @@ app.post('/payOnline', function(req, res){
 						      'username': values.bank.instamojo.username,
 						      'password': 'dantalaya1234'
 						  };
-		        		
+
 		        		var paymentRequestData =  req.body.data;
 		        		paymentRequestData.redirect_url = "http://" +req.get('host') + "/#/updatePayment";
 		        		paymentRequestData.partner_fee_type = "percent";
 		        		paymentRequestData.partner_fee = config.partner_fee;
-		        		
-						  
+
+
 						  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
 							  if(!error && response.statusCode !== 400){
 								var body3 = JSON.parse(body3);
-							    
+
 							    var headersUpdateAccount = {'Authorization' : 'Bearer '+ body3.access_token};
-							    
+
 							    request.post('https://api.instamojo.com/v2/payment_requests/', {headers: headersUpdateAccount, form: paymentRequestData}, function(error, response, body4){
 									  if(!error && response.statusCode !== 400){
-									    res.send({data: body4, username: values.bank.instamojo.username});				
+									    res.send({data: body4, username: values.bank.instamojo.username});
 									  }
 									  else{
 										res.status(400).send(body4);
 									  }
-								    
+
 								  });
 							  }
 							  else{
 								res.status(400).send(body3);
 							  }
-						    
+
 						  });
-		        	
+
 		        }
-		
+
 		});
 });
 
@@ -620,13 +620,13 @@ app.get('/notice', function (req, res) {
 	 	      }
 	    );
  });
- 
+
  app.post('/updateBankDetails', function(req, res){
 
 	// var headers = { 'X-Api-Key': config.instamojo.clientid, 'X-Auth-Token': config.instamojo.authtoken}
 	 	var bankdata = req.body.bankdata;
-	 	
-	 	if(req.body.userdata.bank){		    
+
+	 	if(req.body.userdata.bank){
 		    var payloadAuthRefreshUser = {
 		    		  'grant_type': 'password',
 					  'client_id': config.instamojo.clientid,
@@ -634,7 +634,7 @@ app.get('/notice', function (req, res) {
 				      'username':req.body.userdata.bank.instamojo.username,
 				      'password': 'dantalaya1234'
 				  };
-				  
+
 				  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
 					  if(!error && response.statusCode !== 400){
 						var body3 = JSON.parse(body3);
@@ -643,12 +643,12 @@ app.get('/notice', function (req, res) {
 				    	      'account_number': bankdata.bankaccno,
 				    	      'ifsc_code': bankdata.ifsccode
 						  };
-					    
+
 					    var headersUpdateAccount = {'Authorization' : 'Bearer '+ body3.access_token};
-					    
+
 					    request.put('https://api.instamojo.com/v2/users/'+ bankdata.instamojo.id +'/inrbankaccount/', {headers: headersUpdateAccount, form: payloadUpdateAccount}, function(error, response, body4){
 							  if(!error && response.statusCode !== 400){
-							    
+
 								  model.user.findOne({ "data.username": req.body.userid},function(err, detailss){
 				    	     			if (err) {
 				    	     		           res.send(err);
@@ -661,22 +661,22 @@ app.get('/notice', function (req, res) {
 				    	     		    	        }else{
 				    	     		    	        	res.send('success');
 				    	     		    	        }
-				    	     		    	    });	
+				    	     		    	    });
 				    	     		        }
-				    	     		
+
 				    	     		});
-			
+
 							  }
 							  else{
 								res.status(400).send(body4);
 							  }
-						    
+
 						  });
 					  }
 					  else{
 						res.status(400).send(body3);
 					  }
-				    
+
 				  });
 	 	}
 	 	else{
@@ -685,21 +685,21 @@ app.get('/notice', function (req, res) {
 			     'client_id': config.instamojo.clientid,
 			     'client_secret': config.instamojo.clientsecret
 			  };
-			
+
 			var payloadCreateUser = {
 				 'email': req.body.userdata.email,
 			     'password': 'dantalaya1234',
 			     'phone': req.body.userdata.mobile,
 			     'referrer': 'Dantalayaindia',
 			  };
-			
-			
+
+
 			request.post('https://api.instamojo.com/oauth2/token/', {form: payload}, function(error, response, body){
 			  if(!error && response.statusCode !== 400){
 				var body = JSON.parse(body);
 			    var access_token = body.access_token;
 			    var headersCreateUser = { 'Authorization' : 'Bearer '+ access_token};
-			    
+
 			    request.post('https://api.instamojo.com/v2/users/', {headers: headersCreateUser ,form: payloadCreateUser}, function(error, response, body1){
 			    	if(!error && response.statusCode !== 400){
 					  var body1 = JSON.parse(body1);
@@ -713,24 +713,24 @@ app.get('/notice', function (req, res) {
 					  bankdata.instamojo = {};
 					  bankdata.instamojo.username = body1.username;
 					  bankdata.instamojo.id = body1.id;
-					  
+
 					  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthUser}, function(error, response, body2){
 						  if(!error && response.statusCode !== 400){
 							var body2 = JSON.parse(body2);
 						    bankdata.instamojo.access_token = body2.access_token;
 						    bankdata.instamojo.refresh_token = body2.refresh_token;
-						    
+
 						    var payloadUpdateAccount = {
 					    		 'account_holder_name': bankdata.accholdername,
 					    	      'account_number': bankdata.bankaccno,
 					    	      'ifsc_code': bankdata.ifsccode
 							  };
-						    
+
 						    var headersUpdateAccount = {'Authorization': 'Bearer '+ body2.access_token};
-						    
+
 						    request.put('https://api.instamojo.com/v2/users/'+ bankdata.instamojo.id +'/inrbankaccount/', {headers: headersUpdateAccount, form: payloadUpdateAccount}, function(error, response, body5){
 								  if(!error && response.statusCode !== 400){
-									  
+
 									  model.user.findOne({ "data.username": req.body.userid},function(err, detailss){
 					    	     			if (err) {
 					    	     		           res.send(err);
@@ -743,38 +743,38 @@ app.get('/notice', function (req, res) {
 					    	     		    	        }else{
 					    	     		    	        	res.send('success');
 					    	     		    	        }
-					    	     		    	    });	
+					    	     		    	    });
 					    	     		        }
-					    	     		
+
 					    	     		});
-				
+
 								  }
 								  else{
 									res.status(400).send(body5);
 								  }
-							    
+
 							  });
 						  }
 						  else{
 							res.status(400).send(body2);
 						  }
-					    
+
 					  });
 				  }
 				  else{
 					  res.status(400).send(body1);
 				  }
 				});
-					
+
 			  }
 			  else{
 				  res.status(400).send(body);
 			  }
 			});
-		 
+
 	 	}
  });
- 
+
 
  app.post('/changepassword', function(req, res){
 	 console.log(req.body.userid);
@@ -1219,8 +1219,8 @@ app.post('/userviewtreatment', function(req, res){
 
 });
 
- 
- 
+
+
  app.post('/addToPaymentQueue', function(req, res){
 	 model.paymentQueue.findOne({},function(err, details){
 		var values = details._doc.data;
@@ -1236,10 +1236,10 @@ app.post('/userviewtreatment', function(req, res){
 	        }else{
 	        	res.send('success');
 	        }
-	    });	
+	    });
 	 });
 });
- 
+
  app.post('/addToChargeSheet', function(req, res){
 	 model.chargeSheetSchema.findOne({"month": req.body.month, "year": req.body.year },function(err, details){
 		if(details){
@@ -1253,15 +1253,15 @@ app.post('/userviewtreatment', function(req, res){
 			else{
 				values[req.body.doctorid] = [];
 				values[req.body.doctorid].push(req.body.data);
-			}				
+			}
 			model.chargeSheetSchema.update({"month": req.body.month, "year": req.body.year },{"data" :values , "chargeSheetCreated" : false },function(err){
 		        if (err) {
 		           res.send(err);
 		        }else{
 		        	res.send('success');
 		        }
-		    });	
-			
+		    });
+
 		 }
 		else{
 			var values = {};
@@ -1278,15 +1278,15 @@ app.post('/userviewtreatment', function(req, res){
 			        }
 			    });
 		}
-		
+
 	 });
 });
- 
+
 app.post('/updatePayment', function(req,res){
 	var value;
 	 model.paymentQueue.findOne({},function(err, details){
 	 value = details._doc.data;
-		
+
 		/*
 		var payloadAuthRefreshUser = {
 	    		  'grant_type': 'password',
@@ -1295,13 +1295,13 @@ app.post('/updatePayment', function(req,res){
 			      'username':value[req.body.id].username,
 			      'password': 'dantalaya1234'
 			  };
-			  
+
 			  request.post('https://api.instamojo.com/oauth2/token/', {form: payloadAuthRefreshUser}, function(error, response, body3){
 				  if(!error && response.statusCode !== 400){
 					var body3 = JSON.parse(body3);
-				    
+
 				    var headersUpdateAccount = {'Authorization' : 'Bearer '+ body3.access_token};
-				    
+
 				    request.get('https://api.instamojo.com/v2/payment_requests/'+ req.body.id , {headers: headersUpdateAccount}, function(error, response, body4){
 						  if(!error && response.statusCode !== 400){
 							  model.user.findOne({ "data.username": req.body.userid},function(err, detailss){
@@ -1316,25 +1316,25 @@ app.post('/updatePayment', function(req,res){
 			    	     		    	        }else{
 			    	     		    	        	res.send('success');
 			    	     		    	        }
-			    	     		    	    });	
+			    	     		    	    });
 			    	     		        }
-			    	     		
+
 			    	     		});
-		
+
 						  }
 						  else{
 							res.status(400).send(body4);
 						  }
-					    
+
 					  });
 				  }
 				  else{
 					res.status(400).send(body3);
 				  }
-			    
+
 			  });*/
-		
-			
+
+
 		model.user.findOne({ "_id": value[req.body.id].treatmentId},function(err, detailss){
 			var billId;
 			if (err) {
@@ -1362,30 +1362,30 @@ app.post('/updatePayment', function(req,res){
 						    	           res.send('error');
 						    	        }else{
 						    	        	delete value[req.body.id];
-						    	        	
+
 						    	        	model.paymentQueue.update({},{"data" :value },function(err){
 					    		    	        if (err) {
 					    		    	           res.send('error');
 					    		    	        }else{
 					    		    	        	res.send('success');
 					    		    	        }
-					    		    	    });	
-						    	        	
+					    		    	    });
+
 						    	        }
-						    	    });	
+						    	    });
 				    	        }
 				    	    });
 		    	        }
-		    	    });	
+		    	    });
 		        }
 		});
-		
-		
-		
+
+
+
 	 });
 
 });
- 
+
  app.post('/closeTreatment', function(req, res){
 	        	model.user.findOne({ "_id": req.body.id},function(err, details){
 	    			if (err) {
@@ -1421,35 +1421,35 @@ app.post('/updatePayment', function(req,res){
  var monthlyScheduler = schedule.scheduleJob('1 0 1 * *', function(){
 	  var currenMonth = new Date().getMonth();
 	  var neededYear = new Date().getFullYear();
-	  
+
 	  if(currenMonth == 0){
 		  currenMonth = 12;
 		  neededYear = neededYear -1;
 	  }
 	  var previousMonth = new Date().setMonth(currenMonth-1);
-		
+
 	  model.chargeSheetSchema.findOne({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },function(err, details){
 			if(details){
 				var values = details._doc;
-				
+
 				values.total = {};
 				Object.keys(values.data).map(function(obj){
 					var total = parseInt(0);
 					values.data[obj].map(function(each){
 						total = total + parseInt(each.amount);
 					});
-					
+
 					var serviceAmount = (total * config.partner_fee)/100 ;
 					values.total[obj] = {totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount};
 				});
-				
+
 				model.chargeSheetSchema.update({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },{"total" :values.total , "chargeSheetCreated" : true },function(err){
 			        if (err) {
 			        }else{
 			        	console.log('Charge Sheet Ran for '+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }));
 			        }
-			        
-			    });	
+
+			    });
 			}
 	  });
 });

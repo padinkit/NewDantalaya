@@ -1141,7 +1141,8 @@ footer h1 h2 h3 h4{
     background: #2ecc71;
     color: white;
     text-align: center;
-    margin: -40px 0px;
+    margin-bottom: -30px;
+    margin-top: 30px;
 }
 
 .search-doctor h1 {
@@ -1221,6 +1222,13 @@ footer h1 h2 h3 h4{
     -webkit-box-align: start;
     -ms-flex-align: start;
     align-items: flex-start;
+    position: relative;
+}
+
+.profilecard .btn-primary{
+  position: absolute;
+top: 15px;
+right: 13px;
 }
 
 
@@ -1258,7 +1266,7 @@ footer h1 h2 h3 h4{
 }
 
 .doctoraddress {
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 10px;
 }
 
@@ -1281,6 +1289,7 @@ footer h1 h2 h3 h4{
     margin: 20px;
     font-size: 19px;
     margin-top: 0px;
+    position: unset;
 }
 
 .search1 {
@@ -1859,7 +1868,6 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 .dasboard-table tbody {
   max-height: 400px;
-  overflow-y: auto;
   width: 100%;
 }
 .dasboard-table thead, .dasboard-table tbody, .dasboard-table tr, .dasboard-table td, .dasboard-table th {
@@ -1946,7 +1954,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 	display: inline-block;
 	text-align: center;
 	padding: 25px;
-  margin-top: 120px;
+  margin-top: 80px;
 }
 .prescription{
 	padding: 20px;
@@ -1966,6 +1974,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
     padding: 10px;
     border-top: 5px solid;
     margin: 10px;
+    width: 260px;
 }
 .events.openAppointment{
 	background: #FF9800;
@@ -1976,12 +1985,10 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 .events.rejectAppointment{
 	background: #e44a4a;
 }
-.patient-events{
-	height: 600px;
-	overflow-y: auto;
-}
+
 .dropdown-menu{
 	z-index: 12;
+  width: 155px;
 }
 .navbar-header {
     background: #fff !important;
@@ -2122,7 +2129,7 @@ input.ng-invalid.ng-dirty{
     background: white; }
 .tabsdemoDynamicHeight md-content h1:first-child {
     margin-top: 0; }
-    
+
 .margin-auto{
 	margin: auto;
 }
@@ -2170,7 +2177,38 @@ input.ng-invalid.ng-dirty{
     margin-top: 30vh;
     font-size: 27px;
 }
-.doctorOverlay a{	    
+.doctorOverlay a{
 	border: 1px solid;
 	padding: 7px;
+}
+
+.select-middle{
+  text-align: center;
+margin-bottom: 40px;
+margin-top: 20px;
+}
+
+.patient-header{
+  text-align: center;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.patient-header img{
+  width: 320px;
+}
+
+@media screen and (max-width: 25em) {
+  .patient-header img{
+    width: 85%;
+  }
+
+}
+
+.dropdown-patient{
+  margin-top: 5px;
+   border-radius: 0px;
+   font-size: 16px;
+   background-color: #2ecc71;
+   border: 1px solid #2ecc71;
 }

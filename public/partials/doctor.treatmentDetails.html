@@ -14,15 +14,15 @@
 		<div class="col-md-12">
 			<div class="white-box">
 				<div class="row">
-					<div class="col-md-3 col-xs-6 b-r">
+					<div class="col-md-3 col-xs-6">
 						<strong>Full Name</strong> <br>
 						<p class="text-muted">{{patientData.data.firstname}} {{patientData.data.lastname}}</p>
 					</div>
-					<div class="col-md-3 col-xs-6 b-r">
+					<div class="col-md-3 col-xs-6">
 						<strong>Mobile</strong> <br>
 						<p class="text-muted">{{patientData.data.phone}}</p>
 					</div>
-					<div class="col-md-3 col-xs-6 b-r">
+					<div class="col-md-3 col-xs-6">
 						<strong>Email</strong> <br>
 						<p class="text-muted">{{patientData.data.email}}</p>
 					</div>
@@ -48,8 +48,8 @@
 							    <li><a href="#section-line-4" id="paymentInfo"><span>Patient
 											Payment Info</span></a></li>
 								<li class=""><a href="#section-line-3" id="treatmentHistory"><span>View
-											Treament History</span></a></li>
-								
+											Treatment History</span></a></li>
+
 							</ul>
 						</nav>
 						<div class="content-wrap tab-content">
@@ -117,7 +117,7 @@
 															placeholder="Investigations" ng-model="treatment.investigations">
 													</div>
 												</div>
-												
+
 												<div class="form-group">
 													<label class="col-md-12">Teeth Notation Table</label>
 													<div class="dental-history">
@@ -272,17 +272,17 @@
 														</div>
 													</div>
 												</div>
-												
+
 												<div class="form-group">
 													<label class="col-md-12" for="input-file-now">X-Ray</label>
 													<div class="col-md-12">
 														<div>
 									           				<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
 									           			</div>
-									           			 
+
 									           			 <br>
 									           			 <label class=""><small>*Upload Photo of size less than 1 MB </small></label>
-											        	 <input type="file" ng-model="treatment.xray" accept="image/*"  app-filereader style="margin: 0px;" size="1024000"/>	        	 
+											        	 <input type="file" ng-model="treatment.xray" accept="image/*"  app-filereader style="margin: 0px;" size="1024000"/>
 											        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 1 MB</small></p>
 													</div>
 												</div>
@@ -358,10 +358,10 @@
 													<label class="col-md-12">Treatment plan</label>
 													<div class="col-md-12">
 														<div>
-														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none" id="newTreatmentCheckbox"/> 
+														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none" id="newTreatmentCheckbox"/>
 														  <button type="button" class="btn btn-default" ng-click="invokeAvailTreatment()"><span ng-if="treatment.showTreatment" class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp Avail Treatment</button>
 														</div>
-														
+
 														<div ng-if="treatment.showTreatment" class="show-treatment">
 															<div class="form-group">
 																<label class="col-md-12">Treatment plan</label>
@@ -375,12 +375,12 @@
 																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"/>
 																</div>
 															</div>
-															
-															
+
+
 															<div class="form-group">
 																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
 															</div>
-															
+
 																<div ng-if="treatment.patientacceptedtreatment" class="ml40">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
@@ -390,7 +390,7 @@
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
 																		</div>
 																	</div>
-																	
+
 																	<div class="form-group" ng-class="{'mb0':!$last}">
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
@@ -403,14 +403,14 @@
 																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
 															</div>
 														</div>
-														
+
 													</div>
 												</div>
-												
+
 												<div class="form-group">
 													<label class="col-md-12">Prescription</label>
 													<div class="col-md-12">
-														<div class="prescription ml40">
+														<div class="prescription">
 															<div ng-if="treatment.prescription && treatment.prescription.length !== 0">
 																<table class="table table-striped">
 																  <thead>
@@ -433,24 +433,24 @@
 															</div>
 															<div class="row">
 																<div>
-																	<label class="col-md-6">Prescription</label>	
-																    <label class="col-md-6" for="tdate">Schedule</label>	
+																	<label class="col-md-6">Prescription</label>
+																    <label class="col-md-6" for="tdate">Schedule</label>
 																</div>
 																<div>
 																	<div class="col-md-6">
 																		<input type="text" id="tdate" name="tdate"
 																				class="form-control mydatepicker"
 																				placeholder="Prescription" ng-model="newpresciption.prescription">
-																	</div>	
+																	</div>
 																	<div class="col-md-6">
 																		<input type="text" id="tdate" name="tdate"
 																				class="form-control mydatepicker"
 																				placeholder="Schedule" ng-model="newpresciption.schedule">
-																	</div>			
-																</div>											
+																	</div>
+																</div>
 															</div>
 															<br>
-															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button> 
+															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button>
 															<div class="pull-right">
 											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
 											       					<a href="javascript:void(0)" ng-click="downloadPrescription(treatment.prescription)">Download Prescription</a>
@@ -577,7 +577,7 @@
 															placeholder="Investigations" ng-model="treatment.investigations">
 													</div>
 												</div>
-												
+
 												<div class="form-group">
 													<label class="col-md-12">Teeth Notation Table</label>
 													<div class="dental-history">
@@ -732,17 +732,17 @@
 														</div>
 													</div>
 												</div>
-												
+
 												<div class="form-group">
 													<label class="col-md-12" for="input-file-now">X-Ray</label>
 													<div class="col-md-12">
 														<div>
 									           				<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
 									           			</div>
-									           			 
+
 									           			 <br>
 									           			 <label class=""><small>*Upload Photo of size less than 1 MB </small></label>
-											        	 <input type="file" ng-model="treatment.xray" accept="image/*"  app-filereader style="margin: 0px;" size="1024000"/>	        	 
+											        	 <input type="file" ng-model="treatment.xray" accept="image/*"  app-filereader style="margin: 0px;" size="1024000"/>
 											        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 1 MB</small></p>
 													</div>
 												</div>
@@ -820,10 +820,10 @@
 													<label class="col-md-12">Treatment plan</label>
 													<div class="col-md-12">
 														<div>
-														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none"/> 
+														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none"/>
 														  <button type="button" class="btn btn-default" ng-click="treatment.showTreatment = true"><span ng-if="treatment.showTreatment" class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp Avail Treatment</button>
 														</div>
-														
+
 														<div ng-if="treatment.showTreatment" class="show-treatment">
 															<div class="form-group">
 																<label class="col-md-12">Treatment plan</label>
@@ -837,12 +837,12 @@
 																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
 																</div>
 															</div>
-															
-															
+
+
 															<div class="form-group">
 																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
 															</div>
-															
+
 															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
@@ -852,7 +852,7 @@
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
 																		</div>
 																	</div>
-																	
+
 																	<div class="form-group" ng-class="{'mb0':!$last}">
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
@@ -865,14 +865,14 @@
 																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
 															</div>
 														</div>
-														
+
 													</div>
 												</div>
-												
+
 												<div class="form-group">
 													<label class="col-md-12">Prescription</label>
 													<div class="col-md-12">
-														<div class="prescription ml40">
+														<div class="prescription">
 															<div ng-if="treatment.prescription && treatment.prescription.length !== 0">
 																<table class="table table-striped">
 																  <thead>
@@ -895,21 +895,21 @@
 															</div>
 															<div class="row">
 																<div>
-																	<label class="col-md-6">Prescription</label>	
-																    <label class="col-md-6" for="tdate">Schedule</label>	
+																	<label class="col-md-6">Prescription</label>
+																    <label class="col-md-6" for="tdate">Schedule</label>
 																</div>
 																<div>
 																	<div class="col-md-6">
 																		<input type="text" id="tdate" name="tdate"
 																				class="form-control mydatepicker"
 																				placeholder="Prescription" ng-model="newpresciption.prescription">
-																	</div>	
+																	</div>
 																	<div class="col-md-6">
 																		<input type="text" id="tdate" name="tdate"
 																				class="form-control mydatepicker"
 																				placeholder="Schedule" ng-model="newpresciption.schedule">
-																	</div>			
-																</div>											
+																	</div>
+																</div>
 															</div>
 															<br>
 															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button>
@@ -946,7 +946,7 @@
 									<div class="">
 										 <button id='toggleFiltering' ng-click="toggleFiltering()" class="btn btn-success">Toggle Filtering</button>
   										 <div ng-if="showAllTreatments" id="grid1" ui-grid="gridOptions"  ui-grid-selection class="grid"></div>
-									</div>									
+									</div>
 								</div>
 							</section>
 							<section id="section-line-4" role="tabpanel" class="tab-pane" >
@@ -997,7 +997,7 @@
 														</div>
 													</div>
 												</div>
-												
+
 												<div class="treatment-modal">
 													<div class="form-group">
 														<label class="col-md-12">New Comments</label>
@@ -1235,8 +1235,8 @@
 									           					<img ng-src="{{treatment.xray}}" width="1000"  height="500" />
 									           				</div>
 									           			</div>
-									           			 
-									 
+
+
 													</div>
 													<div class="form-group">
 														<label class="col-md-12">Diagnosis</label>
@@ -1259,10 +1259,10 @@
 													<label class="col-md-12">Treatment plan</label>
 													<div class="col-md-12">
 														<div>
-														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none"/> 
+														  <input type="checkbox" ng-model="treatment.showTreatment" style="display: none"/>
 														  <button type="button" class="btn btn-default" ng-click="treatment.showTreatment = true" disabled><span ng-if="treatment.showTreatment" class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp Avail Treatment</button>
 														</div>
-														
+
 														<div ng-if="treatment.showTreatment" class="show-treatment">
 															<div class="form-group">
 																<label class="col-md-12">Treatment plan</label>
@@ -1276,12 +1276,12 @@
 																	<input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
 																</div>
 															</div>
-															
-															
+
+
 															<div class="form-group">
 																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
 															</div>
-															
+
 															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment" ng-if="!$last">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
@@ -1291,7 +1291,7 @@
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis" disabled></textarea>
 																		</div>
 																	</div>
-																	
+
 																	<div class="form-group" ng-class="{'mb0':!$last}">
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
@@ -1301,16 +1301,16 @@
 																	</div>
 																</div>
 															</div>
-															
+
 														</div>
-														
+
 													</div>
 												</div>
-													
+
 													<div class="form-group">
 													<label class="col-md-12">Prescription</label>
 													<div class="col-md-12">
-														<div class="prescription ml40">
+														<div class="prescription">
 															<div ng-if="treatment.prescription && treatment.prescription.length !== 0">
 																<table class="table table-striped">
 																  <thead>
@@ -1345,9 +1345,9 @@
 																placeholder="Next Appointment Date" ng-model="treatment.nextappointment" disabled>
 														</div>
 													</div>
-													
+
 													<div class="form-group">
-														<h4 style="text-align: center;"><a href="javascript:void(0)" ng-click="paymentsInfo(treatment.treatmentanalysislist)">Payments Info</a></h4>			
+														<h4 style="text-align: center;"><a href="javascript:void(0)" ng-click="paymentsInfo(treatment.treatmentanalysislist)">Payments Info</a></h4>
 													</div>
 													</div>
 											</form>
@@ -1397,7 +1397,7 @@
 		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['RS']"> RS - ROOTSTUMP<br>
 		        <input type="checkbox" ng-model="treatment.teethnotation[currentTooth]['Mo']"> Mo - MOBILE <br>
 		  </fieldset>
-       
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -1464,7 +1464,7 @@
        					<a href="javascript:void(0)" ng-click="dowloadBill(paymentData)">Download Bill</a>
        			</div>
        			<br>
-       			
+
        		</div>
       </div>
       <div class="modal-footer">

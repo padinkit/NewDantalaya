@@ -79,7 +79,7 @@
                         <div class="btn  dbtn"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</div>
                     </a>
                     <div class="dropdown user-menu" ng-if="userLoggedin">
-                  		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  		<button class="btn btn-default dropdown-patient" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 	                    {{userId}}
 	                    <span class="caret"></span>
 	                  </button>
@@ -96,12 +96,15 @@
             </div>
         </div>
     </section>
-	
+
 	<div class="doctorOverlay" ng-style="{ 'display' : nobank ? 'block' : 'none' }" style="display:none;">
 		<p>Kindly Update Your Bank Details to Receieve Payments from patients and fully access the features of Danatalaya</p>
 		<a href="#/doctorprofile">Go To Profile Page</a>
 	</div>
-    <nav class="navbar navbar-default mobilehidden" ng-if="userType != 'doctor'" ng-controller="navcontroller">
+
+
+    <nav class="navbar navbar-default mobilehidden" ng-if="userType != 'patient' && userType != 'admin' && userType !='doctor'" ng-controller="navcontroller">
+
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" ng-class="{'navbar-toggle collapsed': userType != 'patient','navbar-toggle collapsed hide': userType == 'patient'}" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -137,7 +140,15 @@
         </div>
     </nav>
 
+    <!-- if patient signed input -->
 
+    <section ng-if="userType == 'patient' || userType == 'admin' " class="patient-header">
+      <div class="">
+        <a href="#/home">
+          <img src="images/dantalaya_logo.jpg" alt="Logo" />
+        </a>
+      </div>
+    </section>
 
 
     <div ui-view></div>
@@ -165,9 +176,7 @@
 
                         <div class="col-md-4">
                             <ul class="dqli">
-                                <!--<li><a href="#">Sitemap</a></li>-->
                                 <li><a href="#/specialization">Specializations</a></li>
-                                <!--<li><a href="#">Quality Policy</a></li>-->
                                 <li><a href="/privacy" target="_blank">Privacy Policy</a></li>
                             </ul>
                         </div>
@@ -198,7 +207,7 @@
             </div>
             <div class="row dcopy">
                 <div class="col-md-12">
-                    <p>Copyright @ Dantalaya 2017. Developed by <a href="http://padink.in/">Padink</a></p>
+                    <p>Copyright @ Dantalaya 2018. Developed by <a target="_blank" href="https://www.padink.in/">Padink</a></p>
                 </div>
             </div>
         </div>

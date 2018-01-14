@@ -3,11 +3,11 @@
 	            <div class="row">
 	               <div class="col-md-12" ng-if="userType == 'patient'">
 	               <br>
-	               		 	<div>
-								<label>Select the User to view his Details</label>	 
+	               		 	<div class="select-middle">
+								<label>Select the User to view his Details</label>
 								<select ng-model="selectedUser" ng-change="changeUser(selectedUser)">
 									<option value="{{$index}}" ng-repeat="each in allDetailsFromEmail">{{each.data.firstname}} {{each.data.lastname}} <span>{{each.selfname}}</span></option>
-								</select>              			
+								</select>
 	               			</div>
 			               <div class="container tile">
 			                <h2 class="margin-auto text-center">Selected User : <label> {{selectedUserFromEmail.data.firstname}} {{selectedUserFromEmail.data.lastname}} <span ng-if="selectedUserFromEmail.self">(Self)</span></label></h2>
@@ -17,13 +17,13 @@
 							    			<h3>Treatment Details</h3>
 							    		</a>
 						    		</div>
-						    		
+
 						    		<div  class="col-md-4">
 						    			<a class="treatmenttile" ng-click= "searchdoctor()" href="javascript:void(0)">
 							    			<h3> Search for Doctors</h3>
 							    		</a>
 						    		</div>
-						    		
+
 						    		<div  class="col-md-4">
 							    		<a class="treatmenttile" href="#/patientAppointment">
 							    			<h3>Booked Appointments</h3>
@@ -34,50 +34,51 @@
 						    			<h3>Payment Details</h3>
 						    		</a>
 						    	</div>  -->
-						    	
+
 					    	</div>
 	    	        </div>
 	               </div>
-	               
-	               
-	               <div ng-if="showdoctor">
-	               <section class="search-doctor">
-        <div class="container-fluid">
-        	 <form>
-	            <div class="row">
-	               <div class="col-md-12" ng-if="userType == 'patient'">
-	               <h1>Search for Doctors</h1>
-	                 <input type="text" name="location" placeholder="Search by Location." ng-model="searchparam.location">
-	               </div>
-	               <div class="col-md-12">  
-	               		<a><button type="submit" ng-click="search('doctor')">Search</button></a>
-	               </div>
-	               </div>
-	               </div>
-	               </section>
-	               </div>
-	               
-	               
-	               <div class="col-md-12" ng-if="userType == 'admin'">
-	                    <h1>Search for</h1>
-	                    <h1>
-	                    	<select name="special" ng-model="searchparam.userstype">
-	                    		<option value="technician">Technician</option>
-					    	    <option value="surgeon">Surgeon</option>
-	                    	</select>
-	                    
-	                    </h1>
-	                    <input type="text" name="location" placeholder="Search by Location." ng-model="searchparam.location">
-	               </div>
-	            </div>
-            </form>
+
+
+<div ng-if="showdoctor">
+  <section class="search-doctor">
+    <div class="container-fluid">
+      <form>
+        <div class="row">
+          <div class="col-md-12" ng-if="userType == 'patient'">
+            <h1>Search for Doctors</h1>
+            <input type="text" name="location" placeholder="Search by Location." ng-model="searchparam.location">
+          </div>
+          <div class="col-md-12">
+            <a><button type="submit" ng-click="search('doctor')">Search</button></a>
+          </div>
         </div>
-    
+    </div>
+  </section>
+</div>
+
+
+<div class="col-md-12" ng-if="userType == 'admin'">
+  <h1>Search for</h1>
+  <h1>
+                      	<select name="special" ng-model="searchparam.userstype">
+                      		<option value="technician">Technician</option>
+    			    	    <option value="surgeon">Surgeon</option>
+                      	</select>
+
+                      </h1>
+  <input type="text" name="location" placeholder="Search by Location." ng-model="searchparam.location">
+</div>
+</div>
+</form>
+</div </section>
+</div>
+
     <section class="patient-db">
         <div class="container-fluid">
 
           <!--   <div class="row" style="display: flex; justify-content: center;">
-           
+
                 <form action="" method="get" class="search1">
                                <div class="col-md-6">
                     <input type="search" name="search" value="Sriram">
@@ -132,9 +133,9 @@
                         <button class="btn btn-primary pull-right" ng-click="bookAppointment(result.data)">Book An Appointment</button>
                         </div>
                     </div>
-                </div>        
+                </div>
             </div>
-            
+
             <div class="row" ng-if="userType == 'admin'">
                 <div class="col-md-6" ng-repeat="result in results">
                     <div class="profilecard">
@@ -163,13 +164,13 @@
                         <hr>
                         <div class="doctorworking"><i class="fa fa-hourglass" aria-hidden="true" style="color: #2ecc71"></i>&nbsp;Working hours - <b>{{result.data.hours}}</b></div>
                     </div>
-                </div>        
+                </div>
             </div>
-           
-        </div> 
 
-    
-    
+        </div>
+
+
+
 	    <div class="modal-content book-appointment" ng-if="newEventTitleModal">
 	      <div class="modal-header">
 	        <button type="button" class="close" ng-click="closeBookAppointment()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -184,8 +185,8 @@
 	        <button type="button" class="btn btn-default" ng-click="closeBookAppointment()">Close</button>
 	      </div>
 	    </div><!-- /.modal-content -->
-    
-    
+
+
      <div class="modal fade" tabindex="-1" role="dialog" id="newEventTitleModal">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
@@ -219,7 +220,7 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div>
- 
-  
-    
- </section> 
+
+
+
+ </section>

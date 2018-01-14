@@ -31,24 +31,24 @@
 								<i class="ti-user"></i>
 								<div class="bodystate">
 									<h4>{{todayEvents.length}}</h4>
-									<span class="text-muted">Todays <br> Appointments</span>
+									<span class="text-muted">Todays Appointments</span>
 								</div>
 							</div>
 						</div>
 					</div>
-					
+
 				</div>
 				<div class="row">
 					<div class="col-sm-12" ng-show="homeDoctor">
 						<div class="white-box" ng-if="allPatients.length !== 0">
 							<h3 class="box-title m-b-0">Patient List</h3>
 							<p class="text-muted">List of Patients</p>
-							
+
 							<div class="input-group">
 							  <span class="input-group-addon" id="sizing-addon2">Search</span>
 							  <input type="text" class="form-control" placeholder="Search" ng-model="search">
 							</div>
-		
+
 							<div class="table-responsive">
 								<table class="table dasboard-table">
 									<thead>
@@ -74,17 +74,20 @@
 						</div>
 						<div class="white-box" ng-if="allPatients.length == 0">
 							<h3 class="box-title m-b-0">No Patients Added</h3>
-							
+
 						</div>
 					</div>
-					
+
 					<div class="col-sm-12" ng-show="!homeDoctor">
 						<h4>Today's Appointments</h4>
 						<div id='calendar'></div>
 					</div>
 				</div>
-			
+
 		</div>
 	</div>
-	
-	
+	<div class="alert alert-info">
+			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+			Treatments costing Rs 10000+ will be eligible for interest-free loans. Patients can contact Dantalaya.
+			Dental equipment engineers, Junior Dentists, House surgeons, Dental hygienist, dental nurses and dental lab technicians are available on call. Doctors can contact Dantalaya to avail these services.
+	</div>

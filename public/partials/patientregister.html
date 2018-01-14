@@ -63,23 +63,20 @@
                                         <div class="col-md-6 dregpad">
                                                 <label for="aadhaar">Aadhaar number (Optional) <div id="aadhaar_error" class="val_error"></div></label>
                                                 <input type="text" value="" size="35" id="aadhaar" name="aadhaar" ng-model="signup.aadhaarno">
-                                        </div>    
+                                                <div>
+                                                      <label for="nri">
+                                                        <input type="checkbox" id="nri" name="nri" ng-model="signup.nri">
+                                                        NRI (Non - Residential Indian)
+                                                      </label>
+                                                  </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <label for="residential">Residential Address<span class="required">*</span><div id="addr_error" class="val_error"></div></label>
                                             <textarea cols="40" rows="6" id="residential" name="residential" ng-model="signup.address" ></textarea>
                                         </div>
-                                        
-                                        
+
+
                                     </div>
-                                    <div class="row">
-                                    <div class="col-md-6 dregpad nri">
-                                        	<div>
-                                                <label for="aadhaar">NRI (Non - Residential Indian)</label> 
-                                                <input type="checkbox" id="nri" name="nri" ng-model="signup.nri">
-                                            </div>
-                                        </div>
-                                        
-                                       </div>
                                     <div class="row">
                                         <div class="col-md-6 dregpad">
                                             <div>
