@@ -13,10 +13,12 @@ angular.module('dantalayaApp').service('validationService', function() {
 	        var ans2 = document.forms["contactForm"]["answer2"];
 	        var ques1 = document.forms["contactForm"]["sec1"];
 	        var ques2 = document.forms["contactForm"]["sec2"];
-	
-	
-	
-	
+					var state = document.forms["contactForm"]["state"];
+
+
+
+
+
 	        //Getting error display objects
 	        var fname_error = document.getElementById("fname_error");
 	        var lname_error = document.getElementById("lname_error");
@@ -31,8 +33,9 @@ angular.module('dantalayaApp').service('validationService', function() {
 	        var ans2_error = document.getElementById("ans2_error");
 	        var ques1_error = document.getElementById("ques1_error");
 	        var ques2_error = document.getElementById("ques2_error");
-	
-	
+					var state_error = document.getElementById("state_error");
+
+
 	        // Validation Function
 	        function PatientValidate(){
 	          //error array
@@ -40,14 +43,27 @@ angular.module('dantalayaApp').service('validationService', function() {
 
 	         var errorArray = [];
 	          var ok = true;
-	
+
+						var stateValue = state.value.trim();
+						if(stateValue ==null || stateValue == "" || stateValue =="? string: ?"){
+							state.style.border = "1px solid red";
+	            document.getElementById("state_error").style.color = "red";
+	            document.getElementById("state_error").innerHTML="select your state";
+
+	            state.focus();
+	            ok = false;
+						} else{
+		            state.style.border = "0px solid red";
+		            document.getElementById("state_error").innerHTML="";
+		          }
+
 	          var fname = firstname.value;
 	          var alphaExp = /^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$/i;
 	          if(fname == null || fname == ""){
 	            firstname.style.border = "1px solid red";
 	            document.getElementById("fname_error").style.color = "red";
 	            document.getElementById("fname_error").innerHTML="First Name is required";
-	            
+
 	            firstname.focus();
 	            ok = false;
 	          }
@@ -62,7 +78,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 	            errorArray.push(firstname);
 	            firstname.focus();
 	            ok = false;
-	
+
 	          }
 	          else{
 	            firstname.style.border = "0px solid red";
@@ -77,12 +93,12 @@ angular.module('dantalayaApp').service('validationService', function() {
 	            lastname.focus();
 	            ok = false;
 	          }
-	
+
 	          else{
 	            lastname.style.border = "0px solid red";
 	            document.getElementById("lname_error").innerHTML="";
 	          }
-	
+
 	          var dob = date.value;
 	          if(dob == null || dob == ""){
 	            date.style.border = "1px solid red";
@@ -110,7 +126,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 	            aadhaar.style.border = "0px solid red";
 	            document.getElementById("aadhaar_error").innerHTML="";
 	          }
-	
+
 	          var residentialAddr = residential.value;
 	          if(residentialAddr == ""){
 	            residential.style.border = "1px solid red";
@@ -119,7 +135,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 	            errorArray.push(residential);
 	            residential.focus();
 	            ok = false;
-	
+
 	          }
 	          else{
 	            residential.style.border = "0px solid red";
@@ -207,7 +223,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 	            document.getElementById("ans2_error").innerHTML="";
 	          }
 	          var ques1Value = ques1.value;
-	          
+
 	          if(ques1Value == ""){
 	            ques1.style.border = "1px solid red";
 	            document.getElementById("ques1_error").style.color = "red";
@@ -250,15 +266,15 @@ angular.module('dantalayaApp').service('validationService', function() {
 					contactForm.certify.focus();
 					ok = false;
 				}
-	
-	
-	
+
+
+
 	          return ok;
 	    }
-	        
+
 	     return PatientValidate();
 	 };
-	 
+
 	 this.doctorValidation = function () {
 		 	var firstname = document.forms["contactForm"]["contactName"];
 		    var dcino = document.forms["contactForm"]["dci"];
@@ -278,7 +294,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		    var cmobile1 = document.forms["contactForm"]["cmobile1"];
 		    var email = document.forms["contactForm"]["email"];
 		    var exp = document.forms["contactForm"]["exp"];
-		      
+
 		      //Getting error display objects
 		    var fname_error = document.getElementById("fname_error");
 		    var dci_error = document.getElementById("dci_error");
@@ -298,13 +314,13 @@ angular.module('dantalayaApp').service('validationService', function() {
 		    var email_error = document.getElementById("email_error");
 		    var cmobile1_error = document.getElementById("cmobile1_error");
 		    var pin1_error = document.getElementById("exp_error");
-		      
+
 		      // Setting Event Listeners
-		
-		      
+
+
 		      // Validation Function
 		  function DoctorValidate(){
-		    
+
 		      var ok = true;
 		      var errorArray = [];
 		      var fname = firstname.value;
@@ -321,7 +337,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		        firstname.style.border = "0px solid red";
 		        document.getElementById("fname_error").innerHTML="";
 		      }
-		      
+
 		      var dciValue = dcino.value;
 		      if(dciValue == ""){
 		        dcino.style.border = "1px solid red";
@@ -569,11 +585,11 @@ angular.module('dantalayaApp').service('validationService', function() {
 				  ok = false;
 			  }
 		      return ok;
-		  }  
-		
+		  }
+
 		 return DoctorValidate();
 	 };
-	 
+
 	 this.technicianValidation = function () {
 		 var firstname = document.forms["contactForm"]["contactName"];
 		    var lastname = document.forms["contactForm"]["lastName"];
@@ -653,7 +669,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		      document.getElementById("dob_error").innerHTML="";
 		    }
 		    var labnameValue = labname.value;
-		    
+
 		    if(!alphaExp.test(labnameValue)){
 		      labname.style.border = "1px solid red";
 		      document.getElementById("labname_error").style.color = "red";
@@ -750,7 +766,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		      hours.style.border = "0px solid red";
 		      document.getElementById("hours_error").innerHTML="";
 		    }
-		    
+
 
 		    if(errorArray.length>0){
 		      errorArray[0].focus();
@@ -767,13 +783,13 @@ angular.module('dantalayaApp').service('validationService', function() {
 					ok = false;
 				}
 		    return ok;
-		    
 
-		    
-		    } 
+
+
+		    }
 		return SurgeonValidation();
 	 };
-	 
+
 	 this.surgeonValidation = function () {
 		 var firstname = document.forms["contactForm"]["contactName"];
 		    var lastname = document.forms["contactForm"]["lastName"];
@@ -802,7 +818,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		  var city_error = document.getElementById("ci_error");
 
 		   // Setting Event Listeners
-		
+
 		    function SurgeonValidation(){
 		        var ok = true;
 		        var errorArray = [];
@@ -962,7 +978,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		      errorArray.push(mobile);
 		      ci.focus();
 		      ok = false;
-		     
+
 		    }
 		      else{
 		      ci.style.border = "0px solid red";
@@ -985,9 +1001,9 @@ angular.module('dantalayaApp').service('validationService', function() {
 
 		    return ok;
 
-		    
+
 		    }
-		 
+
 		return SurgeonValidation();
 	 };
 

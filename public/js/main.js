@@ -271,19 +271,19 @@ app.run(function($rootScope, $http, $state) {
 	},function(err){
 		console.log('login error');
 	});
-	  $('.nav a').on('click', function(){ 
+	  $('.nav a').on('click', function(){
             $(".navbar-toggle").trigger( "click" );
     });
 });
 
 
 app.controller('navcontroller',function($scope, $location){
-	setTimeout(function(){ 
-		$('.nav a').on('click', function(){ 
+	setTimeout(function(){
+		$('.nav a').on('click', function(){
 			$(".navbar-toggle").trigger( "click" );
 		});
 	}, 300);
-		
+
 
 });
 
@@ -363,7 +363,7 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 
 			$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
 				$rootScope.userData = data.data;
-				
+
 				if(!$rootScope.userData.data.bank){
 					$rootScope.nobank = true;
 				}
@@ -409,12 +409,12 @@ app.controller('patientAppointmenttController',function($scope, $http, $state, $
 });
 
 app.controller('dashboardController',function($scope, $http, $state, $rootScope){
-	
+
 	$scope.results = [];
 	$scope.searchparam = {};
 	$scope.allDetailsFromEmail = [];
 	$scope.selectedUserFromEmail;
-	
+
 	function getAllDetailsFromEmail(){
 		if($rootScope.userType == 'patient' && $rootScope.fetchedUserData){
 			$http.post('/getAllDetailsFromEmail',{email: $rootScope.userData.data.email}).then(function(data){
@@ -430,7 +430,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 						$scope.allDetailsFromEmail.push(obj);
 					}
 				});
-				
+
 			},function(err){
 				toastr.error(err);
 			});
@@ -438,12 +438,12 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 	}
 	getAllDetailsFromEmail();
 	$scope.$on('fetchedUserData', getAllDetailsFromEmail);
-	
+
 	$scope.changeUser = function(each){
 		$scope.selectedUserFromEmail = $scope.allDetailsFromEmail[parseInt(each)];
 		$rootScope.userData = $scope.selectedUserFromEmail;
 	};
-	
+
 	$scope.search = function(){
 		$scope.searchsubmit = true;
 		var params = $scope.searchparam;
@@ -473,7 +473,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 	$scope.closeBookAppointment = function() {
 		$scope.newEventTitleModal = false
 	};
-	
+
 	$scope.bookAppointment = function(obj){
 		//$('#appointmentModal').modal('show');
 		$scope.newEventTitleModal = true;
@@ -505,7 +505,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 							if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 					        	return false;
 					        }
-							
+
 							var eventData;
 							eventData = {
 								start: start,
@@ -522,7 +522,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 							};
 							$scope.eventData = eventData;
 							showEventAddingModal(start);
-							
+
 						},
 						editable: true,
 						eventLimit: true,
@@ -531,12 +531,12 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 					$scope.allEventData.map(function(obj){
 						$('#calendar').fullCalendar('renderEvent', obj , true);
 					});
-					
+
 			 });
-	
+
 
 	};
-	
+
 	function showEventAddingModal(start){
 		$scope.newEventTitle = undefined;
 		$scope.newEventDate = {};
@@ -546,7 +546,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		/*$('#newEventTitleModal').addClass('z2010');
 		$('.modal-backdrop').addClass('z2000');*/
 		$scope.$apply();
-		
+
 	};
 
 	$scope.newEventAdding = function(){
@@ -561,13 +561,13 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 		$('#newEventTitleModal').modal('hide');
 		//$('.modal-backdrop').removeClass('z2000');
 	};
-	
+
 	$scope.closeEventAddingModal = function(){
 		$('#newEventTitleModal').modal('hide');
 		//$('.modal-backdrop').removeClass('z2000');
 	};
-	
-	
+
+
 	function addEvent(){
 		$http.post('/addEvent',{doctorId: $scope.selected.username , patientId:  $rootScope.userId, data : $scope.eventData}).then(function(data){
 			$http.post('/appointmentmail',{origin: "patient" ,data : $scope.eventData}).then(function(data){
@@ -606,7 +606,7 @@ app.controller('updatePaymentController',function($scope, $http, $state, $rootSc
 		$scope.ActivationText = err.data;
 		console.log(err);
 	});
-	
+
 });
 
 
@@ -945,7 +945,7 @@ app.controller('profileController',function($scope, $http, $rootScope, $state){
 		$scope.signup = data.data.data;
 
 		$scope.signup.dob = new Date($scope.signup.dob);
-		
+
 		$scope.bank = $scope.signup.bank;
 	},function(err){
 		toastr.error(err);
@@ -958,11 +958,11 @@ app.controller('profileController',function($scope, $http, $rootScope, $state){
 			toastr.error(err);
 		});
 	};
-	
+
 	$scope.openBankModal = function(){
 		 $('#bankdetailsmodal').modal('show');
 	};
-	
+
 	$scope.updateBankDetails = function(){
 		$scope.error = false;
 		if($scope.bankForm.$valid){
@@ -976,9 +976,9 @@ app.controller('profileController',function($scope, $http, $rootScope, $state){
 				toastr.success('Bank Details Updated Successfully');
 			},function(err){
 				$scope.apierror = err.data;
-			});	
+			});
 		}
-	}; 
+	};
 });
 
 app.controller('changePassController',function($scope, $http, $rootScope, $state){
@@ -1233,7 +1233,7 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 
 app.controller("doctorPatientController",function ($scope,$http,$stateParams) {
 	$scope.patientData = $stateParams.data;
-	
+
 	$scope.patientData.data.dob = new Date($scope.patientData.data.dob);
 
 	$scope.updatePatientDetails = function(){
@@ -1260,7 +1260,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
 			return;
 		}
-		
+
 		$scope.bill = {};
 		$scope.bill.profile = 'bill';
 		$scope.bill.date = new Date;
@@ -1269,7 +1269,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		$scope.bill.patientemail = $rootScope.userData.data.email;
 		$scope.bill.doctorname = $scope.treatmentData.data.name;
 		$scope.bill.paymentmethod = 'onlinepayment';
-		$scope.bill.amount = $scope.pendingAmount.amountLeft;		
+		$scope.bill.amount = $scope.pendingAmount.amountLeft;
 		var paymentRequestData = {
 				'purpose': 'Pay',
 				'amount': $('#payAmount').val(),
@@ -1278,16 +1278,16 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 				'phone': $rootScope.userData.data.mobile,*/
 				/*'send_email': 'True',
 				'send_sms': 'True'*/
-				
+
 		};
-		
-		$http.post('/payOnline',{doctorusername: $scope.treatmentData.data.doctorusername , data : paymentRequestData}).then(function(data){		
+
+		$http.post('/payOnline',{doctorusername: $scope.treatmentData.data.doctorusername , data : paymentRequestData}).then(function(data){
 			var payment_request = JSON.parse(data.data.data);
 			var instamojoUsername = data.data.username;
 			$scope.paymentId = payment_request.id;
 			Instamojo.open(payment_request.longurl);
-			
-	 
+
+
 
 			$scope.bill = {};
 			$scope.bill.profile = 'bill';
@@ -1300,34 +1300,34 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 			$scope.bill.amount = $('#payAmount').val();
 			$scope.bill.instamojoPaymentRequestId = $scope.paymentId;
 			$scope.bill.status = 'initiated';
-			
+
 			$http.post('/addBill',{id: $scope.treatmentData._id , data : $scope.bill}).then(function(data){
 				var obj = $scope.treatmentData.data.treatmentanalysislist;
-				
+
 				obj[obj.length-1].billid = data.data._id;
 				obj[obj.length-1].date = data.data.data.date;
 				obj[obj.length-1].instamojoPaymentRequestId = $scope.paymentId;
 				obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
 				obj[obj.length-1].amountpaidbypatient = $scope.bill.amount;
 				obj[obj.length-1].status = 'initiated';
-				
+
 				obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
 				$scope.updateTreatmentDetails();
-	
+
 				$http.post('/addToPaymentQueue',{id: $scope.treatmentData._id , paymentRequestId : $scope.paymentId, username: instamojoUsername}).then(function(data){
-			
+
 				});
 		 });
 		});
 	};
-	
+
 	$scope.updateTreatmentDetails = function (close){
 		$http.post('/editDetails',{id: $scope.treatmentData._id ,data: $scope.treatmentData.data, close: close}).then(function(data){
 			console.log('updats done');
 		 });
-		
+
 	};
-	
+
 	function getAllTreatments (){
 		if($scope.patientData){
 			$http.post('/viewTreatment',{data : $scope.patientData.data.treatments}).then(function(data){
@@ -1529,17 +1529,17 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		var docDefinition = formatData(obj)
 		pdfMake.createPdf(docDefinition).print();
 	};
-	
+
 	function formatPrescriptionData (obj){
-		
+
 		bodyText = [
 				 	[{text: '#', style: 'tableHeader'},{text: 'Prescription', style: 'tableHeader'}, {text: 'Schedule', style: 'tableHeader'}]
 				];
-	
+
 		obj.map(function(each, index){
 			bodyText.push([index+1, each.prescription, each.schedule]);
 		});
-		
+
 		return {
 			content: [
 				        {text: 'Prescription', style: 'header'},
@@ -1605,11 +1605,11 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 	    $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
 	    $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
 	  };
-	  
+
 	  $scope.showPaymentFn = function(){
 		  $scope.showPayment = true;
 	  }
-	  
+
 
 
 
@@ -1619,9 +1619,9 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		  $scope.treatment.treatmentanalysislist.map(function(obj){
 			  if(obj.amountpaidbypatient){
 				  if(obj.status !== "initiated"){
-					 pending = pending - obj.amountpaidbypatient; 
+					 pending = pending - obj.amountpaidbypatient;
 				  }
-				  
+
 			  }
 		  });
 		  $scope.pendingAmount.amountLeft = pending;
@@ -1839,8 +1839,8 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			}
 			};
 	}
-	
-	
+
+
 
 	$scope.dowloadBill = function (obj){
 		var docDefinition = formatData(obj)
@@ -1851,17 +1851,17 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 		var docDefinition = formatData(obj)
 		pdfMake.createPdf(docDefinition).print();
 	};
-	
+
 function formatPrescriptionData (obj){
-		
+
 		bodyText = [
 				 	[{text: '#', style: 'tableHeader'},{text: 'Prescription', style: 'tableHeader'}, {text: 'Schedule', style: 'tableHeader'}]
 				];
-	
+
 		obj.map(function(each, index){
 			bodyText.push([index+1, each.prescription, each.schedule]);
 		});
-		
+
 		return {
 			content: [
 				        {text: 'Prescription', style: 'header'},
@@ -2023,9 +2023,9 @@ function formatPrescriptionData (obj){
 			obj[obj.length-1].date = data.data.data.date;
 			obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
 			obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
-			
+
 			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount};
-			
+
 			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
 				$scope.updateTreatmentDetails();
 			});
@@ -2080,19 +2080,24 @@ function formatPrescriptionData (obj){
 
 
 	  $scope.addPrescription = function (){
-		  if(!$scope.treatment.prescription){
-			  $scope.treatment.prescription = [];
-			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
-		  }
-		  else if($scope.treatment.prescription.length == 0){
-			  $scope.treatment.prescription = [];
-			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
-		  }
-		  else{
-			  $scope.treatment.prescription.push(angular.copy($scope.newpresciption));
-		  }
-		  $scope.newpresciption = {prescription : '', schedule: ''};
-
+			console.log($scope.newpresciption);
+			if($scope.newpresciption == null){
+				alert('Prescription cannot be empty');
+			}else{
+				if(!$scope.treatment.prescription){
+					$scope.treatment.prescription = [];
+					$scope.treatment.prescription.push(angular.copy($scope.newpresciption));
+				}
+				else if($scope.treatment.prescription.length == 0){
+					$scope.treatment.prescription = [];
+					$scope.treatment.prescription.push(angular.copy($scope.newpresciption));
+				}
+				else{
+					$scope.treatment.prescription.push(angular.copy($scope.newpresciption));
+				}
+				// $scope.newpresciption = {prescription : '', schedule: ''};
+				$scope.newpresciption = null;
+			}
 	  };
 
 	  $scope.deletePrescription = function (index){
@@ -2190,11 +2195,11 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 			else{
 				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
 			}
-			
+
 			$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Danatalaya Appointment'}).then(function(data){
-				
+
 			});
-			
+
 		 });
 	}
 

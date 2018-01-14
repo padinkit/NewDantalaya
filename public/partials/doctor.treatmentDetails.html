@@ -57,11 +57,13 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="white-box">
-											<form class="form-horizontal">
+											<form class="form-horizontal" name="treatmentDetails" novalidate>
 												<div class="form-group">
-													<label class="col-md-12">Chief Complaint</label>
+													<label class="col-md-12" for="chiefcomplaint">Chief Complaint<span style="color:red"> *</span></label>
 													<div class="col-md-12">
-														<textarea class="form-control" rows="4" ng-model="treatment.chiefcomplaint"></textarea>
+														<textarea id="chiefcomplaint" name="chiefcomplaint" class="form-control" rows="4" ng-model="treatment.chiefcomplaint" required></textarea>
+														<span style="color: red" ng-show="treatmentDetails.chiefcomplaint.$touched && treatmentDetails.chiefcomplaint.$invalid">chief complaint cannot be empty</span>
+
 													</div>
 												</div>
 												<div class="form-group">
@@ -287,9 +289,9 @@
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-12">Diagnosis</label>
+													<label class="col-md-12" for="diagnosis">Diagnosis<span style="color:red"> *</span></label>
 													<div class="col-md-12">
-														<select ng-model="treatment.diagnosis" class="form-control">
+														<select id="diagnosis" name="diagnosis" ng-model="treatment.diagnosis" class="form-control" required>
 															<option>1- Dental caries in relation to (irt).... </option>
 															<option>2- Reversible pulpitis irt... </option>
 															<option>3- Irreversible pulpitis irt.... </option>
@@ -342,16 +344,20 @@
 															<option>50- Amelogenesis Imperfecta. </option>
 															<option>51- Others.. </option>
 														</select>
+														<span style="color: red" ng-show="treatmentDetails.diagnosis.$touched && treatmentDetails.diagnosis.$invalid">select a diagnosis / select others if you don't find the required option</span>
+
 														<br>
 														<textarea  class="form-control"
 															placeholder="" rows="2" ng-model="treatment.extradiagnosis"></textarea>
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-12">Consulting Fees</label>
+													<label class="col-md-12" for="fees">Consulting Fees<span style="color:red"> *</span></label>
 													<div class="col-md-12">
-														<input type="number" class="form-control"
-															placeholder="Consulting Fees" ng-model="treatment.consultingfees">
+														<input id="fees" name="fees" type="number" class="form-control"
+															placeholder="Consulting Fees" ng-model="treatment.consultingfees" required>
+															<span style="color: red" ng-show="treatmentDetails.fees.$touched && treatmentDetails.fees.$invalid">enter consultation fees</span>
+
 													</div>
 												</div>
 												<div class="form-group">
@@ -468,9 +474,10 @@
 													</div>
 												</div>
 												<button type="submit"
-													class="btn btn-success waves-effect waves-light m-r-10" ng-click="addTreatment()">Save</button>
+													class="btn btn-success waves-effect waves-light m-r-10" ng-disabled="treatmentDetails.$invalid" ng-click="addTreatment()">Save</button>
 												<button type="reset"
 													class="btn btn-inverse waves-effect waves-light">Cancel</button>
+													<p ng-show="treatmentDetails.$invalid" style="color: red">(fill all the required fields until then you cannot save the treatment)</p>
 											</form>
 										</div>
 									</div>
@@ -480,7 +487,7 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="white-box">
-											<form class="form-horizontal">
+											<form class="form-horizontal" name="currentTreatmentDetails" novalidate>
 												<div class="row">
 													<div class="col-md-6">
 														<div class="form-group">
@@ -519,9 +526,11 @@
 												<hr>
 												<form class="form-horizontal">
 												<div class="form-group">
-													<label class="col-md-12">Chief Complaint</label>
+													<label class="col-md-12" for="currentChief">Chief Complaint<span style="color: red"> *</span> </label>
 													<div class="col-md-12">
-														<textarea class="form-control" rows="4" ng-model="treatment.chiefcomplaint"></textarea>
+														<textarea id="currentChief" name="currentChief" class="form-control" rows="4" ng-model="treatment.chiefcomplaint" required></textarea>
+														<span style="color: red" ng-show="currentTreatmentDetails.currentChief.$touched && currentTreatmentDetails.currentChief.$invalid">enter chief complaint</span>
+
 													</div>
 												</div>
 												<div class="form-group">
@@ -747,11 +756,11 @@
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-12">Diagnosis</label>
+													<label class="col-md-12" for="currentDiagnosis">Diagnosis<span style="color: red"> *</span></label>
 													<div class="col-md-12">
 														<!-- <textarea  class="form-control"
 															placeholder="Diagnosis" rows="4" ng-model="treatment.diagnosis"></textarea> -->
-														<select ng-model="treatment.diagnosis" class="form-control">
+														<select id="currentDiagnosis" name="currentDiagnosis" ng-model="treatment.diagnosis" class="form-control" required>
 															<option>1- Dental caries in relation to (irt).... </option>
 															<option>2- Reversible pulpitis irt... </option>
 															<option>3- Irreversible pulpitis irt.... </option>
@@ -804,6 +813,8 @@
 															<option>50- Amelogenesis Imperfecta. </option>
 															<option>51- Others.. </option>
 														</select>
+														<span style="color: red" ng-show="currentTreatmentDetails.currentDiagnosis.$touched && currentTreatmentDetails.currentDiagnosis.$invalid">enter chief complaint</span>
+
 														<br>
 														<textarea  class="form-control"
 															placeholder="" rows="2" ng-model="treatment.extradiagnosis"></textarea>
@@ -846,7 +857,7 @@
 															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<label class="col-md-10">({{$index + 1}}) Treatment Details</label><span>Date: {{eachTreatment.date | date}}</span>
 																		<div class="col-md-12">
 																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
@@ -930,9 +941,11 @@
 													</div>
 												</div>
 												<button type="submit"
-													class="btn btn-success waves-effect waves-light m-r-10" ng-click="updateTreatmentDetails()">Update</button>
+													class="btn btn-success waves-effect waves-light m-r-10" ng-disabled="currentTreatmentDetails.$invalid" ng-click="updateTreatmentDetails()">Update</button>
 												<button type="submit"
 													class="btn btn-inverse waves-effect waves-light" ng-click="closeTreatment()">Close Treatment</button>
+													<p ng-show="currentTreatmentDetails.$invalid" style="color: red">(fill all the required fields until then you cannot update the treatment)</p>
+
 											</form>
 										</div>
 									</div>
@@ -1239,10 +1252,12 @@
 
 													</div>
 													<div class="form-group">
-														<label class="col-md-12">Diagnosis</label>
+														<label class="col-md-12" for="currentDiagnosis">Diagnosis</label>
 														<div class="col-md-12">
-															<textarea class="form-control"
-																placeholder="Diagnosis"  rows="1" ng-model="treatment.diagnosis" disabled></textarea>
+															<textarea id="currentDiagnosis" name="currentDiagnosis" class="form-control"
+																placeholder="Diagnosis"  rows="1" ng-model="treatment.diagnosis" disabled required></textarea>
+																<span style="color: red" ng-show="currentTreatmentDetails.currentDiagnosis.$touched && currentTreatmentDetails.currentDiagnosis.$invalid">enter chief complaint</span>
+
 															<br>
 														<textarea  class="form-control"
 															placeholder="" rows="2" ng-model="treatment.extradiagnosis" disabled></textarea>
@@ -1253,6 +1268,7 @@
 														<div class="col-md-12">
 															<input type="number" class="form-control"
 																placeholder="Treatment costs" ng-model="treatment.consultingfees" disabled>
+
 														</div>
 													</div>
 														<div class="form-group">
