@@ -236,6 +236,7 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 }]);
 
 app.run(function($rootScope, $http, $state) {
+	$rootScope.fetchedUserData = false;
 	var credentials = JSON.parse( localStorage.getItem("DantalayaUser"));
 	$http.post('/auth/login', credentials ).then(function(data){
 		$rootScope.userLoggedin = true;
@@ -261,8 +262,10 @@ app.run(function($rootScope, $http, $state) {
 			$rootScope.userData = data.data;
 			$rootScope.fetchedUserData = true;
 
-			if(!$rootScope.userData.data.bank){
-				$rootScope.nobank = true;
+			if($rootScope.userType == 'doctor'){
+				if(!$rootScope.userData.data.bank){
+					$rootScope.nobank = true;
+				}
 			}
 			$rootScope.$broadcast('fetchedUserData');
 		},function(err){
@@ -340,6 +343,7 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 	}
 
 	$scope.login = function(){
+		$rootScope.fetchedUserData = false;
 		$http.post('/auth/login', $scope.user ).then(function(data){
 			toastr.success('Login Successful');
 			$rootScope.userLoggedin = true;
@@ -363,10 +367,14 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 
 			$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
 				$rootScope.userData = data.data;
-
-				if(!$rootScope.userData.data.bank){
-					$rootScope.nobank = true;
+				$rootScope.fetchedUserData = true;
+				if($rootScope.userType == 'doctor'){
+					if(!$rootScope.userData.data.bank){
+						$rootScope.nobank = true;
+					}
 				}
+				$rootScope.$broadcast('fetchedUserData');
+				
 			},function(err){
 				console.log(err);
 			});
@@ -436,7 +444,10 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 			});
 		}
 	}
-	getAllDetailsFromEmail();
+	if($rootScope.fetchedUserData){
+	  getAllDetailsFromEmail();
+	}
+	
 	$scope.$on('fetchedUserData', getAllDetailsFromEmail);
 
 	$scope.changeUser = function(each){
@@ -623,6 +634,7 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 		$http.post('/admin/activate', {user :user } ).then(function(data){
 			$http.get('/getaccounts').then(function(data){
 				$scope.getAccounts = data.data;
+				toastr.info('User '+ user + ' has Been Activated');
 			},function(err){
 				console.log(err);
 			});
@@ -633,10 +645,11 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 
 
 
-	$scope.reject = function(user){
-		$http.post('/admin/reject', {user :user } ).then(function(data){
+	$scope.reject = function(user, email){
+		$http.post('/admin/reject', {user :user, email: email} ).then(function(data){
 			$http.get('/getaccounts').then(function(data){
 				$scope.getAccounts = data.data;
+				toastr.info('User '+ user + ' has Been Rejected');
 			},function(err){
 				console.log(err);
 			});
@@ -918,6 +931,9 @@ app.controller('menubarController',function($scope, $http, $rootScope, $state , 
 			console.log('logout success');
 			$state.go('home');
 			$rootScope.userType = undefined;
+			$rootScope.userLoggedin = false;
+			$rootScope.userId = undefined;
+			$rootScope.userData = undefined;
 		},function(err){
 			console.log(err);
 		});
@@ -2135,6 +2151,12 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		    	$scope.showAction = true;
 		    	$('#confirmDialog').modal('show');
 		     	$scope.currentEvent = calEvent;
+		     	//$scope.currentEvent.start =  $scope.currentEvent.start._i;
+		     	//$scope.currentEvent.end =  $scope.currentEvent.end._i;
+		     	delete $scope.currentEvent.source;
+		     	delete $scope.currentEvent._allDay;
+		     	delete $scope.currentEvent._start;
+		     	delete $scope.currentEvent._end;
 		    	$scope.$apply();
 
 		    }
@@ -2142,6 +2164,12 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 		    	$scope.showAction = false;
 		    	$('#confirmDialog').modal('show');
 		     	$scope.currentEvent = calEvent;
+		     	//$scope.currentEvent.start =  $scope.currentEvent.start._i;
+		     	//$scope.currentEvent.end =  $scope.currentEvent.end._i;
+		     	delete $scope.currentEvent.source;
+		     	delete $scope.currentEvent._allDay;
+		     	delete $scope.currentEvent._start;
+		     	delete $scope.currentEvent._end;
 		    	$scope.$apply();
 
 		    }
@@ -2195,9 +2223,13 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 			else{
 				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
 			}
-
+			
 			$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Danatalaya Appointment'}).then(function(data){
 
+			});
+			
+			$http.post('/appointmentmail',{origin: "doctor" ,data : $scope.currentEvent , status: status}).then(function(data){
+				
 			});
 
 		 });

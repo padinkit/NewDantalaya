@@ -17,7 +17,8 @@ var express = require('express')
   , xoauth2 = require('xoauth2')
   , config = require('./config')
   , schedule = require('node-schedule')
-  , AWS = require('aws-sdk');;
+  , moment = require('moment')
+  , AWS = require('aws-sdk');
 var fs = require('fs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -125,36 +126,48 @@ function sendSms(msg, phn, sub){
 		};
 
 		sns.publish(params, function(err, data) {
-		    if (err) console.log(err, err.stack); // an error occurred
-		    else     console.log(data);           // successful response
+		    if (err) {
+		    	console.log(err, err.stack);
+		    	res.send(err);
+		    }// an error occurred
+		    else    {
+		    	console.log(data);           // successful response
+		    }
+		    
+		  
 		});
 };
 app.post('/sendSms',function(req,res){
 	sendSms(req.body.message, req.body.phone, req.body.subject);
+	res.send('sms sent successfully');
 });
 
 function sendmail(req ,user,  key, email, profile){
-	var extra;
+	var extra="";
 	if(profile !=='patient'){
 		extra = 'Once email Verfication is done, await Dantalaya Admin activation to avail all the Sevices.';
 	}
 	var mailOptions = {
-		    from: 'dantalayaindia@gmail.com', // sender address
-		    to: email, // list of receivers
-		    subject: 'Activation Link', // Subject line
-		    html:   "<html>" +
-		    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
-		      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
-		      		"<div><p>"+ extra +"</p></div>"+
-		      		"<div><p>"+ config.mailText +"</p></div>"+
-		      		"</html>" // html body
+			Source: 'noreply@dantalaya.com', // sender address
+			Destination: {ToAddresses :[email]}, // list of receivers
+			Message :{
+				Subject: {Data: 'Dantalaya Acccunt Activation Link'}, // Subject line
+				Body: {
+				    Html: { 		    	
+				    	Data :  "<html>" +
+					    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
+					      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
+					      		"<div><p>"+ extra +"</p></div>"+
+					      		"<div><p>"+ config.mailText +"</p></div>"+
+					      		"</html>" // html body			      		
+				    }
+				}
+			}	
 	};
 
-	transporter.sendMail(mailOptions, function(error, info){
-	    if(error){
-	        return console.log(error);
-	    }
-	    console.log('Message sent: ' + info.response);
+	ses.sendEmail(mailOptions, function(err, data){
+		if (err) console.log(err, err.stack); // an error occurred
+		   else     console.log(data);           // successful response
 	});
 }
 app.post('/auth/login', passport.authenticate('local'),function(req, res){
@@ -350,22 +363,26 @@ app.post('/admin/activate',function(req, res){
 					    	res.status(404).send("failure");
 					    }
 					    var mailOptions = {
-							    from: 'dantalayaindia@gmail.com', // sender address
-							    to: user.email, // list of receivers
-							    subject: 'Account Activated', // Subject line
-							    html:   "<html>" +
-							    	  	"<div> <h2>Dantalaya</h2></div>"+
-							    	  	"<div><p>Your Account Has been Activated</p></div><br><br>"+
-							      		"<div><p>"+ config.doctormailText +"</p></div>"+
-							      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
-							      		"</html>" // html body
+					    		Source: 'noreply@dantalaya.com', // sender address
+					    		Destination: {ToAddresses :[user.email]}, // list of receivers
+					    		Message :{
+									Subject:{Data: 'Account Activated'}, // Subject line
+									Body: {
+									    Html: { 		    	
+									    	Data :  "<html>" +
+										    	  	"<div> <h2>Dantalaya</h2></div>"+
+										    	  	"<div><p>Your Account Has been Activated</p></div><br><br>"+
+										      		"<div><p>"+ config.doctormailText +"</p></div>"+
+										      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
+										      		"</html>" // html body
+									    }
+									}
+					    		}
 						};
 
-						transporter.sendMail(mailOptions, function(error, info){
-						    if(error){
-						        return console.log(error);
-						    }
-						    console.log('Message sent: ' + info.response);
+					    ses.sendEmail(mailOptions, function(err, data){
+							if (err) console.log(err, err.stack); // an error occurred
+							   else     console.log(data);           // successful response
 						});
 
 					    res.send("successfully activated");
@@ -383,21 +400,25 @@ app.post('/admin/reject',function(req, res){
 		function(err, user) {
 			if(!err){
 				var mailOptions = {
-					    from: 'dantalayaindia@gmail.com', // sender address
-					    to: user.email, // list of receivers
-					    subject: 'Account Rejected', // Subject line
-					    html:   "<html>" +
-					    	  	"<div> <h2>Dantalaya</h2></div>"+
-					      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
-					      		"<div><p>For any queries  email info@dantalaya.com</p></div>" +
-					      		"</html>" // html body
+						Source: 'noreply@dantalaya.com', // sender address
+						Destination: {ToAddresses :[req.body.email]}, // list of receivers
+					    Message :{
+							Subject:{Data: 'Account Rejected'}, // Subject line
+							Body: {
+							    Html: { 		    	
+							    	Data :  "<html>" +
+								    	  	"<div> <h2>Dantalaya</h2></div>"+
+								      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
+								      		"<div><p>For any queries  email info@dantalaya.com</p></div>" +
+								      		"</html>" // html body
+							    }
+							}
+			    		}
 				};
 
-				transporter.sendMail(mailOptions, function(error, info){
-				    if(error){
-				        return console.log(error);
-				    }
-				    console.log('Message sent: ' + info.response);
+				ses.sendEmail(mailOptions, function(err, data){
+					if (err) console.log(err, err.stack); // an error occurred
+					   else     console.log(data);           // successful response
 				});
 			    res.send("successfully rejected");
 			}
@@ -409,7 +430,7 @@ app.post('/admin/reject',function(req, res){
 });
 
 app.get('/getaccounts',function(req, res){
-	var userData = model.auth.find({ 'adminactivated' :  false },{username :1 , profile: 1 },
+	var userData = model.auth.find({ 'adminactivated' :  false },{username :1 , profile: 1 , email:1},
 		function(err, user) {
 			if(!err){
 				res.send(user);
@@ -434,24 +455,28 @@ app.post('/getAllAccounts',function(req, res){
 
 function sendPasswordmail(req, user, pass, email){
 	var mailOptions = {
-		    from: 'dantalayaindia@gmail.com', // sender address
-		    to: email, // list of receivers
-		    subject: 'Account Password', // Subject line
-		    html:   "<html>" +
-		    	  	"<div> <h2>Dantalaya</h2>" +
-		    	  	"<p>Below Are The Respective Username And Password For Your Account</p>" +
-		    	  	"<p>Username : <b>"+ user +"</b></p>" +
-		    	  	"<p>Password : <b>"+ pass +"</b></p>" +
-		    	  	"</div>"+
-		      		"<a href='http://" +req.get('host') + "/'><b>Go to Dantalaya Website</b></a>" +
-		      		"</html>" // html body
+			Source: 'noreply@dantalaya.com', // sender address
+			Destination: {ToAddresses :[email]}, // list of receivers
+		    Message :{
+				Subject: {Data: 'Account Password'}, // Subject line
+				Body: {
+				    Html: { 		    	
+				    	Data :  "<html>" +
+					    	  	"<div> <h2>Dantalaya</h2>" +
+					    	  	"<p>Below Are The Respective Username And Password For Your Account</p>" +
+					    	  	"<p>Username : <b>"+ user +"</b></p>" +
+					    	  	"<p>Password : <b>"+ pass +"</b></p>" +
+					    	  	"</div>"+
+					      		"<a href='http://" +req.get('host') + "/'><b>Go to Dantalaya Website</b></a>" +
+					      		"</html>" // html body
+				    }
+				}
+			}
 	};
 
-	transporter.sendMail(mailOptions, function(error, info){
-	    if(error){
-	        return console.log(error);
-	    }
-	    console.log('Message sent: ' + info.response);
+	ses.sendEmail(mailOptions, function(err, data){
+		if (err) console.log(err, err.stack); // an error occurred
+		   else     console.log(data);           // successful response
 	});
 }
 
@@ -459,25 +484,29 @@ function sendPasswordmail(req, user, pass, email){
 
 function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 	var mailOptions = {
-		    from: 'dantalayaindia@gmail.com', // sender address
-		    to: email, // list of receivers
-		    subject: 'Appointment mail', // Subject line
-		    html:   "<html>" +
-		    	  	"<div> <h2>Dantalaya</h2>" +
-		    	  	"<p>" +text+ "</p>" +
-		    	  	"<p>title : <b>"+ title +"</b></p>" +
-		    	  	"<p>" + from +" : <b>"+ name +"</b></p>" +
-		    	  	"<p>start time : <b>"+ starttime +"</b></p>" +
-		    	  	"<p>end time : <b>"+ endtime +"</b></p>" +
-		    	  	"</div>"+
-		      		"</html>" // html body
+			Source: 'noreply@dantalaya.com', // sender address
+			Destination: {ToAddresses :[email]}, // list of receivers
+		    Message :{
+				Subject: {Data: 'Appointment Mail'}, // Subject line
+				Body: {
+				    Html: { 		    	
+				    	Data :  "<html>" +
+					    	  	"<div> <h2>Dantalaya</h2>" +
+					    	  	"<p>" +text+ "</p>" +
+					    	  	"<p>title : <b>"+ title +"</b></p>" +
+					    	  	"<p>" + from +" : <b>"+ name +"</b></p>" +
+					    	  	"<p>start time : <b>"+ starttime +"</b></p>" +
+					    	  	"<p>end time : <b>"+ endtime +"</b></p>" +
+					    	  	"</div>"+
+					      		"</html>" // html body
+				    }
+				}
+			}
 	};
 
-	transporter.sendMail(mailOptions, function(error, info){
-	    if(error){
-	        return console.log(error);
-	    }
-	    console.log('Message sent: ' + info.response);
+	ses.sendEmail(mailOptions, function(err, data){
+		if (err) console.log(err, err.stack); // an error occurred
+		   else     console.log(data);           // successful response
 	});
 }
 
@@ -500,13 +529,13 @@ app.post('/appointmentmail',function(req,res){
 		 var text="Thanks for scheduling an appointment.Your appointment details are mentioned below";
 		 var name = req.body.data.patientName;
 		 var mail = req.body.data.doctorMail;
-		 var from = "Doctor";
+		 var from = "Patient";
 	 }
 
 	 else{
 		 var name = req.body.data.doctorName;
 		 var mail = req.body.data.patientMail;
-		 var from = "Patient";
+		 var from = "Doctor";
 		 if(req.body.status == 'accept'){
 			 var text = "Thanks for scheduling an appointment.Your appointment has been accepted by doctor.";
 			  }
@@ -514,7 +543,7 @@ app.post('/appointmentmail',function(req,res){
 			 var text = "Sorry for the inconvenience.Your appointment has been rejected.Please reschedule it.";
 		 }
 	 }
-	 sendappointmentmail( req.body.data.title , name , req.body.data.start, req.body.data.end , mail,text, from);
+	 sendappointmentmail( req.body.data.title , name , moment(req.body.data.start).format('DD-MMM-YYYY hh:mm A'), moment(req.body.data.end).format('DD-MMM-YYYY hh:mm A'), mail,text, from);
 		res.send('success');
 });
 
