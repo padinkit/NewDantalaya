@@ -39,7 +39,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -133,8 +133,8 @@ function sendSms(msg, phn, sub){
 		    else    {
 		    	console.log(data);           // successful response
 		    }
-		    
-		  
+
+
 		});
 };
 app.post('/sendSms',function(req,res){
@@ -153,16 +153,16 @@ function sendmail(req ,user,  key, email, profile){
 			Message :{
 				Subject: {Data: 'Dantalaya Acccunt Activation Link'}, // Subject line
 				Body: {
-				    Html: { 		    	
+				    Html: {
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
 					      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
 					      		"<div><p>"+ extra +"</p></div>"+
 					      		"<div><p>"+ config.mailText +"</p></div>"+
-					      		"</html>" // html body			      		
+					      		"</html>" // html body
 				    }
 				}
-			}	
+			}
 	};
 
 	ses.sendEmail(mailOptions, function(err, data){
@@ -368,7 +368,7 @@ app.post('/admin/activate',function(req, res){
 					    		Message :{
 									Subject:{Data: 'Account Activated'}, // Subject line
 									Body: {
-									    Html: { 		    	
+									    Html: {
 									    	Data :  "<html>" +
 										    	  	"<div> <h2>Dantalaya</h2></div>"+
 										    	  	"<div><p>Your Account Has been Activated</p></div><br><br>"+
@@ -405,7 +405,7 @@ app.post('/admin/reject',function(req, res){
 					    Message :{
 							Subject:{Data: 'Account Rejected'}, // Subject line
 							Body: {
-							    Html: { 		    	
+							    Html: {
 							    	Data :  "<html>" +
 								    	  	"<div> <h2>Dantalaya</h2></div>"+
 								      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
@@ -460,7 +460,7 @@ function sendPasswordmail(req, user, pass, email){
 		    Message :{
 				Subject: {Data: 'Account Password'}, // Subject line
 				Body: {
-				    Html: { 		    	
+				    Html: {
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2>" +
 					    	  	"<p>Below Are The Respective Username And Password For Your Account</p>" +
@@ -489,7 +489,7 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 		    Message :{
 				Subject: {Data: 'Appointment Mail'}, // Subject line
 				Body: {
-				    Html: { 		    	
+				    Html: {
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2>" +
 					    	  	"<p>" +text+ "</p>" +

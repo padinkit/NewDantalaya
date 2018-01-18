@@ -83,12 +83,9 @@
 															<option>BP</option>
 															<option>Asthma</option>
 															<option>Allergy</option>
-															<option>Thyroid Related</option>
 															<option>Bleeding Disorders</option>
 															<option>Cardiac Disease</option>
 															<option>Pregnancy</option>
-															<option>Habits</option>
-															<option>Other</option>
 														</select>
 													</div>
 												</div>
@@ -376,7 +373,7 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="col-md-12">Treatment Estimated Cost</label>
+																<label class="col-md-12">Treatment Estimated Cost<span style="color: red"> *</span></label>
 																<div class="col-md-12">
 																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"/>
 																</div>
@@ -387,7 +384,7 @@
 																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
 															</div>
 
-																<div ng-if="treatment.patientacceptedtreatment" class="ml40">
+																<div ng-if="treatment.patientacceptedtreatment">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
 																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
@@ -458,7 +455,7 @@
 															<br>
 															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button>
 															<div class="pull-right">
-											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
+											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a>
 											       					<a href="javascript:void(0)" ng-click="downloadPrescription(treatment.prescription)">Download Prescription</a>
 											       			</div>
 														</div>
@@ -508,12 +505,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="form-group">
-													<label class="col-md-12">New Comments</label>
-													<div class="col-md-12">
-														<textarea class="form-control" rows="4" ng-model="treatment.newcomments"></textarea>
-													</div>
-												</div>
+
 												<!-- <div class="form-group">
 													<label class="col-md-12" for="tdate">Treatment
 														Update Date </label>
@@ -550,12 +542,9 @@
 															<option>BP</option>
 															<option>Asthma</option>
 															<option>Allergy</option>
-															<option>Thyroid Related</option>
 															<option>Bleeding Disorders</option>
 															<option>Cardiac Disease</option>
 															<option>Pregnancy</option>
-															<option>Habits</option>
-															<option>Other</option>
 														</select>
 													</div>
 												</div>
@@ -843,7 +832,7 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="col-md-12">Treatment Estimated Cost</label>
+																<label class="col-md-12">Treatment Estimated Cost<span style="color: red"> *</span></label>
 																<div class="col-md-12">
 																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
 																</div>
@@ -854,7 +843,7 @@
 																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
 															</div>
 
-															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
+															<div ng-if="treatment.patientacceptedtreatment">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
 																		<label class="col-md-10">({{$index + 1}}) Treatment Details</label><span>Date: {{eachTreatment.date | date}}</span>
@@ -925,7 +914,7 @@
 															<br>
 															<button type="button" class="btn btn-default" ng-click="addPrescription()">Add Prescription</button>
 															<div class="pull-right">
-											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
+											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a>
 											       					<a href="javascript:void(0)" ng-click="downloadPrescription (treatment.prescription)">Download Prescription</a>
 											       			</div>
 														</div>
@@ -1051,12 +1040,9 @@
 																<option>BP</option>
 																<option>Asthma</option>
 																<option>Allergy</option>
-																<option>Thyroid Related</option>
 																<option>Bleeding Disorders</option>
 																<option>Cardiac Disease</option>
 																<option>Pregnancy</option>
-																<option>Habits</option>
-																<option>Other</option>
 															</select>
 														</div>
 													</div>
@@ -1074,7 +1060,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-12">Any Other Info</label>
+														<label class="col-md-12">Special Comments</label>
 														<div class="col-md-12">
 															<input type="text" class="form-control"
 																placeholder="Other Info" ng-model="treatment.otherinfo" disabled >
@@ -1252,7 +1238,7 @@
 
 													</div>
 													<div class="form-group">
-														<label class="col-md-12" for="currentDiagnosis">Diagnosis</label>
+														<label class="col-md-12" for="currentDiagnosis">Medical History</label>
 														<div class="col-md-12">
 															<textarea id="currentDiagnosis" name="currentDiagnosis" class="form-control"
 																placeholder="Diagnosis"  rows="1" ng-model="treatment.diagnosis" disabled required></textarea>
@@ -1287,7 +1273,7 @@
 																</div>
 															</div>
 															<div class="form-group">
-																<label class="col-md-12">Treatment Estimated Cost</label>
+																<label class="col-md-12">Treatment Estimated Cost<span style="color: red"> *</span></label>
 																<div class="col-md-12">
 																	<input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
 																</div>
@@ -1298,7 +1284,7 @@
 																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
 															</div>
 
-															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
+															<div ng-if="treatment.patientacceptedtreatment">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment" ng-if="!$last">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
 																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
@@ -1347,7 +1333,7 @@
 															</div>
 														</div>
 														<div class="pull-right">
-											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a> &nbsp:&nbsp:&nbsp:&nbsp:
+											       					<a href="javascript:void(0)" ng-click="printPrescription(treatment.prescription)">Print Prescription</a>
 											       					<a href="javascript:void(0)" ng-click="downloadPrescription(treatment.prescription)">Download Prescription</a>
 											       			</div>
 													</div>
@@ -1476,7 +1462,7 @@
 				</div>
 	       		<div>
        			<div class="pull-right">
-       					<a href="javascript:void(0)" ng-click="printBill(paymentData)">Print Bill</a> &nbsp:&nbsp:&nbsp:&nbsp:
+       					<a href="javascript:void(0)" ng-click="printBill(paymentData)">Print Bill</a>
        					<a href="javascript:void(0)" ng-click="dowloadBill(paymentData)">Download Bill</a>
        			</div>
        			<br>
