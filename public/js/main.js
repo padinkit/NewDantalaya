@@ -374,7 +374,7 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 					}
 				}
 				$rootScope.$broadcast('fetchedUserData');
-				
+
 			},function(err){
 				console.log(err);
 			});
@@ -447,7 +447,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 	if($rootScope.fetchedUserData){
 	  getAllDetailsFromEmail();
 	}
-	
+
 	$scope.$on('fetchedUserData', getAllDetailsFromEmail);
 
 	$scope.changeUser = function(each){
@@ -1094,9 +1094,27 @@ app.filter('capitalize', function() {
 	};
 });
 
-app.controller("formCtrl",function ($scope) {
-	$scope.namePattern = new RegExp("^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$");
-	$scope.mobilePattern = new RegExp("^[-0-9+,]+$");
+app.controller("formCtrl",function ($scope,$http,$location) {
+	$scope.contactName = null;
+  $scope.contactEmail = null;
+	$scope.contactPhone = null;
+	$scope.contactMessage = null;
+	$scope.contactForms = function(){
+		var dataObj = {
+			contactName : $scope.contactName,
+			contactEmail : $scope.contactEmail,
+			contactPhone : $scope.contactPhone,
+			contactMessage : $scope.contactMessage
+		}
+		var res = $http.post('/contactmailsend', dataObj);
+	res.success(function(data, status, headers, config) {
+		alert('We have received your response. We will get back to you shortly!');
+		$location.path('/#/home');
+	});
+	res.error(function(data, status, headers, config) {
+		alert( "failure message: " + JSON.stringify({data: data}));
+	});
+	}
 });
 
 
@@ -2223,13 +2241,13 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 			else{
 				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
 			}
-			
+
 			$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Danatalaya Appointment'}).then(function(data){
 
 			});
-			
+
 			$http.post('/appointmentmail',{origin: "doctor" ,data : $scope.currentEvent , status: status}).then(function(data){
-				
+
 			});
 
 		 });

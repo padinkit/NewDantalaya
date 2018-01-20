@@ -19,6 +19,7 @@ var express = require('express')
   , schedule = require('node-schedule')
   , moment = require('moment')
   , AWS = require('aws-sdk');
+var ejs = require('ejs');
 var fs = require('fs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -1447,6 +1448,78 @@ app.post('/updatePayment', function(req,res){
 	    );
  });
 
+
+app.post('/contactmailsend',function(req,res){
+  console.log(req.body.contactName);
+  ejs.renderFile(__dirname + "/views/mail/admincopy.ejs", {
+                                 contactName: req.body.contactName,
+                                 contactEmail: req.body.contactEmail,
+                                 contactPhone: req.body.contactPhone,
+                                 contactMessage: req.body.contactMessage,
+                              }, function (err, data) {
+                                 if (err) {
+                                     console.log(err);
+                                 }
+                                 else {
+
+                                   let mailOptions = {
+                                     from: '"Dantalaya - Smiles for all" <dantalayaindia@gmail.com>', // sender address
+                                     to: "dantalayaindia@gmail.com", // list of receivers
+                                     subject: 'Contact Request', // Subject line
+                                     html: data
+                                 };
+                                   transporter.sendMail(mailOptions, (error, info) => {
+                                     if (error) {
+                                         return console.log(error);
+                                     }
+                                     console.log('Message sent: %s', info.messageId);
+                                 });
+
+                                 }
+
+      });
+
+
+
+
+
+  ejs.renderFile(__dirname + "/views/mail/contactmail.ejs", {
+                                 contactName: req.body.contactName,
+                                 contactEmail: req.body.contactEmail,
+                                 contactPhone: req.body.contactPhone,
+                                 contactMessage: req.body.contactMessage,
+                              }, function (err, data) {
+                                 if (err) {
+                                     console.log(err);
+                                 }
+                                 else {
+
+                                   let mailOptions = {
+                                     from: '"Dantalaya - Smiles for all" <dantalayaindia@gmail.com>', // sender address
+                                     to: req.body.contactEmail, // list of receivers
+                                     subject: 'Thanks for contacting Dantalaya', // Subject line
+                                     html: data
+                                 };
+                                   transporter.sendMail(mailOptions, (error, info) => {
+                                     if (error) {
+                                         return console.log(error);
+                                     }
+                                     console.log('Message sent: %s', info.messageId);
+                                 });
+
+                                 }
+
+      });
+
+
+
+      res.send({status:'success'});
+
+
+
+});
+
+
  var monthlyScheduler = schedule.scheduleJob('1 0 1 * *', function(){
 	  var currenMonth = new Date().getMonth();
 	  var neededYear = new Date().getFullYear();
@@ -1484,6 +1557,11 @@ app.post('/updatePayment', function(req,res){
 });
 
 
+// app.get('/test', function (req, res) {
+//     res.render('mail/admincopy', {
+//         title: "cancel passenger ticket"
+//     });
+// });
 
 
 https.createServer(app).listen(app.get('port'), function(){

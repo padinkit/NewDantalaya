@@ -11,24 +11,24 @@
         <div class="row">
             <div class="col-md-6 dabtc">
                 <h2>Request For Information</h2>
-                <form action="" method="post" id="contactForm" name="contactForm" novalidate>
+                <form  id="contactForm" name="contactForm" novalidate>
                     <fieldset>
 
                         <div>
-                              <span class="error" ng-show="contactForm.contactName.$invalid && contactForm.contactName.$dirty">
+                              <span class="error" ng-show="contactForm.contactName.$invalid && contactForm.contactName.$touched">
                                 <span ng-show="contactForm.contactName.$error.pattern">
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a valid Name
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; enter a valid name
                                 </span>
                                 <span ng-show="contactForm.contactName.$error.required">
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a Name
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;enter a Name
                                 </span>
                             </span>
                             <label for="contactName">Name <span class="required">*</span></label>
-                            <input type="text" value="" size="35" id="contactName" name="contactName" ng-pattern="namePattern" required ng-model="$scope.name">
+                            <input type="text" value="" size="35" id="contactName" name="contactName" ng-pattern="/^[a-zA-Z ]{2,30}$/" required ng-model="contactName">
                         </div>
 
                         <div>
-                            <span class="error" ng-show="contactForm.contactEmail.$invalid && contactForm.contactEmail.$dirty">
+                            <span class="error" ng-show="contactForm.contactEmail.$invalid && contactForm.contactEmail.$touched">
                                 <span ng-show="contactForm.contactEmail.$error.email">
                                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a valid email address
                                 </span>
@@ -37,12 +37,12 @@
                                 </span>
                             </span>
                             <label for="contactEmail">Email <span class="required">*</span></label>
-                            <input type="email" value="" size="35" id="contactEmail" name="contactEmail" required autofill-prediction="EMAIL_ADDRESS" ng-model="$scope.email">
+                            <input type="email" value="" size="35" id="contactEmail" name="contactEmail"  required autofill-prediction="EMAIL_ADDRESS" ng-model="contactEmail">
 
                         </div>
 
                         <div>
-                            <span class="error" ng-show="contactForm.contactSubject.$invalid && contactForm.contactSubject.$dirty">
+                            <span class="error" ng-show="contactForm.contactSubject.$invalid && contactForm.contactSubject.$touched">
                                 <span ng-show="contactForm.contactSubject.$error.pattern">
                                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a valid Phone Number
                                 </span>
@@ -51,21 +51,21 @@
                                 </span>
                             </span>
                             <label for="contactSubject">Phone<span class="required">*</span></label>
-                            <input type="number" value="" ng-pattern="mobilePattern" required  id="contactSubject" name="contactSubject" autofill-prediction="UNKNOWN_TYPE" ng-model="$scope.phone">
+                            <input type="number"  ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im" required  id="contactSubject" name="contactSubject" autofill-prediction="UNKNOWN_TYPE" ng-model="contactPhone">
                         </div>
 
                         <div>
-                            <span class="error" ng-show="contactForm.contactMessage.$invalid && contactForm.contactMessage.$dirty">
+                            <span class="error" ng-show="contactForm.contactMessage.$invalid && contactForm.contactMessage.$touched">
 
                                 <span ng-show="contactForm.contactMessage.$error.required">
                                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please enter a Message
                                 </span>
                             </span>
                             <label for="contactMessage">Message <span class="required">*</span></label>
-                            <textarea cols="25" rows="5" required id="contactMessage" name="contactMessage" ng-model="$scope.message"></textarea>
+                            <textarea cols="25" rows="5" required id="contactMessage" name="contactMessage" ng-model="contactMessage"></textarea>
                         </div>
 
-                        <div class="btn dbtn dbtnc pull-right" ng-disabled="contactForm.$invalid">Submit</div>
+                        <button class="btn dbtn dbtnc pull-right" ng-disabled="contactForm.$invalid" ng-click="contactForms()">Submit</button>
                     </fieldset>
                 </form>
             </div>
@@ -108,5 +108,3 @@
 
 
 </section>
-
-
