@@ -6,7 +6,7 @@
 	  <ul class="nav nav-tabs" role="tablist">
 	    <li role="presentation" ng-class="{active: userActivation}"><a href="javascript:void(0)" aria-controls="home" role="tab" data-toggle="tab" ng-click="toggleTab('userActivation')">User Activation</a></li>
 	    <li role="presentation" ng-class="{active: search}"><a href="javascript:void(0)" aria-controls="profile" role="tab" data-toggle="tab"  ng-click="toggleTab('search')">Search</a></li>
-
+		 <li role="presentation" ng-class="{active: searchSpecific}"><a href="javascript:void(0)" aria-controls="eachsearch" role="tab" data-toggle="tab"  ng-click="toggleTab('searchSpecific')">Search For Specific User</a></li>
 
 	  </ul>
 
@@ -32,32 +32,36 @@
 
 		</div>
 	    <div role="tabpanel" class="tab-pane" id="profile" ng-class="{active: search}">
-	    <div>
-	    		<div>
-	    			<input type="checkbox" ng-model="checkbox.patient"> Patient &nbsp;&nbsp;
-	    			<input type="checkbox"  ng-model="checkbox.doctor"> Dentist &nbsp;&nbsp;
-	    			<input type="checkbox"  ng-model="checkbox.surgeon"> House Surgeon &nbsp;&nbsp;
-	    			<input type="checkbox"  ng-model="checkbox.technician"> Lab Technician &nbsp;&nbsp;
-	    			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    			<button type="button" class="btn btn-primary" ng-click="getAllAccounts()">Get Details</button>
-	    		</div>
-	    		<br>
-		  </div>
-		  <table class="table table-striped" ng-if="allUserData.length != 0">
-				<thead>
-					<tr>
-						<th>Username</th>
-						<th>Profile</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="user in allUserData" ng-if="user.data.username">
-						<th><a href="javascript:void(0)" ng-click="userDetails(user.data.username)">{{user.data.username}}</a></th>
-						<td>{{user.data.profile}}</td>
-					</tr>
-				</tbody>
-			</table>
-			<h3 ng-if="allUserData.length == 0 && showerror">No Data</h3>
+		     <div>
+		    		<div>
+		    			<input type="checkbox" ng-model="checkbox.patient"> Patient &nbsp;&nbsp;
+		    			<input type="checkbox"  ng-model="checkbox.doctor"> Dentist &nbsp;&nbsp;
+		    			<input type="checkbox"  ng-model="checkbox.surgeon"> House Surgeon &nbsp;&nbsp;
+		    			<input type="checkbox"  ng-model="checkbox.technician"> Lab Technician &nbsp;&nbsp;
+		    			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    			<button type="button" class="btn btn-primary" ng-click="getAllAccounts()">Get Details</button>
+		    		</div>
+		    		<br>
+			  </div>
+			  <div><span>&nbsp;&nbsp;Result Count : &nbsp;&nbsp;</span>{{allUserData.length}}</div>
+			  <table class="table table-striped" ng-if="allUserData.length != 0">
+					<thead>
+						<tr>
+							<th>Username</th>
+							<th>Profile</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="user in allUserData" ng-if="user.data.username">
+							<th><a href="javascript:void(0)" ng-click="userDetails(user.data.username)">{{user.data.username}}</a></th>
+							<td>{{user.data.profile}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<h3 ng-if="allUserData.length == 0 && showerror">No Data</h3>
+				
+		</div>
+		<div role="tabpanel" class="tab-pane" id="eachsearch" ng-class="{active: searchSpecific}">
 			<section id="dpreg">
 				<div class="row">
 					<div class="col-md-6">
@@ -224,7 +228,7 @@
 				</div>
 
 
-				</div>
+				
 
 
 

@@ -91,3 +91,34 @@
 			Treatments costing Rs 10000+ will be eligible for interest-free loans. Patients can contact Dantalaya.
 			Dental equipment engineers, Junior Dentists, House surgeons, Dental hygienist, dental nurses and dental lab technicians are available on call. Doctors can contact Dantalaya to avail these services.
 	</div>
+	
+	
+	<div class="modal fade" tabindex="-1" role="dialog" id="confirmDialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" ng-contoller="schedulerController">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Confirm Appointment</h4>
+      </div>
+      <div class="modal-body">
+      	<div>
+      		 <fieldset>
+   				 <legend><h5>Details</h5></legend>
+		      		<div><label class="width170">Description  : </label> {{currentEvent.title}}</div>
+		      		<div><label class="width170">Patient Name : </label> {{currentEvent.patientName}}</div>
+		      		<div><label class="width170">Date Of Appointment : </label> {{ formatDate(currentEvent.start) | date}}</div>
+		      		<div><label class="width170">Patient Phone No : </label> {{currentEvent.patientPhone}}</div>
+		      		<div><label class="width170">Patient Email : </label> {{currentEvent.patientMail}}</div>
+      		</fieldset>
+      	</div>
+      	<br>
+        <p ng-if="showAction">Do you want to Confirm the appointment</p>
+      </div>
+      <div class="modal-footer" ng-if="showAction">
+        <button type="button" class="btn btn-success"  data-dismiss="modal" ng-click="changeAppointMentStatus('accept')">Accept</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="changeAppointMentStatus('reject')">Reject</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
