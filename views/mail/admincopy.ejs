@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+td {
+    padding: 15px;
+}
+</style>
+</head>
+<body>
+<style type="text/css">
+@media only screen and (max-width:480px){table {width: 100%;}}
+@media only screen and (max-width:480px){img.head {width: 100%;}}
+@media \0screen {img {width: auto;}}
+</style>
+<table cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td>Name  </td>
+    <td> <%= contactName %> </td>
+  </tr>
+  <tr>
+    <td>Email </td>
+    <td> <%= contactEmail %> </td>
+
+  </tr>
+  <tr>
+    <td>Contact Number</td>
+    <td> <%= contactPhone %> </td>
+  </tr>
+
+  <tr>
+    <td>Message </td>
+    <td> <%= contactMessage %> </td>
+  </tr>
+
+</table>
+</body>
+</html>

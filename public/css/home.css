@@ -1894,7 +1894,6 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 	}
 }
 .show-treatment{
-	margin-left: 40px;
     margin-top: 20px;
 }
 .mb0{
@@ -1955,6 +1954,7 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
 	text-align: center;
 	padding: 25px;
   margin-top: 80px;
+  border-radius: 3px;
 }
 .prescription{
 	padding: 20px;
@@ -2044,7 +2044,7 @@ table{
 
 .card-content {
   width: 85%;
-  margin: 35px auto;
+  margin: 20px auto;
 }
 
 .card span {
@@ -2052,13 +2052,12 @@ table{
 }
 
 .card-content h3 {
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 0;
   color: #303F9F;
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
   font-size: 30px;
-  padding-left: 100px
 }
 
 .card-content h4 {
@@ -2071,7 +2070,7 @@ table{
 
 .card-content p {
   color: #ffffff;
-  font-size: 22px;
+  font-size: 18px;
   font-family: 'Open Sans', sans-serif;
 
 }
@@ -2198,11 +2197,33 @@ margin-top: 20px;
   width: 320px;
 }
 
+.ssbtn{
+  margin: 22px -70px;
+  padding: 15px 40px;
+}
+
 @media screen and (max-width: 25em) {
   .patient-header img{
     width: 85%;
   }
-
+  .ssbtn{
+    padding: 10px 40px;
+  width: 100%;
+  margin: 0px;
+  margin-top: -30px;
+    }
+  .patienTtreatment{
+    padding: 0px 10px;
+     font-size: 15px;
+  }
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .treatmenttile{
+    margin: 0px;
+    margin-top: 50px;
+  }
 }
 
 .dropdown-patient{
@@ -2214,4 +2235,12 @@ margin-top: 20px;
 }
 .mt5{
 	margin-top: 5px
+}
+
+.tab-pane{
+      overflow-y: scroll;
+}
+
+.prescription{
+      padding-bottom: 40px;
 }

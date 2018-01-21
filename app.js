@@ -19,6 +19,7 @@ var express = require('express')
   , schedule = require('node-schedule')
   , moment = require('moment')
   , AWS = require('aws-sdk');
+var ejs = require('ejs');
 var fs = require('fs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -133,8 +134,8 @@ function sendSms(msg, phn, sub){
 		    else    {
 		    	console.log(data);           // successful response
 		    }
-		    
-		  
+
+
 		});
 };
 app.post('/sendSms',function(req,res){
@@ -153,16 +154,16 @@ function sendmail(req ,user,  key, email, profile){
 			Message :{
 				Subject: {Data: 'Dantalaya Acccunt Activation Link'}, // Subject line
 				Body: {
-				    Html: { 		    	
+				    Html: {
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
 					      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
 					      		"<div><p>"+ extra +"</p></div>"+
 					      		"<div><p>"+ config.mailText +"</p></div>"+
-					      		"</html>" // html body			      		
+					      		"</html>" // html body
 				    }
 				}
-			}	
+			}
 	};
 
 	ses.sendEmail(mailOptions, function(err, data){
@@ -365,7 +366,6 @@ app.post('/admin/activate',function(req, res){
 					    if (err){
 					    	res.status(404).send("failure");
 					    }
-					    
 					    model.user.findOne({ "data.username": req.body.user},function(err, details){
 							if (err) {
 						           res.send('error');
@@ -394,7 +394,6 @@ app.post('/admin/activate',function(req, res){
 															}
 											    		}
 												};
-
 											    ses.sendEmail(mailOptions, function(err, data){
 													if (err) console.log(err, err.stack); // an error occurred
 													   else     console.log(data);           // successful response
@@ -423,7 +422,6 @@ app.post('/admin/reject',function(req, res){
 	var userData = model.auth.remove({ 'username' :  req.body.user },
 		function(err, user) {
 			if(!err){
-				
 				model.user.remove({ "data.username": req.body.user},function(err, details){
 					if(!err){
 						var mailOptions = {
@@ -442,7 +440,6 @@ app.post('/admin/reject',function(req, res){
 									}
 					    		}
 						};
-
 						ses.sendEmail(mailOptions, function(err, data){
 							if (err) console.log(err, err.stack); // an error occurred
 							   else     console.log(data);           // successful response
@@ -492,7 +489,7 @@ function sendPasswordmail(req, user, pass, email){
 		    Message :{
 				Subject: {Data: 'Account Password'}, // Subject line
 				Body: {
-				    Html: { 		    	
+				    Html: {
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2>" +
 					    	  	"<p>Below Are The Respective Username And Password For Your Account</p>" +
@@ -521,7 +518,7 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 		    Message :{
 				Subject: {Data: 'Appointment Mail'}, // Subject line
 				Body: {
-				    Html: { 		    	
+				    Html: {
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2>" +
 					    	  	"<p>" +text+ "</p>" +
@@ -1479,7 +1476,79 @@ app.post('/updatePayment', function(req,res){
 	    );
  });
 
- var monthlyScheduler = schedule.scheduleJob('55 22 15 * *', function(){
+
+app.post('/contactmailsend',function(req,res){
+  console.log(req.body.contactName);
+  ejs.renderFile(__dirname + "/views/mail/admincopy.ejs", {
+                                 contactName: req.body.contactName,
+                                 contactEmail: req.body.contactEmail,
+                                 contactPhone: req.body.contactPhone,
+                                 contactMessage: req.body.contactMessage,
+                              }, function (err, data) {
+                                 if (err) {
+                                     console.log(err);
+                                 }
+                                 else {
+
+                                   let mailOptions = {
+                                     from: '"Dantalaya - Smiles for all" <dantalayaindia@gmail.com>', // sender address
+                                     to: "dantalayaindia@gmail.com", // list of receivers
+                                     subject: 'Contact Request', // Subject line
+                                     html: data
+                                 };
+                                   transporter.sendMail(mailOptions, (error, info) => {
+                                     if (error) {
+                                         return console.log(error);
+                                     }
+                                     console.log('Message sent: %s', info.messageId);
+                                 });
+
+                                 }
+
+      });
+
+
+
+
+
+  ejs.renderFile(__dirname + "/views/mail/contactmail.ejs", {
+                                 contactName: req.body.contactName,
+                                 contactEmail: req.body.contactEmail,
+                                 contactPhone: req.body.contactPhone,
+                                 contactMessage: req.body.contactMessage,
+                              }, function (err, data) {
+                                 if (err) {
+                                     console.log(err);
+                                 }
+                                 else {
+
+                                   let mailOptions = {
+                                     from: '"Dantalaya - Smiles for all" <dantalayaindia@gmail.com>', // sender address
+                                     to: req.body.contactEmail, // list of receivers
+                                     subject: 'Thanks for contacting Dantalaya', // Subject line
+                                     html: data
+                                 };
+                                   transporter.sendMail(mailOptions, (error, info) => {
+                                     if (error) {
+                                         return console.log(error);
+                                     }
+                                     console.log('Message sent: %s', info.messageId);
+                                 });
+
+                                 }
+
+      });
+
+
+
+      res.send({status:'success'});
+
+
+
+});
+
+
+ var monthlyScheduler = schedule.scheduleJob('1 0 1 * *', function(){
 	  var currenMonth = new Date().getMonth();
 	  var neededYear = new Date().getFullYear();
 
@@ -1516,6 +1585,11 @@ app.post('/updatePayment', function(req,res){
 });
 
 
+// app.get('/test', function (req, res) {
+//     res.render('mail/admincopy', {
+//         title: "cancel passenger ticket"
+//     });
+// });
 
 
 https.createServer(app).listen(app.get('port'), function(){

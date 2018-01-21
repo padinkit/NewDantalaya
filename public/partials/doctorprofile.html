@@ -1,5 +1,13 @@
+<section ng-if="userType == 'doctor'" class="patient-header">
+  <div class="">
+    <a href="#/home">
+      <img src="images/dantalaya_logo.jpg" alt="Logo" />
+    </a>
+  </div>
+</section>
+
 <section id="dpreg">
-   
+
         <div class="container-fluid">
         <div class="row">
         <div class="col-md-12">
@@ -16,13 +24,13 @@
            			<div>
            				<img ng-src="{{signup.photo}}" width="116"  height="120" />
            			</div>
-           			 
+
            			 <br>
            			 <label class=""><small>*Upload Photo of size less than 15 KB and of resolution 116px * 120px</small></label>
-		        	 <input type="file" ng-model="signup.photo" accept="image/*"  app-filereader style="margin: 0px;" size="15360"/>	        	 
+		        	 <input type="file" ng-model="signup.photo" accept="image/*"  app-filereader style="margin: 0px;" size="15360"/>
 		        	 <p class="text-danger" ng-if="showError"><small>File Size not less than 15 KB</small></p>
            		</div>
-           		
+
            		<div class="col-md-6 dregpad">
            			<p style="color: #f49203;font-weight: bold;" ng-if="!signup.bank">Bank Details not updated. Kindly Update them to recieve Online Payments</p>
            			<button type="submit" class="btn dbtn pull-right" ng-click="openBankModal()">Update Bank Details</button> </div>
@@ -82,18 +90,18 @@
             </div>
 
            <div class="row">
-           
-           
+
+
             <div class="col-md-6 dregpad">
-                 
 
 
-       
+
+
     <div>
     <label for="dci">DCI Reg. No <span class="required">*</span><div id="dci_error" class="val_error"></div> </label>
     <input type="text"  size="35" id="dci" name="dci" ng-model="signup.dciregno" disabled>
-    </div> 
-                 
+    </div>
+
     <div>
     <label for="qual">Qualification <span class="required">*</span><div id="qual_error" class="val_error"></div></label>
       <select class="form-control" id="qual" name="qual" ng-model="signup.qualification">
@@ -169,7 +177,7 @@
     </select>
     </div>
     </div>
-    
+
     <div class="col-md-6">
 
 
@@ -194,7 +202,7 @@
     	<option value="PhD - ORTHODONTICS">PhD - ORTHODONTICS</option>
     	<option value="PhD - COMMUNITY DENTISTRY /PUBLIC HEALTH">PhD - COMMUNITY DENTISTRY /PUBLIC HEALTH</option>
     	<option value="PhD - ORAL PATHOLOGY AND MICROBIOLOGY">PhD - ORAL PATHOLOGY AND MICROBIOLOGY</option>
-    	<option value="PhD - ORAL AND MAXILLOFACIAL SURGERY (OMFS)">PhD - ORAL AND MAXILLOFACIAL SURGERY (OMFS)</option>  	
+    	<option value="PhD - ORAL AND MAXILLOFACIAL SURGERY (OMFS)">PhD - ORAL AND MAXILLOFACIAL SURGERY (OMFS)</option>
     </select>
     </div>
     <div>
@@ -268,22 +276,22 @@
 
 
     </div>
-    </div>                                                       
-                                                        
-                                        
-                                                              
-                  
+    </div>
+
+
+
+
     <div class="row dsub">
     <div class="col-md-12">
     <div class="dgal">
     <div class="col-md-6">
         <button type="submit" class="btn dbtn pull-left" ng-click="save()">Save Changes</button> </div>
-    </div>       
+    </div>
     </div>
         </div>
-        
-        
-            
+
+
+
             </fieldset>
             </form>
             </div>
@@ -292,8 +300,8 @@
             </div>
             </div>
             </div>
-   
-   
+
+
     <div class="modal fade" tabindex="-1" role="dialog" id="bankdetailsmodal">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
@@ -319,18 +327,18 @@
 			    <label for="pin1">IFSC Code</label>
 			    <input type="text"  size="35"  ng-model="bank.ifsccode" required>
 		    </div>
-		    
+
 		    <p class="bg-warning pa5" ng-if="error">Kindly Check if both Account numbers are same</p>
-		    
+
 		    <p class="bg-warning pa5" ng-if="apierror" ng-repeat="(key, value) in apierror">{{key}} : {{value[0]}}</p>
-		    
+
 		    <div class="modal-footer">
 		      	<button type="submit" class="btn btn-primary" ng-click="updateBankDetails()">Update Bank Details</button>
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		      </div>
 		   </form>
 	      </div>
-	      
+
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div>
