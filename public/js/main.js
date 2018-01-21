@@ -1416,10 +1416,17 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 
 				if($scope.patientData.data.currenttreatment){
 					$scope.currenTreatmentIds = Object.keys($scope.patientData.data.currenttreatment);
+					$scope.currenTreatmentValues = Object.values($scope.patientData.data.currenttreatment);
 					$scope.treatmentData = $scope.allTreatments.find(function(value, index) {
 						return value._id == $scope.patientData.data.currenttreatment[$scope.currenTreatmentIds[0]];
 					});
-					$scope.selectedCurrenTreatmentId = $scope.currenTreatmentIds[0];
+					$scope.currenTreatments = [];
+					$scope.allTreatments.map(function(value, index) {
+						if($scope.currenTreatmentValues.includes(value._id)){
+							$scope.currenTreatments.push({doctor: value.data.doctorname, id:value._id});
+						}
+					});
+					$scope.selectedCurrenTreatmentId = $scope.currenTreatmentValues[0];
 					$scope.treatment = $scope.treatmentData.data;
 					$('#currentTreatment').tab('show');
 				}
@@ -1436,7 +1443,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 
 				$scope.updateCurrentTreatment = function(){
 					$scope.treatmentData = $scope.allTreatments.find(function(value, index) {
-						return value._id == $scope.patientData.data.currenttreatment[$scope.selectedCurrenTreatmentId];
+						return value._id == $scope.selectedCurrenTreatmentId;
 					});
 					$scope.treatment = $scope.treatmentData.data;
 				}
@@ -1991,6 +1998,7 @@ function formatPrescriptionData (obj){
 		$scope.treatment.startdate = new Date;
 		$scope.treatment.doctorname = $rootScope.userData.data.firstname + " " + $rootScope.userData.data.lastname;
 		$scope.treatment.doctorusername = $rootScope.userData.data.username;
+		$scope.treatment.doctordciregno = $rootScope.userData.data.dciregno;
 		$scope.treatment.doctoruserid = $rootScope.userData._id;
 
 		if(fromsubaddTreatment){

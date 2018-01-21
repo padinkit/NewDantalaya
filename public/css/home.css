@@ -1226,9 +1226,8 @@ footer h1 h2 h3 h4{
 }
 
 .profilecard .btn-primary{
-  position: absolute;
-top: 15px;
-right: 13px;
+	top: 15px;
+	right: 13px;
 }
 
 
@@ -2243,4 +2242,7 @@ margin-top: 20px;
 
 .prescription{
       padding-bottom: 40px;
+}
+.mb0{
+	margin-bottom: 0px !important;
 }

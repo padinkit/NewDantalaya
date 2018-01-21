@@ -479,7 +479,7 @@
 												<button type="submit"
 													class="btn btn-success waves-effect waves-light m-r-10" ng-disabled="treatmentDetails.$invalid" ng-click="addTreatment()">Save</button>
 												<button type="reset"
-													class="btn btn-inverse waves-effect waves-light">Cancel</button>
+													class="btn btn-inverse waves-effect waves-light">Clear</button>
 													<p ng-show="treatmentDetails.$invalid" style="color: red">(fill all the required fields until then you cannot save the treatment)</p>
 											</form>
 										</div>
@@ -493,7 +493,7 @@
 											<form class="form-horizontal" name="currentTreatmentDetails" novalidate>
 												<div class="row">
 													<div class="col-md-6">
-														<div class="form-group">
+														<div class="form-group mb0">
 															<label class="control-label col-md-3">Treatment
 																ID:</label>
 															<div class="col-md-9">
@@ -502,11 +502,19 @@
 														</div>
 													</div>
 													<div class="col-md-6">
-														<div class="form-group">
+														<div class="form-group mb0">
 															<label class="control-label col-md-5">Treatment
 																Start Date:</label>
 															<div class="col-md-6">
 																<p class="form-control-static" style="padding-top: 7px">{{treatment.startdate | date}}</p>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group mb0">
+															<label class="control-label col-md-3">Doctor Name:</label>
+															<div class="">
+																<p class="form-control-static" style="padding-top: 7px">{{treatment.doctorname}}</p>
 															</div>
 														</div>
 													</div>

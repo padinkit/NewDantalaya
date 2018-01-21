@@ -19,7 +19,7 @@
 					</div>
 					<div class="col-md-3 col-xs-6">
 						<strong>Mobile</strong> <br>
-						<p class="text-muted">{{patientData.data.phone}}</p>
+						<p class="text-muted">{{patientData.data.mobile}}</p>
 					</div>
 					<div class="col-md-3 col-xs-6">
 						<strong>Email</strong> <br>
@@ -56,21 +56,18 @@
 										<div class="white-box">
 											<form class="form-horizontal">
 												<div class="row">
-													<div class="col-md-6">
+													<div class="">
 														<div class="form-group">
-															<label class="control-label col-md-3">Current Treatments</label>
-															<div class="col-md-9">
-																<select class="form-control" ng-model="selectedCurrenTreatmentId" ng-options="x for x in currenTreatmentIds" ng-change="updateCurrentTreatment()"></select>
+															<label class="control-label col-md-3">Current Treatments with Doctors</label>
+															<div class="col-md-6">
+																<select class="form-control" ng-model="selectedCurrenTreatmentId" ng-options="x.id as x.doctor for x in currenTreatments" ng-change="updateCurrentTreatment()"></select>
 															</div>
 														</div>
-													</div>
-													<div class="col-md-6">
-
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6">
-														<div class="form-group">
+														<div class="form-group mb0">
 															<label class="control-label col-md-3">Treatment
 																ID:</label>
 															<div class="col-md-9">
@@ -79,7 +76,7 @@
 														</div>
 													</div>
 													<div class="col-md-6">
-														<div class="form-group">
+														<div class="form-group mb0">
 															<label class="control-label col-md-5">Treatment
 																Start Date:</label>
 															<div class="col-md-6">
@@ -87,6 +84,24 @@
 															</div>
 														</div>
 													</div>
+													
+													<div class="col-md-5">
+														<div class="form-group mb0">
+															<label class="control-label col-md-3">Doctor Name:</label>
+															<div class="">
+																<p class="form-control-static" style="padding-top: 7px">{{treatment.doctorname}}</p>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-7">
+														<div class="form-group mb0">
+															<label class="control-label col-md-3">Doctor DCI Reg. No:</label>
+															<div class="">
+																<p class="form-control-static" style="padding-top: 7px">{{treatment.doctordciregno}}</p>
+															</div>
+														</div>
+													</div>
+													
 												</div>
 												<div class="form-group" ng-if="treatment.newcomments">
 													<label class="col-md-12">New Comments</label>
