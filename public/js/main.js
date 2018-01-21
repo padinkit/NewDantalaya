@@ -597,7 +597,7 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 app.controller('activationController',function($scope, $http, $state, $rootScope, $stateParams , $location){
 	var params = $location.search();
 	$http.post('/auth/activate', params ).then(function(data){
-		$scope.ActivationText = "Your Account Has Been Activated";
+		$scope.ActivationText = "Your Account has been Activated";
 		$scope.showLogin = true;
 	},function(err){
 		$scope.ActivationText = err.data;
@@ -1108,9 +1108,9 @@ app.filter('searchFilter', function() {
 			  if(obj.data.firstname && obj.data.lastname){
 				  if(!obj.data.username)
 					{
-						  return obj.data.firstname.includes(search) || obj.data.lastname.includes(search);
+						  return obj.data.firstname.toLowerCase().includes(search.toLowerCase()) || obj.data.lastname.toLowerCase().includes(search.toLowerCase());
 					}else{
-						return obj.data.firstname.includes(search) || obj.data.lastname.includes(search) || obj.data.username.includes(search);
+						return obj.data.firstname.toLowerCase().includes(search.toLowerCase()) || obj.data.lastname.toLowerCase().includes(search.toLowerCase()) || obj.data.username.toLowerCase().includes(search.toLowerCase());
 					}
 			  }
 			});
@@ -1210,7 +1210,12 @@ app.controller("addNewPatientController",function ($scope,$http,$rootScope,$stat
 
 app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$state) {
 		$scope.todayEvents = [];
-
+		$scope.refreshCalendar = function(){
+			setTimeout(function(){ 
+				$('#calendar').fullCalendar( 'refetchEvents' ); 
+			}, 300);
+			
+		}
 		$http.post('/viewAllPatients',{doctorId: $rootScope.userId}).then(function(data){
 			$scope.allPatients = data.data;
 		 });
@@ -1218,18 +1223,20 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 		$http.post('/viewEvents',{doctorId: $rootScope.userId}).then(function(data){
 			if(data.data.data){
 				$scope.allEventData = data.data.data.events;
-				$scope.allEventData.map(function(obj){
-					$('#calendar').fullCalendar('renderEvent', obj , true);
-				});
+				
 					var todayDate = new Date();
 					$scope.allEventData.map(function(obj){
 						var selectDate = new Date(obj.start);
 						if((todayDate.getDate()+todayDate.getMonth()+todayDate.getFullYear()) ==  (selectDate.getDate()+selectDate.getMonth()+selectDate.getFullYear())){
 							$scope.todayEvents.push(obj);
+							$('#calendar').fullCalendar('renderEvent', obj , true);
 						}
 					});
 
 			}
+			
+			
+			 $('#calendar').fullCalendar('today');
 
 		 });
 
@@ -1239,7 +1246,6 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 			selectHelper: true,
 			eventLimit: true,
 			timezone: false,
-			longpressDelay : 10,
 			events: $scope.allEventData,
 			height: 700
 		});
@@ -1334,6 +1340,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 
 				});
 		 });
+		 $scope.calculatePendingAmount();
 		});
 	};
 
@@ -1445,6 +1452,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 					    ]
 					  };
 				});
+				$scope.calculatePendingAmount();
 			});
 		}
 	}
@@ -1651,7 +1659,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 			  $scope.pendingAmount.limit = "onpar"
 		  }
 		  $scope.payAmount = angular.copy($scope.pendingAmount.amountLeft);
-		  return  $scope.pendingAmount.amountLeft;
+		  $scope.pendingAmount =  $scope.pendingAmount.amountLeft;
 	  }
 
 });
@@ -1765,6 +1773,8 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 					    ]
 					  };
 				});
+				
+				$scope.calculatePendingAmount();
 			});
 		}
 	}
@@ -1952,6 +1962,13 @@ function formatPrescriptionData (obj){
 
 	$scope.addTreatment = function (fromsubaddTreatment, obj){
 
+		if($scope.treatment.showTreatment){
+			if(!$scope.treatment.treatmentcost){
+				toastr.warning("Treatment Estimated Cost cannot be empty if Availed Treatment.");
+				return;
+			}
+		}
+		
 		$scope.treatment.profile = 'treatment';
 		$scope.treatment.startdate = new Date;
 		$scope.treatment.doctorname = $rootScope.userData.data.firstname + " " + $rootScope.userData.data.lastname;
@@ -2007,6 +2024,10 @@ function formatPrescriptionData (obj){
 	  };
 
 	  $scope.subaddTreatment = function(obj){
+		if(!$scope.treatment.treatmentcost){
+			toastr.warning("Treatment Estimated Cost cannot be Empty");
+			return;
+		}
 		if(!obj[obj.length-1].treatmentanalysis){
 			toastr.warning("Treatment Analysis cannot be Empty");
 			return;
@@ -2015,7 +2036,7 @@ function formatPrescriptionData (obj){
 			toastr.warning("Amount Paid by Patient cannot be Empty");
 			return;
 		}
-		if($scope.pendingAmount.amountLeft < obj[obj.length-1].amountpaidbypatient){
+		if($scope.pendingAmount < obj[obj.length-1].amountpaidbypatient){
 			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
 			return;
 		}
@@ -2045,7 +2066,11 @@ function formatPrescriptionData (obj){
 			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
 				$scope.updateTreatmentDetails();
 			});
+			
+			$scope.calculatePendingAmount();
 		});
+		
+		
 
 	  };
 
@@ -2070,7 +2095,7 @@ function formatPrescriptionData (obj){
 		  else{
 			  $scope.pendingAmount.limit = "onpar"
 		  }
-		  return  $scope.pendingAmount.amountLeft;
+		    $scope.pendingAmount = $scope.pendingAmount.amountLeft ;
 	  }
 
 	  $scope.closeTreatment = function(){
@@ -2277,7 +2302,3 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 });
 
 
-app.controller("doctorDashboardController",function ($scope,$state, $http, $rootScope) {
-
-
-});

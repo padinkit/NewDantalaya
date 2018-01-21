@@ -180,10 +180,12 @@ app.post('/auth/login', passport.authenticate('local'),function(req, res){
 
 app.post('/auth/signup',function(req,res){
 	req.body.contactInfo.username = req.body.authInfo.username;
+	req.body.contactInfo.adminactivated = false;
 	req.body.authInfo.activated = false;
 	req.body.authInfo.adminactivated = false;
 	if(req.body.authInfo.profile == 'patient'){
 		req.body.authInfo.adminactivated = true;
+		req.body.contactInfo.adminactivated = true;
 	}
 	req.body.authInfo.email = req.body.contactInfo.email;
 	var randomNo = Math.random().toString(36).slice(2);
@@ -358,34 +360,56 @@ app.post('/admin/activate',function(req, res){
 		function(err, user) {
 			if(!err){
 					user.adminactivated = true;
+					var newText = user.profile == 'doctor' ? config.doctormailText : '';
 					user.save(function (err) {
 					    if (err){
 					    	res.status(404).send("failure");
 					    }
-					    var mailOptions = {
-					    		Source: 'noreply@dantalaya.com', // sender address
-					    		Destination: {ToAddresses :[user.email]}, // list of receivers
-					    		Message :{
-									Subject:{Data: 'Account Activated'}, // Subject line
-									Body: {
-									    Html: { 		    	
-									    	Data :  "<html>" +
-										    	  	"<div> <h2>Dantalaya</h2></div>"+
-										    	  	"<div><p>Your Account Has been Activated</p></div><br><br>"+
-										      		"<div><p>"+ config.doctormailText +"</p></div>"+
-										      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
-										      		"</html>" // html body
-									    }
-									}
-					    		}
-						};
+					    
+					    model.user.findOne({ "data.username": req.body.user},function(err, details){
+							if (err) {
+						           res.send('error');
+						        }else{
+						        	var values = details._doc.data;
+						        	values['adminactivated'] = true;
+						        	
+						        	model.user.update({ "data.username": req.body.user},{"data" :values },function(err){
+						    	        if (err) {
+						    	           res.send('error');
+						    	        }else{
+						    	        	 var mailOptions = {
+											    		Source: 'noreply@dantalaya.com', // sender address
+											    		Destination: {ToAddresses :[user.email]}, // list of receivers
+											    		Message :{
+															Subject:{Data: 'Account Activated'}, // Subject line
+															Body: {
+															    Html: { 		    	
+															    	Data :  "<html>" +
+																    	  	"<div> <h2>Dantalaya</h2></div>"+
+																    	  	"<div><p>Your Account has been Activated</p></div><br><br>"+
+																      		"<div><p>"+ newText +"</p></div>"+
+																      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
+																      		"</html>" // html body
+															    }
+															}
+											    		}
+												};
 
-					    ses.sendEmail(mailOptions, function(err, data){
-							if (err) console.log(err, err.stack); // an error occurred
-							   else     console.log(data);           // successful response
+											    ses.sendEmail(mailOptions, function(err, data){
+													if (err) console.log(err, err.stack); // an error occurred
+													   else     console.log(data);           // successful response
+												});
+
+											    res.send("successfully activated");
+						    	        }
+						    	    });
+						        }
+
 						});
-
-					    res.send("successfully activated");
+					    
+					    
+					    
+					   
 					  });
 			}
 			else{
@@ -399,28 +423,36 @@ app.post('/admin/reject',function(req, res){
 	var userData = model.auth.remove({ 'username' :  req.body.user },
 		function(err, user) {
 			if(!err){
-				var mailOptions = {
-						Source: 'noreply@dantalaya.com', // sender address
-						Destination: {ToAddresses :[req.body.email]}, // list of receivers
-					    Message :{
-							Subject:{Data: 'Account Rejected'}, // Subject line
-							Body: {
-							    Html: { 		    	
-							    	Data :  "<html>" +
-								    	  	"<div> <h2>Dantalaya</h2></div>"+
-								      		"<div><p>Sorry for the inconvenience. Your Account Has been Rejected</p></div>"+
-								      		"<div><p>For any queries  email info@dantalaya.com</p></div>" +
-								      		"</html>" // html body
-							    }
-							}
-			    		}
-				};
+				
+				model.user.remove({ "data.username": req.body.user},function(err, details){
+					if(!err){
+						var mailOptions = {
+								Source: 'noreply@dantalaya.com', // sender address
+								Destination: {ToAddresses :[req.body.email]}, // list of receivers
+							    Message :{
+									Subject:{Data: 'Account Rejected'}, // Subject line
+									Body: {
+									    Html: { 		    	
+									    	Data :  "<html>" +
+										    	  	"<div> <h2>Dantalaya</h2></div>"+
+										      		"<div><p>Sorry for the inconvenience. Your Account has been Rejected</p></div>"+
+										      		"<div><p>For any queries  email info@dantalaya.com</p></div>" +
+										      		"</html>" // html body
+									    }
+									}
+					    		}
+						};
 
-				ses.sendEmail(mailOptions, function(err, data){
-					if (err) console.log(err, err.stack); // an error occurred
-					   else     console.log(data);           // successful response
+						ses.sendEmail(mailOptions, function(err, data){
+							if (err) console.log(err, err.stack); // an error occurred
+							   else     console.log(data);           // successful response
+						});
+					    res.send("successfully rejected");
+						
+					}
+					
 				});
-			    res.send("successfully rejected");
+				
 			}
 			else{
 				res.status(404).send("failure");
@@ -493,10 +525,10 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2>" +
 					    	  	"<p>" +text+ "</p>" +
-					    	  	"<p>title : <b>"+ title +"</b></p>" +
+					    	  	"<p>Title : <b>"+ title +"</b></p>" +
 					    	  	"<p>" + from +" : <b>"+ name +"</b></p>" +
-					    	  	"<p>start time : <b>"+ starttime +"</b></p>" +
-					    	  	"<p>end time : <b>"+ endtime +"</b></p>" +
+					    	  	"<p>Start time : <b>"+ starttime +"</b></p>" +
+					    	  	"<p>End time : <b>"+ endtime +"</b></p>" +
 					    	  	"</div>"+
 					      		"</html>" // html body
 				    }
@@ -526,7 +558,7 @@ app.post('/auth/forgotPassword',function(req, res){
 
 app.post('/appointmentmail',function(req,res){
 	 if(req.body.origin == 'patient'){
-		 var text="Thanks for scheduling an appointment.Your appointment details are mentioned below";
+		 var text="Thanks for scheduling an appointment.Your appointment details are mentioned below.";
 		 var name = req.body.data.patientName;
 		 var mail = req.body.data.doctorMail;
 		 var from = "Patient";
@@ -537,7 +569,7 @@ app.post('/appointmentmail',function(req,res){
 		 var mail = req.body.data.patientMail;
 		 var from = "Doctor";
 		 if(req.body.status == 'accept'){
-			 var text = "Thanks for scheduling an appointment.Your appointment has been accepted by doctor.";
+			 var text = "Thanks for scheduling an appointment.Your appointment has been Confirmed by doctor.";
 			  }
 		 else{
 			 var text = "Sorry for the inconvenience.Your appointment has been rejected.Please reschedule it.";
@@ -556,7 +588,7 @@ app.post('/searchdetails', function(req, res){
 	var val =  req.body.location;
 
 	if(type !== 'technician' && type !== 'surgeon'){
-		model.user.find({$and : [{ $or: [ {"data.cliniccity" : new RegExp(val, 'i') } , {"data.clinicaddress" : new RegExp(val, 'i') },{"data.clinicstate" : new RegExp(val, 'i') },{"data.clinicpin" : new RegExp(val, 'i') } , {"data.specialization" : speciality} ] },{ "data.profile": "doctor" }]},
+		model.user.find({$and : [{ $or: [ {"data.cliniccity" : new RegExp(val, 'i') } , {"data.clinicaddress" : new RegExp(val, 'i') },{"data.clinicstate" : new RegExp(val, 'i') },{"data.clinicpin" : new RegExp(val, 'i') } , {"data.specialization" : speciality} ] },{ "data.profile": "doctor" },{ "data.adminactivated": true }]},
 		  function(err, details) {
 		           res.send(details);
 		 }).catch(function (err) {
@@ -564,7 +596,7 @@ app.post('/searchdetails', function(req, res){
 		 });
 	}
 	else{
-		model.user.find({$and : [{ $or: [ {"data.city" : new RegExp(val, 'i') } , {"data.address" : new RegExp(val, 'i') },{"data.state" : new RegExp(val, 'i') },{"data.pin" : new RegExp(val, 'i') } ] },{ "data.profile": type }]},
+		model.user.find({$and : [{ $or: [ {"data.city" : new RegExp(val, 'i') } , {"data.address" : new RegExp(val, 'i') },{"data.state" : new RegExp(val, 'i') },{"data.pin" : new RegExp(val, 'i') } ] },{ "data.profile": type },{ "data.adminactivated": true }]},
 		  function(err, details) {
 		           res.send(details);
 		 }).catch(function (err) {
@@ -1447,7 +1479,7 @@ app.post('/updatePayment', function(req,res){
 	    );
  });
 
- var monthlyScheduler = schedule.scheduleJob('1 0 1 * *', function(){
+ var monthlyScheduler = schedule.scheduleJob('55 22 15 * *', function(){
 	  var currenMonth = new Date().getMonth();
 	  var neededYear = new Date().getFullYear();
 

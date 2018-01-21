@@ -91,6 +91,10 @@
 															<option>Other</option>
 														</select>
 													</div>
+													<div class="col-md-12 mt5">
+														<textarea  ng-if="treatment.medicalhistory == 'Other'" class="form-control"
+															placeholder="" rows="2" ng-model="treatment.extramedicalhistory"></textarea>
+													</div>
 												</div>
 												<!-- <div class="form-group">
 													<label class="col-md-12">Habits</label>
@@ -378,14 +382,16 @@
 															<div class="form-group">
 																<label class="col-md-12">Treatment Estimated Cost</label>
 																<div class="col-md-12">
-																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"/>
+																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"  ng-disabled="treatment.patientacceptedtreatment" />
 																</div>
+																<small>Kindly enter the above Treatment Info before patient acceptance of treatment</small>
 															</div>
 
 
 															<div class="form-group">
-																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
+																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" ng-disabled="treatment.patientacceptedtreatment || !treatment.treatmentcost" ng-click="calculatePendingAmount()"/> Patient Accepted Treatment</label>
 															</div>
+
 
 																<div ng-if="treatment.patientacceptedtreatment" class="ml40">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
@@ -406,7 +412,7 @@
 																	</div>
 																</div>
 																<button type="button" class="btn btn-info" ng-click="subaddTreatment(treatment.treatmentanalysislist)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp Add</button>
-																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
+																<span class="pull-right"><b>Pending Fees To be Paid:</b> {{pendingAmount}}</span>
 															</div>
 														</div>
 
@@ -557,6 +563,10 @@
 															<option>Habits</option>
 															<option>Other</option>
 														</select>
+													</div>
+													<div class="col-md-12 mt5">
+														<textarea  ng-if="treatment.medicalhistory == 'Other'" class="form-control"
+															placeholder="" rows="2" ng-model="treatment.extramedicalhistory"></textarea>
 													</div>
 												</div>
 												<!-- <div class="form-group">
@@ -845,13 +855,14 @@
 															<div class="form-group">
 																<label class="col-md-12">Treatment Estimated Cost</label>
 																<div class="col-md-12">
-																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
+																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"  ng-disabled="treatment.patientacceptedtreatment" />
 																</div>
+																<small>Kindly enter the above Treatment Info before patient acceptance of treatment</small>
 															</div>
 
 
 															<div class="form-group">
-																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
+																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" ng-disabled="treatment.patientacceptedtreatment || !treatment.treatmentcost" ng-click="calculatePendingAmount()"/> Patient Accepted Treatment</label>
 															</div>
 
 															<div ng-if="treatment.patientacceptedtreatment" class="ml40">
@@ -873,7 +884,7 @@
 																	</div>
 																</div>
 																<button type="button" class="btn btn-info" ng-click="subaddTreatment(treatment.treatmentanalysislist)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp Add</button>
-																<span class="pull-right"><b>Pending Amount To be Paid:</b> {{calculatePendingAmount()}}</span>
+																<span class="pull-right"><b>Pending Fees To be Paid:</b> {{pendingAmount}}</span>
 															</div>
 														</div>
 
@@ -1058,6 +1069,10 @@
 																<option>Habits</option>
 																<option>Other</option>
 															</select>
+														</div>
+														<div class="col-md-12 mt5">
+														<textarea  ng-if="treatment.medicalhistory == 'Other'" class="form-control"
+															placeholder="" rows="2" ng-model="treatment.extramedicalhistory" disabled></textarea>
 														</div>
 													</div>
 													<!-- <div class="form-group">
@@ -1295,7 +1310,7 @@
 
 
 															<div class="form-group">
-																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" /> Patient Accepted Treatment</label>
+																<label class="col-md-12"><input type="checkbox" ng-model="treatment.patientacceptedtreatment" disabled/> Patient Accepted Treatment</label>
 															</div>
 
 															<div ng-if="treatment.patientacceptedtreatment" class="ml40">

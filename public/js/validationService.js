@@ -753,21 +753,6 @@ angular.module('dantalayaApp').service('validationService', function() {
 		      document.getElementById("email_error").innerHTML="";
 		    }
 
-		    var hoursValue = hours.value;
-		    if (hoursValue == null || hoursValue == ""){
-		      hours.style.border = "1px solid red";
-		      document.getElementById("hours_error").style.color = "red";
-		      document.getElementById("hours_error").innerHTML = "working hours cannot be empty";
-		      errorArray.push(hours);
-		      hours.focus();
-		      ok = false;
-		    }
-		    else{
-		      hours.style.border = "0px solid red";
-		      document.getElementById("hours_error").innerHTML="";
-		    }
-
-
 		    if(errorArray.length>0){
 		      errorArray[0].focus();
 		    }
@@ -962,28 +947,7 @@ angular.module('dantalayaApp').service('validationService', function() {
 		      si.style.border = "0px solid red";
 		      document.getElementById("si_error").innerHTML="";
 		    }
-		    var endDateValue = ci.value;
-		    if(endDateValue == null || endDateValue == ""){
-		      ci.style.border = "1px solid red";
-		      document.getElementById("ci_error").style.color = "red";
-		      document.getElementById("ci_error").innerHTML = "end date is required";
-		      errorArray.push(ci);
-		      ci.focus();
-		      ok = false;
-		      }
-		      else if(startDateValue>endDateValue){
-		      ci.style.border = "1px solid red";
-		      document.getElementById("ci_error").style.color = "red";
-		      document.getElementById("ci_error").innerHTML = "End date should be greater than start date";
-		      errorArray.push(mobile);
-		      ci.focus();
-		      ok = false;
-
-		    }
-		      else{
-		      ci.style.border = "0px solid red";
-		      document.getElementById("ci_error").innerHTML="";
-		    }
+		    
 
 				if(!contactForm.agree.checked) {
 
