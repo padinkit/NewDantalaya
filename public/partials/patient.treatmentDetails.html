@@ -405,9 +405,9 @@
 																		</div>
 																	</div>
 																</div>
-																<span class="pull-right"><b>Pending Fees To be Paid:</b> {{pendingAmount}}</span>
+																<span class="pull-right"><b>Pending Fees To be Paid:</b> {{pendingAmountValue}}</span>
 																<br>
-																<button class="pull-right btn btn-success" ng-if="!showPayment && pendingAmount != 0" ng-click="showPaymentFn()" ng-if="">Pay Online</button>
+																<button class="pull-right btn btn-success" ng-if="!showPayment && pendingAmountValue != 0" ng-click="showPaymentFn()" ng-if="">Pay Online</button>
 																<div ng-if="showPayment" class="pull-right">
 																	Amount You Wish to Pay <input type="text" style="width:85px" ng-model="payAmount" id="payAmount"/> &nbsp;&nbsp;
 																	<button class="pull-right btn btn-success" ng-click="payOnline()">Pay</button>

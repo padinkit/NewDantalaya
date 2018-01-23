@@ -1466,13 +1466,13 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 
 	};
 
-	function getAllTreatments (){
+	function getAllTreatments (fromHistory){
 		if($scope.patientData){
 			$http.post('/viewTreatment',{data : $scope.patientData.data.treatments}).then(function(data){
 				$scope.allTreatments = data.data;
 				//$scope.gridOptions.data = data.data;
 				$scope.allTreatments.map(function(obj){
-					if(Object.keys($scope.patientData.data.currenttreatment)){
+					if(Object.keys($scope.patientData.data.currenttreatment).length !== 0){
 						Object.keys($scope.patientData.data.currenttreatment).map(function(objs){
 							if($scope.patientData.data.currenttreatment[objs] !== obj._id){
 								$scope.treatmentHistory.push(obj);
@@ -1525,7 +1525,9 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 					});
 					$scope.selectedCurrenTreatmentId = $scope.currenTreatmentValues[0];
 					$scope.treatment = $scope.treatmentData.data;
-					$('#currentTreatment').tab('show');
+					if(!fromHistory){
+						$('#currentTreatment').tab('show');
+					}
 				}
 
 				var paymentIds = [];
@@ -1733,8 +1735,10 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 	};
 
 	$('#treatmentHistory').click(function(){
+		$scope.showAllTreatments = false;
+		getAllTreatments(true);
 		$scope.showAllTreatments = true;
-		$scope.$apply();
+		//$scope.$apply();
 	});
 
 	$('#paymentInfo').click(function(){
@@ -1781,7 +1785,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 			  $scope.pendingAmount.limit = "onpar"
 		  }
 		  $scope.payAmount = angular.copy($scope.pendingAmount.amountLeft);
-		  $scope.pendingAmount =  $scope.pendingAmount.amountLeft;
+		  $scope.pendingAmountValue =  $scope.pendingAmount.amountLeft;
 	  }
 
 });
@@ -1801,13 +1805,16 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 	$scope.treatment.treatmentanalysislist = [{treatmentanalysis: '',amountpaidbypatient: '', date: new Date()}];
 	$scope.patientData = $stateParams.data;
 
-	function getAllTreatments (){
+	function getAllTreatments (fromHistory){
 		if($scope.patientData){
-			$http.post('/viewTreatment',{data : $scope.patientData.data.treatments , doctorusername: $rootScope.userData.data.username}).then(function(data){
+			$http.post('/getuserDetailsById',{id : $stateParams.data._id}).then(function(userdata){
+				$scope.patientData = userdata.data;
+			
+			  $http.post('/viewTreatment',{data : $scope.patientData.data.treatments , doctorusername: $rootScope.userData.data.username}).then(function(data){
 				$scope.allTreatments = data.data;
 				//$scope.gridOptions.data = data.data;
 				$scope.allTreatments.map(function(obj){
-					if(Object.keys($scope.patientData.data.currenttreatment)){
+					if(Object.keys($scope.patientData.data.currenttreatment).length !== 0){
 						Object.keys($scope.patientData.data.currenttreatment).map(function(objs){
 							if($scope.patientData.data.currenttreatment[objs] !== obj._id){
 								$scope.treatmentHistory.push(obj);
@@ -1852,7 +1859,10 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 					});
 					if($scope.treatmentData){
 						$scope.treatment = $scope.treatmentData.data;
-						$('#currentTreatment').tab('show');
+						if(!fromHistory){
+							$('#currentTreatment').tab('show');
+						}
+						
 					}
 
 				}
@@ -1897,6 +1907,7 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 				});
 
 				$scope.calculatePendingAmount();
+			  });
 			});
 		}
 	}
@@ -2062,12 +2073,14 @@ function formatPrescriptionData (obj){
 		$scope.treatment = {};
 	    $scope.treatment.treatmentanalysislist = [{treatmentanalysis: '',amountpaidbypatient: '', date: new Date()}];
 		$scope.treatment.showTreatment = false;
-		$scope.$apply();
+		//$scope.$apply();
 	});
 
 	$('#treatmentHistory').click(function(){
+		$scope.showAllTreatments = false;
+		getAllTreatments(true);
 		$scope.showAllTreatments = true;
-		$scope.$apply();
+		//$scope.$apply();
 	});
 
 	$('#paymentInfo').click(function(){
@@ -2126,6 +2139,12 @@ function formatPrescriptionData (obj){
 				$http.post('/closeTreatment',{id: $scope.patientData._id}).then(function(data){
 					toastr.success("Treatment Successfully Closed");
 					$('#newTreamtment').click();
+					/*Object.values($scope.patientData.data.currenttreatment).map(function(obj,index){
+						if(obj == $scope.treatmentData._id){
+							delete $scope.patientData.data.currenttreatment[Object.keys($scope.patientData.data.currenttreatment)[index]];
+						}
+					});*/
+					 
 				});
 			}
 			else{
@@ -2159,7 +2178,7 @@ function formatPrescriptionData (obj){
 			toastr.warning("Amount Paid by Patient cannot be Empty");
 			return;
 		}
-		if($scope.pendingAmount < obj[obj.length-1].amountpaidbypatient){
+		if($scope.pendingAmountValue < obj[obj.length-1].amountpaidbypatient){
 			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
 			return;
 		}
@@ -2218,10 +2237,11 @@ function formatPrescriptionData (obj){
 		  else{
 			  $scope.pendingAmount.limit = "onpar"
 		  }
-		    $scope.pendingAmount = $scope.pendingAmount.amountLeft ;
+		    $scope.pendingAmountValue = $scope.pendingAmount.amountLeft ;
 	  }
 
 	  $scope.closeTreatment = function(){
+		  $scope.calculatePendingAmount();
 		  if($scope.treatment.patientacceptedtreatment){
 			  if( $scope.pendingAmount.limit == "under" ){
 				  toastr.warning("Still Pending amount Left to be Paid before you can close the treatment");

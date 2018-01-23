@@ -360,6 +360,19 @@ app.post('/getuserDetails',function(req, res){
   );
 });
 
+app.post('/getuserDetailsById',function(req, res){
+	var userData = model.user.findOne({ '_id' :  req.body.id },
+		function(err, user) {
+			if(!err){
+				res.send(user);
+			}
+			else{
+				res.status(404).send("failure");
+			}
+	    }
+  );
+});
+
 
 
 
