@@ -235,7 +235,7 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 	toastr.options.positionClass = "toast-top-center";
 }]);
 
-app.run(function($rootScope, $http, $state) {
+app.run(function($rootScope, $http, $state,$location) {
 	$rootScope.fetchedUserData = false;
 	var credentials = JSON.parse( localStorage.getItem("DantalayaUser"));
 	$http.post('/auth/login', credentials ).then(function(data){
@@ -1236,10 +1236,10 @@ app.controller("addNewPatientController",function ($scope,$http,$rootScope,$stat
 app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$state) {
 		$scope.todayEvents = [];
 		$scope.refreshCalendar = function(){
-			setTimeout(function(){ 
-				$('#calendar').fullCalendar( 'refetchEvents' ); 
+			setTimeout(function(){
+				$('#calendar').fullCalendar( 'refetchEvents' );
 			}, 300);
-			
+
 		}
 		$http.post('/viewAllPatients',{doctorId: $rootScope.userId}).then(function(data){
 			$scope.allPatients = data.data;
@@ -1248,7 +1248,7 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 		$http.post('/viewEvents',{doctorId: $rootScope.userId}).then(function(data){
 			if(data.data.data){
 				$scope.allEventData = data.data.data.events;
-				
+
 					var todayDate = new Date();
 					$scope.allEventData.map(function(obj){
 						var selectDate = new Date(obj.start);
@@ -1259,8 +1259,8 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 					});
 
 			}
-			
-			
+
+
 			 $('#calendar').fullCalendar('today');
 
 		 });
@@ -1302,8 +1302,8 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 			    }
 			}
 		});
-		
-		
+
+
 		function updateEvent(status){
 			$http.post('/updateEvents',{doctorId: $rootScope.userId , data : $scope.newAllEventData, eventId : $scope.currentEvent.id, status: status, patientId : $scope.currentEvent.patientId }).then(function(data){
 				$('#calendar').fullCalendar('removeEvents');
@@ -1328,7 +1328,7 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 
 			 });
 		}
-		
+
 		$scope.changeAppointMentStatus = function(status){
 			$scope.newAllEventData = [];
 
@@ -1895,7 +1895,7 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 					    ]
 					  };
 				});
-				
+
 				$scope.calculatePendingAmount();
 			});
 		}
@@ -2090,7 +2090,7 @@ function formatPrescriptionData (obj){
 				return;
 			}
 		}
-		
+
 		$scope.treatment.profile = 'treatment';
 		$scope.treatment.startdate = new Date;
 		$scope.treatment.doctorname = $rootScope.userData.data.firstname + " " + $rootScope.userData.data.lastname;
@@ -2189,11 +2189,11 @@ function formatPrescriptionData (obj){
 			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
 				$scope.updateTreatmentDetails();
 			});
-			
+
 			$scope.calculatePendingAmount();
 		});
-		
-		
+
+
 
 	  };
 
@@ -2423,5 +2423,3 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 	}
 
 });
-
-

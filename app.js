@@ -40,7 +40,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -94,6 +94,18 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+
+
+// function accessControl(req, res, next) {
+//   console.log('hi');
+//     if (req.isAuthenticated()) {
+//       lo
+//         return next();
+//     } else {
+//         res.redirect('/');
+//     }
+// }
+
 
 app.get('/', routes.index);
 app.get('/partials/:filename', routes.partials);
@@ -372,7 +384,7 @@ app.post('/admin/activate',function(req, res){
 						        }else{
 						        	var values = details._doc.data;
 						        	values['adminactivated'] = true;
-						        	
+
 						        	model.user.update({ "data.username": req.body.user},{"data" :values },function(err){
 						    	        if (err) {
 						    	           res.send('error');
@@ -383,7 +395,7 @@ app.post('/admin/activate',function(req, res){
 											    		Message :{
 															Subject:{Data: 'Account Activated'}, // Subject line
 															Body: {
-															    Html: { 		    	
+															    Html: {
 															    	Data :  "<html>" +
 																    	  	"<div> <h2>Dantalaya</h2></div>"+
 																    	  	"<div><p>Your Account has been Activated</p></div><br><br>"+
@@ -405,10 +417,10 @@ app.post('/admin/activate',function(req, res){
 						        }
 
 						});
-					    
-					    
-					    
-					   
+
+
+
+
 					  });
 			}
 			else{
@@ -430,7 +442,7 @@ app.post('/admin/reject',function(req, res){
 							    Message :{
 									Subject:{Data: 'Account Rejected'}, // Subject line
 									Body: {
-									    Html: { 		    	
+									    Html: {
 									    	Data :  "<html>" +
 										    	  	"<div> <h2>Dantalaya</h2></div>"+
 										      		"<div><p>Sorry for the inconvenience. Your Account has been Rejected</p></div>"+
@@ -445,11 +457,11 @@ app.post('/admin/reject',function(req, res){
 							   else     console.log(data);           // successful response
 						});
 					    res.send("successfully rejected");
-						
+
 					}
-					
+
 				});
-				
+
 			}
 			else{
 				res.status(404).send("failure");
