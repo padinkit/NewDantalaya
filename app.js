@@ -932,6 +932,28 @@ app.get('/notice', function (req, res) {
 		});
  });
 
+ 
+ function sendAWSmail(email, subject , data){
+		var mailOptions = {
+				Source: 'noreply@dantalaya.com', // sender address
+				Destination: {ToAddresses :[email]}, // list of receivers
+				Message :{
+					Subject: {Data: subject}, // Subject line
+					Body: {
+					    Html: {
+					    	Data :  data
+					    }
+					}
+				}
+		};
+	ses.sendEmail(mailOptions, function(err, data){
+		if (err) console.log(err, err.stack); // an error occurred
+		   else     console.log(data);           // successful response
+	});
+}
+ 
+ 
+ 
  app.post('/addNewPatient', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
 
@@ -975,11 +997,19 @@ app.get('/notice', function (req, res) {
 			    		    	        }else{
 			    		    	        	res.send({success: true,data: doc});
 			    		    	        }
+			    		    	        
+			    		    	        var mailData = "<html>" +
+							    	  	"<div> <h2>Welcome to Dantalaya</h2></div>"+
+							      		"<div><p>"+ config.doctorAddPatient +"</p></div>"+
+							      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
+							      		"</html>" ;
+			    		    	        sendAWSmail(req.body.data.email,'Welcome to Dantalaya', mailData);
 			    		    	    });
 			    		        }
-
+			    				
 			    		});
-
+			        	
+			        	
 			        }
 			    });
 		  }

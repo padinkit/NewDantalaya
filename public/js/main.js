@@ -1470,6 +1470,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 		if($scope.patientData){
 			$http.post('/viewTreatment',{data : $scope.patientData.data.treatments}).then(function(data){
 				$scope.allTreatments = data.data;
+				$scope.treatmentHistory = [];
 				//$scope.gridOptions.data = data.data;
 				$scope.allTreatments.map(function(obj){
 					if(Object.keys($scope.patientData.data.currenttreatment).length !== 0){
@@ -1812,6 +1813,7 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 			
 			  $http.post('/viewTreatment',{data : $scope.patientData.data.treatments , doctorusername: $rootScope.userData.data.username}).then(function(data){
 				$scope.allTreatments = data.data;
+				$scope.treatmentHistory = [];
 				//$scope.gridOptions.data = data.data;
 				$scope.allTreatments.map(function(obj){
 					if(Object.keys($scope.patientData.data.currenttreatment).length !== 0){

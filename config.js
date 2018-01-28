@@ -15,6 +15,10 @@ config.aws = {
 };
 config.partner_fee = 6;
 
+config.doctorAddPatient = "Dear patrons, welcome to Dantalaya, the world's largest network of practicing Dental  surgeons and oral care providers."+
+"Dantalaya offers Dental treatment for you and your family at very affordable prices at standardized clinics in your neighborhood. You can now get interest free loans for any procedure and pay later in easy EMI's. "+
+"No need to postpone your Dental problems anymore. Get timely treatment to avoid complications and save money. Book an appointment online with your Dentist on Dantalaya and avail a free consultation for the entire family.";
+
 config.mailText = 'Dantalaya, "the largest network of Dental Practitioners and oral health care service providers", is an online referral platform offering solutions to the Dental problems in India.<br><br>'+
 
 'Doctors from rural and urban areas have come together for the first time in India to produce smiles for all.90% of the patients in India rely on private practitioners. '+
