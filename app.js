@@ -233,6 +233,27 @@ app.post('/auth/signup',function(req,res){
 
 });
 
+app.post('/payOnlineChargeSheet', function(req, res){
+	var headers = { 'X-Api-Key': config.instamojoPrivateKey.apikey, 'X-Auth-Token': config.instamojoPrivateKey.authtoken}
+	var payload = {
+	  purpose: 'Charge Sheet Bill Payment',
+	  amount: req.body.amount,
+	  phone: req.body.phone,
+	  buyer_name: req.body.buyer_name,
+	  redirect_url: "http://" +req.get('host') + "/#/updatePayment",
+	  //send_email: true,
+	  //send_sms: true,
+	  email: req.body.email
+   }
+
+	request.post('https://www.instamojo.com/api/1.1/payment-requests/', {form: payload,  headers: headers}, function(error, response, body){
+	  if(!error && response.statusCode == 201){
+		  res.send({data: body});
+	  }
+	})
+	
+});
+
 app.post('/payOnline', function(req, res){
 	model.user.findOne({ "data.username": req.body.doctorusername},function(err, detailss){
 			if (err) {
@@ -484,7 +505,7 @@ app.post('/admin/reject',function(req, res){
 });
 
 app.get('/getaccounts',function(req, res){
-	var userData = model.auth.find({ 'adminactivated' :  false },{username :1 , profile: 1 , email:1},
+	var userData = model.auth.find({ 'adminactivated' :  false },{username :1 , profile: 1 , email:1, billnotpaid: 1},
 		function(err, user) {
 			if(!err){
 				res.send(user);
@@ -508,6 +529,7 @@ app.post('/getAllAccounts',function(req, res){
 })
 
 function sendPasswordmail(req, user, pass, email){
+	console.log(email);
 	var mailOptions = {
 			Source: 'noreply@dantalaya.com', // sender address
 			Destination: {ToAddresses :[email]}, // list of receivers
@@ -957,65 +979,115 @@ app.get('/notice', function (req, res) {
  app.post('/addNewPatient', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
 
+	  if(!req.body.data.email){
+		  userData.save(function(err, doc){
+				var newId = (doc._id).toString();
+				console.log(newId);
+		        if (err) {
+		            res.json({'alert':'Registration error'});
+		        }else{
 
-	  model.user.find({ "data.email": req.body.data.email},function(err, acc){
-		  if(acc.length != 0){
-			  res.send({emailAlreadyPresent : true});
-			  return;
-		  }
-		  else{
-			  userData.save(function(err, doc){
-					var newId = (doc._id).toString();
-					console.log(newId);
-			        if (err) {
-			            res.json({'alert':'Registration error'});
-			        }else{
+		        	model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
+		    			if (err) {
+		    		           res.send('error');
+		    		        }else{
+		    		        	var values = details._doc.data;
 
-			        	model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
-			    			if (err) {
-			    		           res.send('error');
-			    		        }else{
-			    		        	var values = details._doc.data;
+		    		        	if(typeof values['patients'] == 'object' ){
 
-			    		        	if(typeof values['patients'] == 'object' ){
+		    		        		if(values.patients.includes(req.body.patientId)){
+		    			        		res.send('Patient is Already Added');
+		    			        		return;
+		    			        	}
 
-			    		        		if(values.patients.includes(req.body.patientId)){
-			    			        		res.send('Patient is Already Added');
-			    			        		return;
-			    			        	}
+		    		        		values['patients'].push(newId);
+		    		        	}
+		    		        	else{
+		    		        		values['patients']= [];
+		    		        		values['patients'].push(newId);
+		    		        	}
 
-			    		        		values['patients'].push(newId);
-			    		        	}
-			    		        	else{
-			    		        		values['patients']= [];
-			    		        		values['patients'].push(newId);
-			    		        	}
-
-			    		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
-			    		    	        if (err) {
-			    		    	           res.send('error');
-			    		    	        }else{
-			    		    	        	res.send({success: true,data: doc});
-			    		    	        }
-			    		    	        
-			    		    	        var mailData = "<html>" +
-							    	  	"<div> <h2>Welcome to Dantalaya</h2></div>"+
-							      		"<div><p>"+ config.doctorAddPatient +"</p></div>"+
-							      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
-							      		"</html>" ;
-			    		    	        sendAWSmail(req.body.data.email,'Welcome to Dantalaya', mailData);
-			    		    	    });
-			    		        }
-			    				
-			    		});
-			        	
-			        	
-			        }
-			    });
-		  }
-
-	  });
-
+		    		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
+		    		    	        if (err) {
+		    		    	           res.send('error');
+		    		    	        }else{
+		    		    	        	res.send({success: true,data: doc});
+		    		    	        }
+		    		    	        
+		    		    	        var mailData = "<html>" +
+						    	  	"<div> <h2>Welcome to Dantalaya</h2></div>"+
+						      		"<div><p>"+ config.doctorAddPatient +"</p></div>"+
+						      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
+						      		"</html>" ;
+		    		    	        sendAWSmail(req.body.data.email,'Welcome to Dantalaya', mailData);
+		    		    	    });
+		    		        }
+		    				
+		    		});
+		        	
+		        	
+		        }
+		    });
+	  }
+	  else{
+			  model.user.find({ "data.email": req.body.data.email},function(err, acc){
+				  if(acc.length != 0){
+					  res.send({emailAlreadyPresent : true});
+					  return;
+				  }
+				  else{
+					  userData.save(function(err, doc){
+							var newId = (doc._id).toString();
+							console.log(newId);
+					        if (err) {
+					            res.json({'alert':'Registration error'});
+					        }else{
+		
+					        	model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
+					    			if (err) {
+					    		           res.send('error');
+					    		        }else{
+					    		        	var values = details._doc.data;
+		
+					    		        	if(typeof values['patients'] == 'object' ){
+		
+					    		        		if(values.patients.includes(req.body.patientId)){
+					    			        		res.send('Patient is Already Added');
+					    			        		return;
+					    			        	}
+		
+					    		        		values['patients'].push(newId);
+					    		        	}
+					    		        	else{
+					    		        		values['patients']= [];
+					    		        		values['patients'].push(newId);
+					    		        	}
+		
+					    		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
+					    		    	        if (err) {
+					    		    	           res.send('error');
+					    		    	        }else{
+					    		    	        	res.send({success: true,data: doc});
+					    		    	        }
+					    		    	        
+					    		    	        var mailData = "<html>" +
+									    	  	"<div> <h2>Welcome to Dantalaya</h2></div>"+
+									      		"<div><p>"+ config.doctorAddPatient +"</p></div>"+
+									      		"<a href='http://" +req.get('host') + "/'><b>Go To Dantalaya</b></a>" +
+									      		"</html>" ;
+					    		    	        sendAWSmail(req.body.data.email,'Welcome to Dantalaya', mailData);
+					    		    	    });
+					    		        }
+					    				
+					    		});
+					        	
+					        	
+					        }
+					    });
+				  }
+		
+			  });
+		 	}
 
 
  });
@@ -1341,8 +1413,17 @@ app.post('/userviewtreatment', function(req, res){
 			values = {};
 		}
 		values[req.body.paymentRequestId] = {};
-		values[req.body.paymentRequestId].treatmentId = req.body.id;
-		values[req.body.paymentRequestId].instamojoUsername = req.body.username;
+		if(req.body.chargesheet){
+			values[req.body.paymentRequestId].userId = req.body.id;
+			values[req.body.paymentRequestId].month = req.body.month;
+			values[req.body.paymentRequestId].year = req.body.year;
+			values[req.body.paymentRequestId].chargesheet = true;
+		}
+		else{
+			values[req.body.paymentRequestId].treatmentId = req.body.id;
+			values[req.body.paymentRequestId].instamojoUsername = req.body.username;
+		}
+		values[req.body.paymentRequestId].date = new Date();
 		model.paymentQueue.update({},{"data" :values },function(err){
 	        if (err) {
 	           res.send(err);
@@ -1446,53 +1527,99 @@ app.post('/updatePayment', function(req,res){
 				  }
 
 			  });*/
-
-
-		model.user.findOne({ "_id": value[req.body.id].treatmentId},function(err, detailss){
-			var billId;
-			if (err) {
-		           res.send('error');
-		        }else{
-		        	var values = detailss._doc.data;
-		        	values['treatmentanalysislist'].map(function(obj, index){
-		        		if(obj.instamojoPaymentRequestId == req.body.id){
-		        			values['treatmentanalysislist'][index].status = "Completed";
-		        			billId = values['treatmentanalysislist'][index].billid;
-		        		}
-		        	});
-		        	model.user.update({ "_id": value[req.body.id].treatmentId},{"data" :values },function(err){
-		    	        if (err) {
-		    	           res.send('error');
-		    	        }else{
-		    	        	model.user.findOne({ "_id": billId},function(err, billDetails){
-				    	        if (err) {
-				    	           res.send('error');
-				    	        }else{
-				    	        	var billValues =  billDetails._doc.data;
-				    	        	billValues.status = "Completed";
-				    	        	model.user.update({ "_id": billId},{"data" :billValues },function(err){
+	 			if(value[req.body.id].chargesheet){
+	 				model.user.findOne({ "_id": value[req.body.id].userId},function(err, detailss){
+	 					if (err) {
+					           res.send('error');
+					        }else{
+					        	var values = detailss._doc.data;
+					        	values['chargesheet'].map(function(obj, index){
+					        		if(obj.month == value[req.body.id].month && obj.year ==  value[req.body.id].year){
+					        			values['chargesheet'][index].paidServiceAmount = true;
+					        			values['chargesheet'][index].instamojorequestId = req.body.id;
+					        		}
+					        		model.user.update({ "_id": value[req.body.id].userId},{"data" :values },function(err){
 						    	        if (err) {
-						    	           res.send('error');
+						    	           res.send(err);
 						    	        }else{
-						    	        	delete value[req.body.id];
-
-						    	        	model.paymentQueue.update({},{"data" :value },function(err){
-					    		    	        if (err) {
-					    		    	           res.send('error');
-					    		    	        }else{
-					    		    	        	res.send('success');
-					    		    	        }
-					    		    	    });
-
+						    	        	 model.chargeSheetSchema.findOne({"month": value[req.body.id].month  , "year":  value[req.body.id].year},function(err, chargeSheetDetails){
+						    	        		if (err) {
+								    	           res.send(err);
+								    	        }else{
+								    	        	var chargeSheetValues = chargeSheetDetails;
+								    	        	chargeSheetValues.total[value[req.body.id].userId].paidServiceAmount = true;
+								    	        	chargeSheetValues.total[value[req.body.id].userId].instamojorequestId = req.body.id;
+								    	        	model.chargeSheetSchema.update({"month": value[req.body.id].month  , "year":  value[req.body.id].year},{"total" :chargeSheetValues.total },function(err){
+													    if (err){
+													    	res.status(404).send(err);
+													    }
+													    else{
+													    	delete value[req.body.id];
+										    	        	model.paymentQueue.update({},{"data" :value },function(err){
+									    		    	        if (err) {
+									    		    	           res.send(err);
+									    		    	        }else{
+									    		    	        	res.send('success');
+									    		    	        }
+									    		    	    });
+													    }
+													  });
+								    	        }
+						    	        	 });	
 						    	        }
-						    	    });
-				    	        }
-				    	    });
-		    	        }
-		    	    });
-		        }
-		});
-
+					        		});
+					        	});
+					        	
+					        }
+	 					
+	 				});
+	 			}
+	 			else{
+					model.user.findOne({ "_id": value[req.body.id].treatmentId},function(err, detailss){
+						var billId;
+						if (err) {
+					           res.send('error');
+					        }else{
+					        	var values = detailss._doc.data;
+					        	values['treatmentanalysislist'].map(function(obj, index){
+					        		if(obj.instamojoPaymentRequestId == req.body.id){
+					        			values['treatmentanalysislist'][index].status = "Completed";
+					        			billId = values['treatmentanalysislist'][index].billid;
+					        		}
+					        	});
+					        	model.user.update({ "_id": value[req.body.id].treatmentId},{"data" :values },function(err){
+					    	        if (err) {
+					    	           res.send('error');
+					    	        }else{
+					    	        	model.user.findOne({ "_id": billId},function(err, billDetails){
+							    	        if (err) {
+							    	           res.send('error');
+							    	        }else{
+							    	        	var billValues =  billDetails._doc.data;
+							    	        	billValues.status = "Completed";
+							    	        	model.user.update({ "_id": billId},{"data" :billValues },function(err){
+									    	        if (err) {
+									    	           res.send('error');
+									    	        }else{
+									    	        	delete value[req.body.id];
+			
+									    	        	model.paymentQueue.update({},{"data" :value },function(err){
+								    		    	        if (err) {
+								    		    	           res.send('error');
+								    		    	        }else{
+								    		    	        	res.send('success');
+								    		    	        }
+								    		    	    });
+			
+									    	        }
+									    	    });
+							    	        }
+							    	    });
+					    	        }
+					    	    });
+					        }
+					});
+			       }
 
 
 	 });
@@ -1626,6 +1753,39 @@ app.post('/contactmailsend',function(req,res){
 
 					var serviceAmount = (total * config.partner_fee)/100 ;
 					values.total[obj] = {totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount};
+					
+					model.user.findOne({ "_id": obj},function(err, details){
+		    			if (err) {
+		    				console.log(err)
+		    		        }else{
+		    		        	var values = details._doc.data;
+		    		        	if(typeof values['chargesheet'] == 'object' ){
+    	     		        		values['chargesheet'].push({totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount, month: new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }),year: neededYear.toString() });
+    	     		        	}
+    	     		        	else{
+    	     		        		values['chargesheet']= [];
+    	     		        		values['chargesheet'].push({totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount, month: new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }),year: neededYear.toString() });
+    	     		        	}
+		    		        	
+		    		        	model.user.update({ "_id": obj},{"data" :values },function(error){
+		    		    	        if (error) {
+		    		    	           console.log(error)
+		    		    	        }
+		    		    	        
+		    		    	        
+		    		    	        var mailData = "<html>" +
+						    	  	"<div> <h2>Dantalaya</h2></div>"+
+						      		"<div><p>Your Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString() + " has been generated. Kindly pay them before 16th of this month to continue availing Danatalaya Services</p></div>"+
+						      		"<div><p>Amount to be paid : Rs." + serviceAmount + "</p></div>" +
+						      		"</html>" ;
+		    		    	        sendAWSmail(values.email,"Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString(), mailData);
+		    		    	        
+		    		    	        
+		    		    	        
+		    		    	    });
+		    		        }
+		    		});
+					
 				});
 
 				model.chargeSheetSchema.update({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },{"total" :values.total , "chargeSheetCreated" : true },function(err){
@@ -1640,11 +1800,59 @@ app.post('/contactmailsend',function(req,res){
 });
 
 
-// app.get('/test', function (req, res) {
-//     res.render('mail/admincopy', {
-//         title: "cancel passenger ticket"
-//     });
-// });
+ var chargeSheetNonPaymentScheduler = schedule.scheduleJob('1 0 16 * *', function(){
+	 var currenMonth = new Date().getMonth();
+	  var neededYear = new Date().getFullYear();
+
+	  if(currenMonth == 0){
+		  currenMonth = 12;
+		  neededYear = neededYear -1;
+	  }
+	  var previousMonth = new Date().setMonth(currenMonth-1);
+	  model.chargeSheetSchema.findOne({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },function(err, details){
+			if(details){
+				var values = details._doc;
+				Object.keys(values.total).map(function(obj){
+					if(!values.total[obj].paidServiceAmount){
+						model.user.findOne({ "_id": obj},function(err, details){
+							var values = details._doc.data;
+							var username = values.username;
+			    			if (err) {
+			    				console.log(err);
+			    		        }else{
+			    		        	//values.billnotpaid = true;
+			    		        	values.adminactivated = false;
+			    		        	model.user.update({ "_id": obj},{"data" : values },function(error){
+			    		    	        if (error) {
+			    		    	           console.log(error)
+			    		    	        }
+			    		    	        var mailData = "<html>" +
+							    	  	"<div> <h2>Dantalaya</h2></div>"+
+							      		"<div>Sorry for the inconvenience. But your Account has been Deactivated for Non-payment of bill. Kindly contact customer support to activate the account</div>"+
+							      		"</html>" ;
+			    		    	        sendAWSmail(values.email,"Account Deactivated for Non-payment of Bill", mailData);
+			    		    	        
+			    		    	        model.auth.findOne({ "username": username},function(err, user){
+			    			    			if (err) {
+			    			    				console.log(err);
+			    			    			}
+			    			    			user.adminactivated = false;
+			    			    			user.billnotpaid = true;
+			    			    			user.save(function (err) {
+			    							    if (err){
+			    							    	res.status(404).send("failure");
+			    							    }
+			    			    			});
+			    		    	        });
+			    		    	    });
+			    		        }
+			    		});
+					}
+				});
+			}
+	  });
+	 
+ });
 
 
 https.createServer(app).listen(app.get('port'), function(){

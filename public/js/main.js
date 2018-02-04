@@ -96,6 +96,11 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 		templateUrl:"partials/dashboard.html",
 		controller: "dashboardController"
 	})
+	.state("chargeSheet",{
+		url:'/chargeSheet',
+		templateUrl:"partials/chargeSheet.html",
+		controller: "chargeSheetController"
+	})
 	.state("activation",{
 		url:'/activation',
 		templateUrl:"partials/activation.html",
@@ -620,6 +625,64 @@ app.controller('updatePaymentController',function($scope, $http, $state, $rootSc
 
 });
 
+app.filter('trueFalseParser', function($filter) {
+
+  return function(input) {
+    return input ? 'Done' :'Not Yet Paid';
+  };
+});
+
+
+app.controller('chargeSheetController',function($scope, $http, $state, $rootScope, $stateParams , $location){
+	$scope.chargesheet = $rootScope.userData.data.chargesheet;
+	$scope.gridOptions = {
+	    enableFiltering: false,
+	    data :  $scope.chargesheet,
+	    enableRowSelection: true,
+	    enableRowHeaderSelection: false,
+	    multiSelect: false,
+	    onRegisterApi: function(gridApi){
+	      $scope.gridApi = gridApi;
+	      gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+
+	      });
+
+	    },
+	    columnDefs: [
+		  { field: 'month', displayName: 'Month' },
+	      { field: 'year', displayName: 'Year' },
+	      { field: 'totalamount', displayName: 'Total Revenue Earned' },
+	      { field: 'serviceAmount', displayName: 'Billed Amount',
+	    	  cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.serviceAmount}}  <a class="grid-payonline" href="javascript:void(0)" ng-if="!row.entity.paidServiceAmount" ng-click=" grid.appScope.payOnline(row.entity)">Pay Online</a></div>'
+	    		      
+	      },
+	      { field: 'paidServiceAmount', displayName: 'Bill Payment', cellFilter:'trueFalseParser' }
+	    ]
+	  };
+	
+	$scope.payOnline = function(each){
+		var paymentData = {
+				amount : each.serviceAmount,
+				phone : $rootScope.userData.data.mobile,
+				buyer_name : $rootScope.userData.data.firstname + " " + $rootScope.userData.data.lastname,
+				email : $rootScope.userData.data.email
+		}
+		$http.post('/payOnlineChargeSheet', paymentData ).then(function(data){
+			var payment_request = JSON.parse(data.data.data).payment_request;
+			var instamojoUsername = data.data.username;
+			$scope.paymentId = payment_request.id;
+			Instamojo.open(payment_request.longurl);
+			$http.post('/addToPaymentQueue',{id: $rootScope.userData._id , paymentRequestId : payment_request.id, chargesheet : true , month: each.month,year: each.year }).then(function(data){
+
+			});
+			
+		},function(err){
+			console.log(err);
+		});
+	};
+	
+	
+});
 
 app.controller('admindashController',function($scope, $http, $state, $rootScope, $stateParams , $location){
 	$scope.userActivation = true;
@@ -631,6 +694,10 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 	});
 
 	$scope.activate = function(user){
+	    var r = confirm("Are You sure, you want to Activate the Account");
+	    if (!r) {
+	       return;
+	    }
 		$http.post('/admin/activate', {user :user } ).then(function(data){
 			$http.get('/getaccounts').then(function(data){
 				$scope.getAccounts = data.data;
@@ -646,6 +713,10 @@ app.controller('admindashController',function($scope, $http, $state, $rootScope,
 
 
 	$scope.reject = function(user, email){
+		var r = confirm("Are You sure, you want to Reject the Account");
+	    if (!r) {
+	       return;
+	    }
 		$http.post('/admin/reject', {user :user, email: email} ).then(function(data){
 			$http.get('/getaccounts').then(function(data){
 				$scope.getAccounts = data.data;
@@ -2146,6 +2217,7 @@ function formatPrescriptionData (obj){
 							delete $scope.patientData.data.currenttreatment[Object.keys($scope.patientData.data.currenttreatment)[index]];
 						}
 					});*/
+				  $scope.treatmentData = undefined;
 					 
 				});
 			}
@@ -2204,7 +2276,7 @@ function formatPrescriptionData (obj){
 			obj[obj.length-1].date = data.data.data.date;
 			obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
 			obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
-
+			$scope.treatment.treatmentanalysislist = obj;
 			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount};
 
 			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){

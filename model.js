@@ -10,6 +10,7 @@ mongoose.connect(config.host,function(){
 	    profile: String,
 	    activated: Boolean,
 	    adminactivated : Boolean,
+	    billnotpaid: Boolean,
 	    key : String,
 	    email : String
 });

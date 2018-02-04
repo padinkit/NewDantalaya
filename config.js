@@ -4,6 +4,10 @@ var config = {};
 config.host = 'mongodb://dantalaya:dantalaya@ds147789.mlab.com:47789/dbmodel';
 config.port = 27017;
 
+config.instamojoPrivateKey = {
+		apikey : '5513828b2ef00debcaec7c6e6770e11b',
+		authtoken: '3b0c130bc9eb2ff8c5774dffde376e17'
+};
 config.instamojo = {
 		clientid : 'iVkE93WnpeWeWReb69TUv18fOuLWW464hviOayyK',
 		clientsecret: 'If157QrIeBTVfBjtUg4f0V7gGlQbewtk6bHdeSrpWFY0Jlj72hri17KaLtrpFZcVhbCx0lxf5T3G3BY4UJ1QBXyx1PikXB9DYPUaJB6inWJcSK8PQpqvxDaDcbU3Aszr'

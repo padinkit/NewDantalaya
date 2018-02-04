@@ -88,6 +88,7 @@
 	                    <li ng-if="userType == 'patient'"><a href="#/dashboard">Dashboard</a></li>
 	                    <li ng-if="userType == 'doctor'"><a href="#/doctor/dashboard">Dashboard</a></li>
 	                    <li><a href="#/{{userType}}profile">Profile</a></li>
+	                    <li ng-if="userType == 'doctor'"><a href="#/chargeSheet">Charge Sheet</a></li>
 	                    <li><a href="#/changepassword">Change Password</a></li>
 	                    <li role="separator" class="divider"></li>
 	                    <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>

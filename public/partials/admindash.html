@@ -18,14 +18,21 @@
 					<tr>
 						<th>Username</th>
 						<th>Profile</th>
+						<th>E-Mail</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="user in getAccounts">
 						<th><a href="javascript:void(0)" ng-click="userDetails(user.username)">{{user.username}}</a></th>
 						<td>{{user.profile}}</td>
-						<td><button type="button" class="btn btn-primary" ng-click="activate(user.username)">Activate</button></td>
-						<td><button type="button" class="btn btn-danger" ng-click="reject(user.username, user.email)">Reject</button></td>
+						<td>{{user.email}}</td>
+						<td>
+							<button type="button" class="btn btn-primary" ng-click="activate(user.username)">Activate</button>
+						</td>
+						<td>
+							<button ng-if="!user.billnotpaid"  type="button" class="btn btn-danger" ng-click="reject(user.username, user.email)">Reject</button>
+							<span ng-if="user.billnotpaid"   class="label label-info">Bill Not Paid</span>
+						</td>
 					</tr>
 				</tbody>
 			</table>
