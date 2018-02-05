@@ -158,7 +158,7 @@ app.post('/sendSms',function(req,res){
 function sendmail(req ,user,  key, email, profile){
 	var extra="";
 	if(profile !=='patient'){
-		extra = 'Once email Verfication is done, await Dantalaya Admin activation to avail all the Sevices.';
+		extra = 'Once email Verfication is done, await Dantalaya Admin activation to avail all the Sevices. Dantalaya admin activation takes one working day.';
 	}
 	var mailOptions = {
 			Source: 'noreply@dantalaya.com', // sender address
@@ -251,7 +251,7 @@ app.post('/payOnlineChargeSheet', function(req, res){
 		  res.send({data: body});
 	  }
 	})
-	
+
 });
 
 app.post('/payOnline', function(req, res){
@@ -559,6 +559,9 @@ function sendPasswordmail(req, user, pass, email){
 
 
 function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
+var time = starttime.toString();
+
+
 	var mailOptions = {
 			Source: 'noreply@dantalaya.com', // sender address
 			Destination: {ToAddresses :[email]}, // list of receivers
@@ -569,10 +572,11 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 				    	Data :  "<html>" +
 					    	  	"<div> <h2>Dantalaya</h2>" +
 					    	  	"<p>" +text+ "</p>" +
+                    "<p>" + from +" : <b>"+ name +"</b></p>" +
 					    	  	"<p>Title : <b>"+ title +"</b></p>" +
-					    	  	"<p>" + from +" : <b>"+ name +"</b></p>" +
-					    	  	"<p>Start time : <b>"+ starttime +"</b></p>" +
-					    	  	"<p>End time : <b>"+ endtime +"</b></p>" +
+					    	  	"<p>Date : <b>"+ starttime +"</b></p>" +
+					    	  	"<p>Time : <b>"+ time.slice(12) +"</b></p>" +
+                    "<p>To confirm the appointment click  below Link  and login to your account: <a href='www.dantalaya.com'>www.dantalaya.com</a></p>"+
 					    	  	"</div>"+
 					      		"</html>" // html body
 				    }
@@ -954,7 +958,7 @@ app.get('/notice', function (req, res) {
 		});
  });
 
- 
+
  function sendAWSmail(email, subject , data){
 		var mailOptions = {
 				Source: 'noreply@dantalaya.com', // sender address
@@ -973,9 +977,9 @@ app.get('/notice', function (req, res) {
 		   else     console.log(data);           // successful response
 	});
 }
- 
- 
- 
+
+
+
  app.post('/addNewPatient', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
 
@@ -1013,7 +1017,7 @@ app.get('/notice', function (req, res) {
 		    		    	        }else{
 		    		    	        	res.send({success: true,data: doc});
 		    		    	        }
-		    		    	        
+
 		    		    	        var mailData = "<html>" +
 						    	  	"<div> <h2>Welcome to Dantalaya</h2></div>"+
 						      		"<div><p>"+ config.doctorAddPatient +"</p></div>"+
@@ -1022,10 +1026,10 @@ app.get('/notice', function (req, res) {
 		    		    	        sendAWSmail(req.body.data.email,'Welcome to Dantalaya', mailData);
 		    		    	    });
 		    		        }
-		    				
+
 		    		});
-		        	
-		        	
+
+
 		        }
 		    });
 	  }
@@ -1042,34 +1046,34 @@ app.get('/notice', function (req, res) {
 					        if (err) {
 					            res.json({'alert':'Registration error'});
 					        }else{
-		
+
 					        	model.user.findOne({ "data.username": req.body.doctorId},function(err, details){
 					    			if (err) {
 					    		           res.send('error');
 					    		        }else{
 					    		        	var values = details._doc.data;
-		
+
 					    		        	if(typeof values['patients'] == 'object' ){
-		
+
 					    		        		if(values.patients.includes(req.body.patientId)){
 					    			        		res.send('Patient is Already Added');
 					    			        		return;
 					    			        	}
-		
+
 					    		        		values['patients'].push(newId);
 					    		        	}
 					    		        	else{
 					    		        		values['patients']= [];
 					    		        		values['patients'].push(newId);
 					    		        	}
-		
+
 					    		        	model.user.update({ "data.username": req.body.doctorId},{"data" :values },function(err){
 					    		    	        if (err) {
 					    		    	           res.send('error');
 					    		    	        }else{
 					    		    	        	res.send({success: true,data: doc});
 					    		    	        }
-					    		    	        
+
 					    		    	        var mailData = "<html>" +
 									    	  	"<div> <h2>Welcome to Dantalaya</h2></div>"+
 									      		"<div><p>"+ config.doctorAddPatient +"</p></div>"+
@@ -1078,14 +1082,14 @@ app.get('/notice', function (req, res) {
 					    		    	        sendAWSmail(req.body.data.email,'Welcome to Dantalaya', mailData);
 					    		    	    });
 					    		        }
-					    				
+
 					    		});
-					        	
-					        	
+
+
 					        }
 					    });
 				  }
-		
+
 			  });
 		 	}
 
@@ -1565,13 +1569,13 @@ app.post('/updatePayment', function(req,res){
 													    }
 													  });
 								    	        }
-						    	        	 });	
+						    	        	 });
 						    	        }
 					        		});
 					        	});
-					        	
+
 					        }
-	 					
+
 	 				});
 	 			}
 	 			else{
@@ -1602,7 +1606,7 @@ app.post('/updatePayment', function(req,res){
 									    	           res.send('error');
 									    	        }else{
 									    	        	delete value[req.body.id];
-			
+
 									    	        	model.paymentQueue.update({},{"data" :value },function(err){
 								    		    	        if (err) {
 								    		    	           res.send('error');
@@ -1610,7 +1614,7 @@ app.post('/updatePayment', function(req,res){
 								    		    	        	res.send('success');
 								    		    	        }
 								    		    	    });
-			
+
 									    	        }
 									    	    });
 							    	        }
@@ -1753,7 +1757,7 @@ app.post('/contactmailsend',function(req,res){
 
 					var serviceAmount = (total * config.partner_fee)/100 ;
 					values.total[obj] = {totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount};
-					
+
 					model.user.findOne({ "_id": obj},function(err, details){
 		    			if (err) {
 		    				console.log(err)
@@ -1766,26 +1770,26 @@ app.post('/contactmailsend',function(req,res){
     	     		        		values['chargesheet']= [];
     	     		        		values['chargesheet'].push({totalamount : total , paidServiceAmount : false , serviceAmount: serviceAmount, month: new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }),year: neededYear.toString() });
     	     		        	}
-		    		        	
+
 		    		        	model.user.update({ "_id": obj},{"data" :values },function(error){
 		    		    	        if (error) {
 		    		    	           console.log(error)
 		    		    	        }
-		    		    	        
-		    		    	        
+
+
 		    		    	        var mailData = "<html>" +
 						    	  	"<div> <h2>Dantalaya</h2></div>"+
 						      		"<div><p>Your Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString() + " has been generated. Kindly pay them before 16th of this month to continue availing Danatalaya Services</p></div>"+
 						      		"<div><p>Amount to be paid : Rs." + serviceAmount + "</p></div>" +
 						      		"</html>" ;
 		    		    	        sendAWSmail(values.email,"Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString(), mailData);
-		    		    	        
-		    		    	        
-		    		    	        
+
+
+
 		    		    	    });
 		    		        }
 		    		});
-					
+
 				});
 
 				model.chargeSheetSchema.update({"month": new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }), "year": neededYear.toString() },{"total" :values.total , "chargeSheetCreated" : true },function(err){
@@ -1831,7 +1835,7 @@ app.post('/contactmailsend',function(req,res){
 							      		"<div>Sorry for the inconvenience. But your Account has been Deactivated for Non-payment of bill. Kindly contact customer support to activate the account</div>"+
 							      		"</html>" ;
 			    		    	        sendAWSmail(values.email,"Account Deactivated for Non-payment of Bill", mailData);
-			    		    	        
+
 			    		    	        model.auth.findOne({ "username": username},function(err, user){
 			    			    			if (err) {
 			    			    				console.log(err);
@@ -1851,7 +1855,7 @@ app.post('/contactmailsend',function(req,res){
 				});
 			}
 	  });
-	 
+
  });
 
 
