@@ -654,12 +654,12 @@ app.controller('chargeSheetController',function($scope, $http, $state, $rootScop
 	      { field: 'totalamount', displayName: 'Total Revenue Earned' },
 	      { field: 'serviceAmount', displayName: 'Billed Amount',
 	    	  cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.serviceAmount}}  <a class="grid-payonline" href="javascript:void(0)" ng-if="!row.entity.paidServiceAmount" ng-click=" grid.appScope.payOnline(row.entity)">Pay Online</a></div>'
-	    		      
+
 	      },
 	      { field: 'paidServiceAmount', displayName: 'Bill Payment', cellFilter:'trueFalseParser' }
 	    ]
 	  };
-	
+
 	$scope.payOnline = function(each){
 		var paymentData = {
 				amount : each.serviceAmount,
@@ -675,13 +675,13 @@ app.controller('chargeSheetController',function($scope, $http, $state, $rootScop
 			$http.post('/addToPaymentQueue',{id: $rootScope.userData._id , paymentRequestId : payment_request.id, chargesheet : true , month: each.month,year: each.year }).then(function(data){
 
 			});
-			
+
 		},function(err){
 			console.log(err);
 		});
 	};
-	
-	
+
+
 });
 
 app.controller('admindashController',function($scope, $http, $state, $rootScope, $stateParams , $location){
@@ -1383,13 +1383,13 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 				});
 				var message;
 				if(status == 'accept'){
-					message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
+					message = 'Dantalaya - Your Appointment with Dr.' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
 				}
 				else{
-					message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
+					message = 'Dantalaya - Your Appointment with Dr.' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
 				}
 
-				$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Danatalaya Appointment'}).then(function(data){
+				$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Dantalaya Appointment'}).then(function(data){
 
 				});
 
@@ -1881,7 +1881,7 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 		if($scope.patientData){
 			$http.post('/getuserDetailsById',{id : $stateParams.data._id}).then(function(userdata){
 				$scope.patientData = userdata.data;
-			
+
 			  $http.post('/viewTreatment',{data : $scope.patientData.data.treatments , doctorusername: $rootScope.userData.data.username}).then(function(data){
 				$scope.allTreatments = data.data;
 				$scope.treatmentHistory = [];
@@ -1935,7 +1935,7 @@ app.controller("treatmentDetailsController",function ($scope,$http,$rootScope,$s
 						if(!fromHistory){
 							$('#currentTreatment').tab('show');
 						}
-						
+
 					}
 
 				}
@@ -2218,7 +2218,7 @@ function formatPrescriptionData (obj){
 						}
 					});*/
 				  $scope.treatmentData = undefined;
-					 
+
 				});
 			}
 			else{
@@ -2460,13 +2460,13 @@ app.controller("schedulerController",function ($scope,$state, $http, $rootScope)
 			});
 			var message;
 			if(status == 'accept'){
-				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
+				message = 'Dantalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
 			}
 			else{
-				message = 'Danatalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
+				message = 'Dantalaya - Your Appointment with ' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
 			}
 
-			$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Danatalaya Appointment'}).then(function(data){
+			$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Dantalaya Appointment'}).then(function(data){
 
 			});
 

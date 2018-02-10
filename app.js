@@ -40,7 +40,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -160,23 +160,44 @@ function sendmail(req ,user,  key, email, profile){
 	if(profile !=='patient'){
 		extra = 'Once email Verfication is done, await Dantalaya Admin activation to avail all the Sevices. Dantalaya admin activation takes one working day.';
 	}
-	var mailOptions = {
-			Source: 'noreply@dantalaya.com', // sender address
-			Destination: {ToAddresses :[email]}, // list of receivers
-			Message :{
-				Subject: {Data: 'Dantalaya Acccunt Activation Link'}, // Subject line
-				Body: {
-				    Html: {
-				    	Data :  "<html>" +
-					    	  	"<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
-					      		"<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
-					      		"<div><p>"+ extra +"</p></div>"+
-					      		"<div><p>"+ config.mailText +"</p></div>"+
-					      		"</html>" // html body
-				    }
-				}
-			}
-	};
+  if(profile == 'doctor'){
+    var mailOptions = {
+        Source: 'noreply@dantalaya.com', // sender address
+        Destination: {ToAddresses :[email]}, // list of receivers
+        Message :{
+          Subject: {Data: 'Dantalaya Account Activation Link'}, // Subject line
+          Body: {
+              Html: {
+                Data :  "<html>" +
+                      "<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
+                      "<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
+                      "<div><p>"+ extra +"</p></div>"+
+                      "<div><p>"+ config.mailText +"</p></div>"+
+                      "</html>" // html body
+              }
+          }
+        }
+    };
+  }else{
+    var mailOptions = {
+        Source: 'noreply@dantalaya.com', // sender address
+        Destination: {ToAddresses :[email]}, // list of receivers
+        Message :{
+          Subject: {Data: 'Dantalaya Acccunt Activation Link'}, // Subject line
+          Body: {
+              Html: {
+                Data :  "<html>" +
+                      "<div> <h2>Dantalaya</h2><p>Click on the Link below to activate your User account</p></div>"+
+                      "<a href='http://" +req.get('host') + "/#/activation?user=" + user + "&key="+ key + "'><b>Activate Your Account</b></a>" +
+                      "<div><p>"+ extra +"</p></div>"+
+                      "<div><p>"+ config.registrationMail +"</p></div>"+
+                      "</html>" // html body
+              }
+          }
+        }
+    };
+  }
+
 
 	ses.sendEmail(mailOptions, function(err, data){
 		if (err) console.log(err, err.stack); // an error occurred
@@ -560,29 +581,55 @@ function sendPasswordmail(req, user, pass, email){
 
 function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 var time = starttime.toString();
-
-
-	var mailOptions = {
-			Source: 'noreply@dantalaya.com', // sender address
-			Destination: {ToAddresses :[email]}, // list of receivers
-		    Message :{
-				Subject: {Data: 'Appointment Mail'}, // Subject line
-				Body: {
-				    Html: {
-				    	Data :  "<html>" +
-					    	  	"<div> <h2>Dantalaya</h2>" +
-					    	  	"<p>" +text+ "</p>" +
+if(from == 'Doctor'){
+  var mailOptions = {
+      Source: 'noreply@dantalaya.com', // sender address
+      Destination: {ToAddresses :[email]}, // list of receivers
+        Message :{
+        Subject: {Data: 'Appointment Mail'}, // Subject line
+        Body: {
+            Html: {
+              Data :  "<html>" +
+                    "<div> <h2>Dantalaya</h2>" +
+                    "<p>" +text+ "</p>" +
                     "<p>" + from +" : <b>"+ name +"</b></p>" +
-					    	  	"<p>Title : <b>"+ title +"</b></p>" +
-					    	  	"<p>Date : <b>"+ starttime +"</b></p>" +
-					    	  	"<p>Time : <b>"+ time.slice(12) +"</b></p>" +
+                    "<p>Title : <b>"+ title +"</b></p>" +
+                    "<p>Date : <b>"+ starttime.slice(0,11) +"</b></p>" +
+                    "<p>Time : <b>"+ time.slice(12) +"</b></p>" +
+                    "<p>To view your appointment click  below link  and login to your account: <a href='www.dantalaya.com'>www.dantalaya.com</a></p>"+
+                    "</div>"+
+                    "</html>" // html body
+            }
+        }
+      }
+  };
+}
+else{
+  var mailOptions = {
+      Source: 'noreply@dantalaya.com', // sender address
+      Destination: {ToAddresses :[email]}, // list of receivers
+        Message :{
+        Subject: {Data: 'Appointment Mail'}, // Subject line
+        Body: {
+            Html: {
+              Data :  "<html>" +
+                    "<div> <h2>Dantalaya</h2>" +
+                    "<p>" +text+ "</p>" +
+                    "<p>" + from +" : <b>"+ name +"</b></p>" +
+                    "<p>Title : <b>"+ title +"</b></p>" +
+                    "<p>Date : <b>"+ starttime.slice(0,11) +"</b></p>" +
+                    "<p>Time : <b>"+ time.slice(12) +"</b></p>" +
                     "<p>To confirm the appointment click  below Link  and login to your account: <a href='www.dantalaya.com'>www.dantalaya.com</a></p>"+
-					    	  	"</div>"+
-					      		"</html>" // html body
-				    }
-				}
-			}
-	};
+                    "</div>"+
+                    "</html>" // html body
+            }
+        }
+      }
+  };
+}
+
+
+
 
 	ses.sendEmail(mailOptions, function(err, data){
 		if (err) console.log(err, err.stack); // an error occurred
@@ -617,7 +664,7 @@ app.post('/appointmentmail',function(req,res){
 		 var mail = req.body.data.patientMail;
 		 var from = "Doctor";
 		 if(req.body.status == 'accept'){
-			 var text = "Thanks for scheduling an appointment.Your appointment has been Confirmed by doctor.";
+			 var text = "Thanks for scheduling an appointment.Your appointment has been Confirmed by doctor. Request you to be present 15 minutes before the scheduled appointment time.";
 			  }
 		 else{
 			 var text = "Sorry for the inconvenience.Your appointment has been rejected.Please reschedule it.";
@@ -696,6 +743,15 @@ app.get('/privacy', function (req, res) {
 		res.send(data);
 	});
 });
+app.get('/t&c', function (req, res) {
+	var filePath = "/pdf/t&c.pdf";
+
+	fs.readFile(__dirname + filePath , function (err,data){
+		res.contentType("application/pdf");
+		res.send(data);
+	});
+});
+
 app.get('/notice', function (req, res) {
 	var filePath = "/pdf/Notice.pdf";
 
@@ -1779,7 +1835,7 @@ app.post('/contactmailsend',function(req,res){
 
 		    		    	        var mailData = "<html>" +
 						    	  	"<div> <h2>Dantalaya</h2></div>"+
-						      		"<div><p>Your Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString() + " has been generated. Kindly pay them before 16th of this month to continue availing Danatalaya Services</p></div>"+
+						      		"<div><p>Your Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString() + " has been generated. Kindly pay them before 16th of this month to continue availing Dantalaya Services</p></div>"+
 						      		"<div><p>Amount to be paid : Rs." + serviceAmount + "</p></div>" +
 						      		"</html>" ;
 		    		    	        sendAWSmail(values.email,"Bill for the month of  "+ new Date(previousMonth).toLocaleString( "en-us",{ month: "long" }) + " , " + neededYear.toString(), mailData);
