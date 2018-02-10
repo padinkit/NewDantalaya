@@ -634,6 +634,9 @@ app.filter('trueFalseParser', function($filter) {
 
 
 app.controller('chargeSheetController',function($scope, $http, $state, $rootScope, $stateParams , $location){
+	 if(!$rootScope.userData){
+	    	$state.go('home');
+	    }
 	$scope.chargesheet = $rootScope.userData.data.chargesheet;
 	$scope.gridOptions = {
 	    enableFiltering: false,
