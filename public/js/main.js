@@ -659,9 +659,21 @@ app.controller('chargeSheetController',function($scope, $http, $state, $rootScop
 	    	  cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.serviceAmount}}  <a class="grid-payonline" href="javascript:void(0)" ng-if="!row.entity.paidServiceAmount" ng-click=" grid.appScope.payOnline(row.entity)">Pay Online</a></div>'
 
 	      },
-	      { field: 'paidServiceAmount', displayName: 'Bill Payment', cellFilter:'trueFalseParser' }
+	      { field: 'paidServiceAmount', displayName: 'Bill Payment', cellFilter:'trueFalseParser' },
+	      { field: 'viewStatement', displayName: 'View Statement',
+	    	  cellTemplate: '<div class="ui-grid-cell-contents"><a class="" href="javascript:void(0)" ng-click=" grid.appScope.viewStatement(row.entity)">View Statement</a></div>'
+
+	      }
 	    ]
 	  };
+	  
+	$scope.viewStatement = function (obj){
+			$http.post('/getParticularChargeSheet', {month : obj.month , year: obj.year , id: $rootScope.userData._id } ).then(function(data){
+				$scope.monthYear = obj.month + " " + obj.year;
+				$scope.statementData = data.data;
+				$('#statement').modal();
+			});		
+	};
 
 	$scope.payOnline = function(each){
 		var paymentData = {
@@ -2280,9 +2292,10 @@ function formatPrescriptionData (obj){
 			obj[obj.length-1].paymentmethod = $scope.bill.paymentmethod;
 			obj.push({treatmentanalysis: '',amountpaidbypatient: '', date: new Date()});
 			$scope.treatment.treatmentanalysislist = obj;
-			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount};
+			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount, time: new Date(), treatmentId : $scope.treatmentData._id};
 
-			$http.post('/addToChargeSheet',{month: new Date().toLocaleString( "en-us",{ month: "long" }) , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
+			var month = new Date().toLocaleString( "en-us",{ month: "long" });
+			$http.post('/addToChargeSheet',{month: month , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
 				$scope.updateTreatmentDetails();
 			});
 
