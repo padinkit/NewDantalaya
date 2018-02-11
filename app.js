@@ -55,7 +55,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 // development only

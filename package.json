@@ -23,7 +23,6 @@
     "passport-local": "~1.0.0",
     "path": "^0.12.7",
     "request": "^2.83.0",
-    "serve-favicon": "^2.4.5",
     "xoauth2": "^1.2.0"
   }
 }
