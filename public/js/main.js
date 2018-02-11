@@ -2263,7 +2263,7 @@ function formatPrescriptionData (obj){
 			toastr.warning("Treatment Analysis cannot be Empty");
 			return;
 		}
-		if(!obj[obj.length-1].amountpaidbypatient){
+		if(obj[obj.length-1].amountpaidbypatient  == null || obj[obj.length-1].amountpaidbypatient  == undefined || obj[obj.length-1].amountpaidbypatient  === ""){
 			toastr.warning("Amount Paid by Patient cannot be Empty");
 			return;
 		}
@@ -2295,9 +2295,11 @@ function formatPrescriptionData (obj){
 			var chargesheetData = {billid: data.data._id, amount:  $scope.bill.amount, time: new Date(), treatmentId : $scope.treatmentData._id};
 
 			var month = new Date().toLocaleString( "en-us",{ month: "long" });
-			$http.post('/addToChargeSheet',{month: month , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
-				$scope.updateTreatmentDetails();
-			});
+			if($scope.bill.amount !== 0){
+				$http.post('/addToChargeSheet',{month: month , year : new Date().getFullYear(), data : chargesheetData, doctorid: $rootScope.userData._id} ).then(function(data){
+					$scope.updateTreatmentDetails();
+				});
+			}
 
 			$scope.calculatePendingAmount();
 		});

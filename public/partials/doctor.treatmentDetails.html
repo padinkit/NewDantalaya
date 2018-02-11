@@ -355,7 +355,7 @@
 												<div class="form-group">
 													<label class="col-md-12" for="fees">Consulting Fees<span style="color:red"> *</span></label>
 													<div class="col-md-12">
-														<input id="fees" name="fees" type="number" class="form-control"
+														<input id="fees" name="fees"  type="number" min=0 oninput="validity.valid||(value='');" class="form-control"
 															placeholder="Consulting Fees" ng-model="treatment.consultingfees" required>
 															<span style="color: red" ng-show="treatmentDetails.fees.$touched && treatmentDetails.fees.$invalid">enter consultation fees</span>
 
@@ -379,7 +379,7 @@
 															<div class="form-group">
 																<label class="col-md-12">Treatment Estimated Cost<span style="color: red"> *</span></label>
 																<div class="col-md-12">
-																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"  ng-disabled="treatment.patientacceptedtreatment" />
+																	 <input  type="number" min=0 oninput="validity.valid||(value='');" class="form-control"ng-model="treatment.treatmentcost"  ng-disabled="treatment.patientacceptedtreatment" />
 																</div>
 																<small>Kindly enter the above Treatment Info before patient acceptance of treatment</small>
 															</div>
@@ -404,7 +404,7 @@
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
-																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
+																			 <input ng-if="$last"  type="number" min=0 oninput="validity.valid||(value='');" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
 																		</div>
 																	</div>
 																</div>
@@ -531,6 +531,12 @@
 												</div> -->
 												<hr>
 												<form class="form-horizontal">
+												<div class="form-group">
+													<label class="col-md-12">New Comments</label>
+													<div class="col-md-12">
+														<textarea class="form-control" rows="4" ng-model="treatment.newcomments"></textarea>
+													</div>
+												</div>
 												<div class="form-group">
 													<label class="col-md-12" for="currentChief">Chief Complaint<span style="color: red"> *</span> </label>
 													<div class="col-md-12">
@@ -830,7 +836,7 @@
 												<div class="form-group">
 													<label class="col-md-12">Consulting Fees</label>
 													<div class="col-md-12">
-														<input type="number" class="form-control"
+														<input  type="number" min=0 oninput="validity.valid||(value='');" class="form-control"
 															placeholder="Consulting Fees" ng-model="treatment.consultingfees" disabled>
 													</div>
 												</div>
@@ -852,7 +858,7 @@
 															<div class="form-group">
 																<label class="col-md-12">Treatment Estimated Cost<span style="color: red"> *</span></label>
 																<div class="col-md-12">
-																	 <input type="number" class="form-control"ng-model="treatment.treatmentcost"  ng-disabled="treatment.patientacceptedtreatment" />
+																	 <input  type="number" min=0 oninput="validity.valid||(value='');" class="form-control"ng-model="treatment.treatmentcost"  ng-disabled="treatment.patientacceptedtreatment" />
 																</div>
 																<small>Kindly enter the above Treatment Info before patient acceptance of treatment</small>
 															</div>
@@ -876,7 +882,7 @@
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
-																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
+																			 <input ng-if="$last"  type="number" min=0 oninput="validity.valid||(value='');" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient">
 																		</div>
 																	</div>
 																</div>
@@ -1275,7 +1281,7 @@
 													<div class="form-group">
 														<label class="col-md-12">Consulting Fees</label>
 														<div class="col-md-12">
-															<input type="number" class="form-control"
+															<input  type="number" min=0 oninput="validity.valid||(value='');" class="form-control"
 																placeholder="Treatment costs" ng-model="treatment.consultingfees" disabled>
 
 														</div>
@@ -1298,7 +1304,7 @@
 															<div class="form-group">
 																<label class="col-md-12">Treatment Estimated Cost<span style="color: red"> *</span></label>
 																<div class="col-md-12">
-																	<input type="number" class="form-control"ng-model="treatment.treatmentcost" disabled/>
+																	<input  type="number" min=0 oninput="validity.valid||(value='');" class="form-control"ng-model="treatment.treatmentcost" disabled/>
 																</div>
 															</div>
 
@@ -1321,7 +1327,7 @@
 																		<label class="col-md-12">Amount Paid by Patient <span class="label label-info pull-right">{{eachTreatment.paymentmethod}}</span><span class="label label-danger pull-right" ng-if="eachTreatment.status == 'initiated'">Payment Failed</span></label>
 																		<div class="col-md-12">
 																		     <p ng-if="!$last">{{eachTreatment.amountpaidbypatient}}</p>
-																			 <input ng-if="$last" type="number" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient" disabled>
+																			 <input ng-if="$last"  type="number" min=0 oninput="validity.valid||(value='');" class="form-control" placeholder="Amount Paid by Patient" ng-model="eachTreatment.amountpaidbypatient" disabled>
 																		</div>
 																	</div>
 																</div>
