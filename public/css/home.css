@@ -1869,15 +1869,8 @@ input:disabled:-ms-input-placeholder { /* Internet Explorer 10+ */
   max-height: 400px;
   width: 100%;
 }
-.dasboard-table thead, .dasboard-table tbody, .dasboard-table tr, .dasboard-table td, .dasboard-table th {
-  display: block;
-}
-.dasboard-table tbody td {
-  float: left;
-}
-.dasboard-table thead tr th {
-  float: left;
-}
+
+
 .ma0{
 	margin: 0px !important;
 }
@@ -2246,7 +2239,7 @@ margin-top: 20px;
 .mb0{
 	margin-bottom: 0px !important;
 }
-.grid-payonline{	
+.grid-payonline{
     float: right;
     border: 1px solid;
     padding: 0px 5px;

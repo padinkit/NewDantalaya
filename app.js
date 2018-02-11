@@ -21,6 +21,8 @@ var express = require('express')
   , AWS = require('aws-sdk');
 var ejs = require('ejs');
 var fs = require('fs');
+var favicon = require('serve-favicon')
+
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -40,7 +42,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -53,6 +55,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 // development only
