@@ -14,19 +14,19 @@
 		<div class="col-md-12">
 			<div class="white-box">
 				<div class="row">
-					<div class="col-md-3 col-xs-6">
+					<div class="col-md-3 col-xs-12">
 						<strong>Full Name</strong> <br>
 						<p class="text-muted">{{patientData.data.firstname}} {{patientData.data.lastname}}</p>
 					</div>
-					<div class="col-md-3 col-xs-6">
+					<div class="col-md-3 col-xs-12">
 						<strong>Mobile</strong> <br>
 						<p class="text-muted">{{patientData.data.mobile}}</p>
 					</div>
-					<div class="col-md-3 col-xs-6">
+					<div class="col-md-3 col-xs-12">
 						<strong>Email</strong> <br>
 						<p class="text-muted">{{patientData.data.email}}</p>
 					</div>
-					<div class="col-md-3 col-xs-6">
+					<div class="col-md-3 col-xs-12">
 						<strong>Patient ID</strong> <br>
 						<p class="text-muted">{{patientData._id}}</p>
 					</div>
@@ -107,7 +107,7 @@
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-12">Any Other Info</label>
+													<label class="col-md-12">Periodontium</label>
 													<div class="col-md-12">
 														<input type="text" class="form-control"
 															placeholder="Other Info" ng-model="treatment.otherinfo">
@@ -512,9 +512,9 @@
 													</div>
 													<div class="col-md-6">
 														<div class="form-group mb0">
-															<label class="control-label col-md-3">Doctor Name:</label>
+															<label class="control-label col-md-3">Doctor:</label>
 															<div class="">
-																<p class="form-control-static" style="padding-top: 7px">{{treatment.doctorname}}</p>
+																<p class="form-control-static" style="padding-top: 7px; padding-left: 7px;">{{treatment.doctorname}}</p>
 															</div>
 														</div>
 													</div>
@@ -580,7 +580,7 @@
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-12">Any Other Info</label>
+													<label class="col-md-12">Periodontium</label>
 													<div class="col-md-12">
 														<input type="text" class="form-control"
 															placeholder="Other Info" ng-model="treatment.otherinfo">
@@ -1460,7 +1460,7 @@
 					</span>
 				</div>
 				<div class="form-group row">
-					<label class="col-md-6">Doctor Name</label>
+					<label class="col-md-6">Doctor</label>
 					<span class="col-md-6">
 						{{paymentData.data.doctorname}}
 					</span>
