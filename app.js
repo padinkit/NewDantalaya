@@ -21,7 +21,6 @@ var express = require('express')
   , AWS = require('aws-sdk');
 var ejs = require('ejs');
 var fs = require('fs');
-var favicon = require('serve-favicon')
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
