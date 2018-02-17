@@ -41,7 +41,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -1495,13 +1495,13 @@ app.post('/userviewtreatment', function(req, res){
 	 });
 });
 
- 
+
  app.post('/getParticularChargeSheet', function(req, res){
 	 model.chargeSheetSchema.findOne({"month": req.body.month, "year": req.body.year },function(err, details){
 		res.send(details._doc.data[req.body.id]);
 	 });
  });
- 
+
  app.post('/addToChargeSheet', function(req, res){
 	 model.chargeSheetSchema.findOne({"month": req.body.month, "year": req.body.year },function(err, details){
 		if(details){
