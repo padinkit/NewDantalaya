@@ -242,43 +242,50 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 
 app.run(function($rootScope, $http, $state,$location) {
 	$rootScope.fetchedUserData = false;
-	var credentials = JSON.parse( localStorage.getItem("DantalayaUser"));
-	$http.post('/auth/login', credentials ).then(function(data){
-		$rootScope.userLoggedin = true;
-		$rootScope.userId = data.data.username;
-		$rootScope.userType= data.data.profile;
-		if($rootScope.userType == 'admin'){
-		  $state.go('admindash');
+	var token = localStorage.getItem("DantalayaUser");
+	if(token){
+		$http.post('/auth/loginToken', {token : token} ).then(function(logindata){
+				$http.post('/auth/login', logindata.data ).then(function(data){
+					$rootScope.userLoggedin = true;
+					$rootScope.userId = data.data.username;
+					$rootScope.userType= data.data.profile;
+					if($rootScope.userType == 'admin'){
+					  $state.go('admindash');
+					}
+					else if($rootScope.userType == 'patient'){
+					 $state.go('dashboard');
+					}
+					else if($rootScope.userType == 'doctor'){
+					 $state.go('doctor.home');
+					}
+					else if($rootScope.userType == 'technician'){
+					 $state.go('technicianprofile');
+					}
+					else if($rootScope.userType == 'surgeon'){
+					  $state.go('surgeonprofile');
+					}
+			
+					$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
+						$rootScope.userData = data.data;
+						$rootScope.fetchedUserData = true;
+			
+						if($rootScope.userType == 'doctor'){
+							if(!$rootScope.userData.data.bank){
+								$rootScope.nobank = true;
+							}
+						}
+						$rootScope.$broadcast('fetchedUserData');
+					},function(err){
+						console.log(err);
+					});
+				},function(err){
+					console.log('login error');
+				});
+			},function(err){
+				console.log('login error');
+				$state.go('home');
+			});
 		}
-		else if($rootScope.userType == 'patient'){
-		 $state.go('dashboard');
-		}
-		else if($rootScope.userType == 'doctor'){
-		 $state.go('doctor.home');
-		}
-		else if($rootScope.userType == 'technician'){
-		 $state.go('technicianprofile');
-		}
-		else if($rootScope.userType == 'surgeon'){
-		  $state.go('surgeonprofile');
-		}
-
-		$http.post('/getuserDetails', {user : $rootScope.userId } ).then(function(data){
-			$rootScope.userData = data.data;
-			$rootScope.fetchedUserData = true;
-
-			if($rootScope.userType == 'doctor'){
-				if(!$rootScope.userData.data.bank){
-					$rootScope.nobank = true;
-				}
-			}
-			$rootScope.$broadcast('fetchedUserData');
-		},function(err){
-			console.log(err);
-		});
-	},function(err){
-		console.log('login error');
-	});
 	  $('.nav a').on('click', function(){
             $(".navbar-toggle").trigger( "click" );
     });
@@ -354,6 +361,7 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 			$rootScope.userLoggedin = true;
 			$rootScope.userId = data.data.username;
 			$rootScope.userType= data.data.profile;
+			localStorage.setItem("DantalayaUser",data.data.token);
 			if($rootScope.userType == 'admin'){
 			  $state.go('admindash');
 			}
@@ -384,7 +392,7 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 				console.log(err);
 			});
 
-			localStorage.setItem("DantalayaUser",JSON.stringify($scope.user));
+			
 		},function(err){
 			toastr.error('Username or Password Incorrect Or Account Not Yet Activated');
 		});
@@ -1027,6 +1035,7 @@ app.controller('menubarController',function($scope, $http, $rootScope, $state , 
 			$rootScope.userLoggedin = false;
 			$rootScope.userId = undefined;
 			$rootScope.userData = undefined;
+			localStorage.removeItem("DantalayaUser");
 		},function(err){
 			console.log(err);
 		});
@@ -1320,137 +1329,145 @@ app.controller("addNewPatientController",function ($scope,$http,$rootScope,$stat
 });
 
 app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$state) {
-		$scope.todayEvents = [];
-		$scope.refreshCalendar = function(){
-			setTimeout(function(){
-				$('#calendar').fullCalendar( 'refetchEvents' );
-			}, 300);
-
-		}
-		$http.post('/viewAllPatients',{doctorId: $rootScope.userId}).then(function(data){
-			$scope.allPatients = data.data;
-		 });
-
-		$http.post('/viewEvents',{doctorId: $rootScope.userId}).then(function(data){
-			if(data.data.data){
-				$scope.allEventData = data.data.data.events;
-
-					var todayDate = new Date();
-					$scope.allEventData.map(function(obj){
-						var selectDate = new Date(obj.start);
-						if((todayDate.getDate()+todayDate.getMonth()+todayDate.getFullYear()) ==  (selectDate.getDate()+selectDate.getMonth()+selectDate.getFullYear())){
-							$scope.todayEvents.push(obj);
-							$('#calendar').fullCalendar('renderEvent', obj , true);
-						}
-					});
-
-			}
-
-
-			 $('#calendar').fullCalendar('today');
-
-		 });
-
-		$('#calendar').fullCalendar({
-			defaultView: 'agendaDay',
-			selectable: true,
-			selectHelper: true,
-			eventLimit: true,
-			timezone: false,
-			events: $scope.allEventData,
-			height: 700,
-			eventClick: function(calEvent, jsEvent, view) {
-			    if(calEvent.className.includes('openAppointment')){
-			    	$scope.showAction = true;
-			    	$('#confirmDialog').modal('show');
-			     	$scope.currentEvent = calEvent;
-			     	//$scope.currentEvent.start =  $scope.currentEvent.start._i;
-			     	//$scope.currentEvent.end =  $scope.currentEvent.end._i;
-			     	delete $scope.currentEvent.source;
-			     	delete $scope.currentEvent._allDay;
-			     	delete $scope.currentEvent._start;
-			     	delete $scope.currentEvent._end;
-			    	$scope.$apply();
-
-			    }
-			    else{
-			    	$scope.showAction = false;
-			    	$('#confirmDialog').modal('show');
-			     	$scope.currentEvent = calEvent;
-			     	//$scope.currentEvent.start =  $scope.currentEvent.start._i;
-			     	//$scope.currentEvent.end =  $scope.currentEvent.end._i;
-			     	delete $scope.currentEvent.source;
-			     	delete $scope.currentEvent._allDay;
-			     	delete $scope.currentEvent._start;
-			     	delete $scope.currentEvent._end;
-			    	$scope.$apply();
-
-			    }
-			}
+		
+		$scope.$on('fetchedUserData',function(){
+			runHome();
 		});
+		
+		function runHome(){
 
-
-		function updateEvent(status){
-			$http.post('/updateEvents',{doctorId: $rootScope.userId , data : $scope.newAllEventData, eventId : $scope.currentEvent.id, status: status, patientId : $scope.currentEvent.patientId }).then(function(data){
-				$('#calendar').fullCalendar('removeEvents');
-				$scope.newAllEventData.map(function(obj){
-					$('#calendar').fullCalendar('renderEvent', obj , true);
-				});
-				var message;
-				if(status == 'accept'){
-					message = 'Dantalaya - Your Appointment with Dr.' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
-				}
-				else{
-					message = 'Dantalaya - Your Appointment with Dr.' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
-				}
-
-				$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Dantalaya Appointment'}).then(function(data){
-
-				});
-
-				$http.post('/appointmentmail',{origin: "doctor" ,data : $scope.currentEvent , status: status}).then(function(data){
-
-				});
-
+			$scope.todayEvents = [];
+			$scope.refreshCalendar = function(){
+				setTimeout(function(){
+					$('#calendar').fullCalendar( 'refetchEvents' );
+				}, 300);
+	
+			}
+			$http.post('/viewAllPatients',{doctorId: $rootScope.userId}).then(function(data){
+				$scope.allPatients = data.data;
 			 });
-		}
-
-		$scope.changeAppointMentStatus = function(status){
-			$scope.newAllEventData = [];
-
-			var events = $('#calendar').fullCalendar('clientEvents');
-			events = events.map(function(obj, index ){
-
-				var attrs = {
-						className: obj.className,
-						end: obj.end._i,
-						start: obj.start._i,
-						doctorUser: obj.doctorUser,
-						doctorName: obj.doctorName,
-						patientId: obj.patientId,
-						patientName: obj.patientName,
-						title: obj.title,
-		                doctorMail: obj.doctorMail,
-		                patientMail: obj.patientMail,
-		                patientPhone: obj.patientPhone,
-		                doctorPhone: obj.doctorPhone,
-		                id: obj.id
-
+	
+			$http.post('/viewEvents',{doctorId: $rootScope.userId}).then(function(data){
+				if(data.data.data){
+					$scope.allEventData = data.data.data.events;
+	
+						var todayDate = new Date();
+						$scope.allEventData.map(function(obj){
+							var selectDate = new Date(obj.start);
+							if((todayDate.getDate()+todayDate.getMonth()+todayDate.getFullYear()) ==  (selectDate.getDate()+selectDate.getMonth()+selectDate.getFullYear())){
+								$scope.todayEvents.push(obj);
+								$('#calendar').fullCalendar('renderEvent', obj , true);
+							}
+						});
+	
 				}
-
-				if(obj._id === $scope.currentEvent._id){
-					if(status == 'accept'){
-						attrs.className = ['confirmAppointment'];
-						$scope.newAllEventData.push(attrs);
-					}
-				}
-				else{
-				  $scope.newAllEventData.push(attrs);
+	
+	
+				 $('#calendar').fullCalendar('today');
+	
+			 });
+	
+			$('#calendar').fullCalendar({
+				defaultView: 'agendaDay',
+				selectable: true,
+				selectHelper: true,
+				eventLimit: true,
+				timezone: false,
+				events: $scope.allEventData,
+				height: 700,
+				eventClick: function(calEvent, jsEvent, view) {
+				    if(calEvent.className.includes('openAppointment')){
+				    	$scope.showAction = true;
+				    	$('#confirmDialog').modal('show');
+				     	$scope.currentEvent = calEvent;
+				     	//$scope.currentEvent.start =  $scope.currentEvent.start._i;
+				     	//$scope.currentEvent.end =  $scope.currentEvent.end._i;
+				     	delete $scope.currentEvent.source;
+				     	delete $scope.currentEvent._allDay;
+				     	delete $scope.currentEvent._start;
+				     	delete $scope.currentEvent._end;
+				    	$scope.$apply();
+	
+				    }
+				    else{
+				    	$scope.showAction = false;
+				    	$('#confirmDialog').modal('show');
+				     	$scope.currentEvent = calEvent;
+				     	//$scope.currentEvent.start =  $scope.currentEvent.start._i;
+				     	//$scope.currentEvent.end =  $scope.currentEvent.end._i;
+				     	delete $scope.currentEvent.source;
+				     	delete $scope.currentEvent._allDay;
+				     	delete $scope.currentEvent._start;
+				     	delete $scope.currentEvent._end;
+				    	$scope.$apply();
+	
+				    }
 				}
 			});
-			updateEvent(status);
+	
+	
+			function updateEvent(status){
+				$http.post('/updateEvents',{doctorId: $rootScope.userId , data : $scope.newAllEventData, eventId : $scope.currentEvent.id, status: status, patientId : $scope.currentEvent.patientId }).then(function(data){
+					$('#calendar').fullCalendar('removeEvents');
+					$scope.newAllEventData.map(function(obj){
+						$('#calendar').fullCalendar('renderEvent', obj , true);
+					});
+					var message;
+					if(status == 'accept'){
+						message = 'Dantalaya - Your Appointment with Dr.' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been confirmed";
+					}
+					else{
+						message = 'Dantalaya - Your Appointment with Dr.' + $scope.currentEvent.doctorName + ' for ' + $scope.currentEvent.title + " at " + moment($scope.currentEvent.start).format('DD-MMM-YYYY hh:mm A') + " has been declined";
+					}
+	
+					$http.post('/sendSms', {message: message, phone: '+91' + $scope.currentEvent.patientPhone , subject:'Dantalaya Appointment'}).then(function(data){
+	
+					});
+	
+					$http.post('/appointmentmail',{origin: "doctor" ,data : $scope.currentEvent , status: status}).then(function(data){
+	
+					});
+	
+				 });
+			}
+	
+			$scope.changeAppointMentStatus = function(status){
+				$scope.newAllEventData = [];
+	
+				var events = $('#calendar').fullCalendar('clientEvents');
+				events = events.map(function(obj, index ){
+	
+					var attrs = {
+							className: obj.className,
+							end: obj.end._i,
+							start: obj.start._i,
+							doctorUser: obj.doctorUser,
+							doctorName: obj.doctorName,
+							patientId: obj.patientId,
+							patientName: obj.patientName,
+							title: obj.title,
+			                doctorMail: obj.doctorMail,
+			                patientMail: obj.patientMail,
+			                patientPhone: obj.patientPhone,
+			                doctorPhone: obj.doctorPhone,
+			                id: obj.id
+	
+					}
+	
+					if(obj._id === $scope.currentEvent._id){
+						if(status == 'accept'){
+							attrs.className = ['confirmAppointment'];
+							$scope.newAllEventData.push(attrs);
+						}
+					}
+					else{
+					  $scope.newAllEventData.push(attrs);
+					}
+				});
+				updateEvent(status);
+			}
 		}
-
+		 runHome();
 });
 
 
@@ -1480,7 +1497,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 			console.log(obj);
 		});*/
 		if($scope.pendingAmount.amountLeft < $('#payAmount').val()){
-			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
+			toastr.warning("Amount to be Paid exceeds the total cost of the Treatment. Kindly Re-check the amount");
 			return;
 		}
 
@@ -2268,7 +2285,7 @@ function formatPrescriptionData (obj){
 			return;
 		}
 		if($scope.pendingAmountValue < obj[obj.length-1].amountpaidbypatient){
-			toastr.warning("Amount to be Paid excceds the total cost of the Treatment. Kindly Re-check the amount");
+			toastr.warning("Amount to be Paid exceeds the total cost of the Treatment. Kindly Re-check the amount");
 			return;
 		}
 		if(!$scope.treatmentData){

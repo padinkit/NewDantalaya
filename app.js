@@ -22,6 +22,8 @@ var express = require('express')
 var ejs = require('ejs');
 var fs = require('fs');
 
+var userTokens = {};
+
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -206,7 +208,28 @@ function sendmail(req ,user,  key, email, profile){
 	});
 }
 app.post('/auth/login', passport.authenticate('local'),function(req, res){
-    res.json(req.user);
+	var userData = req.user._doc;
+	userData.token = Math.random().toString(36).slice(2);
+	if (userData.token in userTokens){
+		userData.token = Math.random().toString(36).slice(2);
+	}
+	userTokens[userData.token] = {username: req.user.username, password: req.user.password};
+    res.json(userData);
+});
+
+
+app.post('/auth/loginToken',function(req, res){
+	if(req.body.token){
+		if(userTokens[req.body.token]){
+			res.send(userTokens[req.body.token]);
+		}
+		else{
+			res.status(400).send('error');
+		}
+	}
+	else{
+		res.status(400).send('error');
+	}
 });
 
 
