@@ -1518,13 +1518,13 @@ app.post('/userviewtreatment', function(req, res){
 	 });
 });
 
- 
+
  app.post('/getParticularChargeSheet', function(req, res){
 	 model.chargeSheetSchema.findOne({"month": req.body.month, "year": req.body.year },function(err, details){
 		res.send(details._doc.data[req.body.id]);
 	 });
  });
- 
+
  app.post('/addToChargeSheet', function(req, res){
 	 model.chargeSheetSchema.findOne({"month": req.body.month, "year": req.body.year },function(err, details){
 		if(details){
