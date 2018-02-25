@@ -21,7 +21,6 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 		controller: function(){
 			setTimeout(function(){
 				$(document).ready(function() {
-
 			        $("#owl-demo").owlCarousel({
 			            slideSpeed: 4000,
 			            paginationSpeed: 400,
@@ -243,6 +242,7 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 app.run(function($rootScope, $http, $state,$location) {
 	$rootScope.fetchedUserData = false;
 	var token = localStorage.getItem("DantalayaUser");
+	$rootScope.token = token;
 	if(token){
 		$http.post('/auth/loginToken', {token : token} ).then(function(logindata){
 				$http.post('/auth/login', logindata.data ).then(function(data){
@@ -362,6 +362,7 @@ app.controller('loginController',function($scope, $http, $state, $rootScope){
 			$rootScope.userId = data.data.username;
 			$rootScope.userType= data.data.profile;
 			localStorage.setItem("DantalayaUser",data.data.token);
+			$rootScope.token = data.data.token;
 			if($rootScope.userType == 'admin'){
 			  $state.go('admindash');
 			}
@@ -1036,6 +1037,7 @@ app.controller('menubarController',function($scope, $http, $rootScope, $state , 
 			$rootScope.userId = undefined;
 			$rootScope.userData = undefined;
 			localStorage.removeItem("DantalayaUser");
+			$rootScope.token = undefined;
 		},function(err){
 			console.log(err);
 		});
