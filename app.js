@@ -630,8 +630,9 @@ if(from == 'Doctor'){
   };
 }
 else{
+  text = "Hi Dentist, you got an appointment. Kindly refer below mentioned details :- ";
+
   var mailOptions = {
-    text = "Hi Dentist, you got an appointment. Kindly refer below mentioned details :- ";
       Source: 'noreply@dantalaya.com', // sender address
       Destination: {ToAddresses :[email]}, // list of receivers
         Message :{
