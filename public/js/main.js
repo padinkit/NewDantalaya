@@ -286,6 +286,13 @@ app.run(function($rootScope, $http, $state,$location) {
 				$state.go('home');
 			});
 		}
+	
+	
+		$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+			setTimeout(function(){ 
+					document.body.scrollTop = document.documentElement.scrollTop = 0;
+			 }, 300);
+		});
 	  $('.nav a').on('click', function(){
             $(".navbar-toggle").trigger( "click" );
     });
@@ -661,15 +668,15 @@ app.controller('chargeSheetController',function($scope, $http, $state, $rootScop
 
 	    },
 	    columnDefs: [
-		  { field: 'month', displayName: 'Month' },
-	      { field: 'year', displayName: 'Year' },
-	      { field: 'totalamount', displayName: 'Total Revenue Earned' },
-	      { field: 'serviceAmount', displayName: 'Billed Amount',
+		  { field: 'month', displayName: 'Month' , width:160},
+	      { field: 'year', displayName: 'Year' , width:160},
+	      { field: 'totalamount', displayName: 'Total Revenue Earned' , width:260},
+	      { field: 'serviceAmount', displayName: 'Billed Amount', minWidth:260, 
 	    	  cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.serviceAmount}}  <a class="grid-payonline" href="javascript:void(0)" ng-if="!row.entity.paidServiceAmount" ng-click=" grid.appScope.payOnline(row.entity)">Pay Online</a></div>'
 
 	      },
-	      { field: 'paidServiceAmount', displayName: 'Bill Payment', cellFilter:'trueFalseParser' },
-	      { field: 'viewStatement', displayName: 'View Statement',
+	      { field: 'paidServiceAmount', displayName: 'Bill Payment', cellFilter:'trueFalseParser' , width:160},
+	      { field: 'viewStatement', displayName: 'View Statement' , width:160 , 
 	    	  cellTemplate: '<div class="ui-grid-cell-contents"><a class="" href="javascript:void(0)" ng-click=" grid.appScope.viewStatement(row.entity)">View Statement</a></div>'
 
 	      }

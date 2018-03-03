@@ -1,19 +1,31 @@
 var mongoose = require('mongoose');
 var config = require('./config');
+var bcrypt   = require('bcrypt-nodejs');
+
 mongoose.connect(config.host,function(){
 		console.log('mongodb connected');
 });
 
 	var authSchema = new mongoose.Schema({
-	    username: String,
-	    password: String,
-	    profile: String,
-	    activated: Boolean,
-	    adminactivated : Boolean,
-	    billnotpaid: Boolean,
-	    key : String,
-	    email : String
-});
+		    username: String,
+		    password: String,
+		    profile: String,
+		    activated: Boolean,
+		    adminactivated : Boolean,
+		    billnotpaid: Boolean,
+		    key : String,
+		    email : String
+	});
+	
+	// generating a hash
+	authSchema.methods.generateHash = function(password) {
+	    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+	};
+
+	// checking if password is valid
+	authSchema.methods.validPassword = function(password) {
+	    return bcrypt.compareSync(password, this.local.password);
+	};
 
 	var userSchema = new mongoose.Schema({
 		data: mongoose.Schema.Types.Mixed
