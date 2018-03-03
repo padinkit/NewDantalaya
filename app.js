@@ -607,7 +607,6 @@ function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 var time = starttime.toString();
 console.log(email);
 if(from == 'Doctor'){
-  text = "Hi Dentist, you got an appointment. Kindly refer below mentioned details :- ";
   var mailOptions = {
       Source: 'noreply@dantalaya.com', // sender address
       Destination: {ToAddresses :[email]}, // list of receivers
@@ -632,6 +631,7 @@ if(from == 'Doctor'){
 }
 else{
   var mailOptions = {
+    text = "Hi Dentist, you got an appointment. Kindly refer below mentioned details :- ";
       Source: 'noreply@dantalaya.com', // sender address
       Destination: {ToAddresses :[email]}, // list of receivers
         Message :{
