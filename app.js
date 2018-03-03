@@ -186,7 +186,7 @@ function sendmail(req ,user,  key, email, profile){
         Source: 'noreply@dantalaya.com', // sender address
         Destination: {ToAddresses :[email]}, // list of receivers
         Message :{
-          Subject: {Data: 'Dantalaya Acccunt Activation Link'}, // Subject line
+          Subject: {Data: 'Dantalaya Account Activation Link'}, // Subject line
           Body: {
               Html: {
                 Data :  "<html>" +
@@ -605,6 +605,7 @@ function sendPasswordmail(req, user, pass, email){
 
 function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 var time = starttime.toString();
+console.log(email);
 if(from == 'Doctor'){
   var mailOptions = {
       Source: 'noreply@dantalaya.com', // sender address
@@ -629,6 +630,8 @@ if(from == 'Doctor'){
   };
 }
 else{
+  text = "Hi Dentist, you got an appointment. Kindly refer below mentioned details :- ";
+
   var mailOptions = {
       Source: 'noreply@dantalaya.com', // sender address
       Destination: {ToAddresses :[email]}, // list of receivers
@@ -643,7 +646,7 @@ else{
                     "<p>Title : <b>"+ title +"</b></p>" +
                     "<p>Date : <b>"+ starttime.slice(0,11) +"</b></p>" +
                     "<p>Time : <b>"+ time.slice(12) +"</b></p>" +
-                    "<p>To confirm the appointment click  below Link  and login to your account: <a href='www.dantalaya.com'>www.dantalaya.com</a></p>"+
+                    "<p>To confirm/accept the appointment click  below Link  and login to your account: <a href='www.dantalaya.com'>www.dantalaya.com</a></p>"+
                     "</div>"+
                     "</html>" // html body
             }
@@ -687,6 +690,8 @@ app.post('/appointmentmail',function(req,res){
 		 var name = req.body.data.doctorName;
 		 var mail = req.body.data.patientMail;
 		 var from = "Doctor";
+     console.log("Patient Mail: "+mail);
+     console.log("DoctorName: "+ name);
 		 if(req.body.status == 'accept'){
 			 var text = "Thanks for scheduling an appointment.Your appointment has been Confirmed by doctor. Request you to be present 15 minutes before the scheduled appointment time.";
 			  }
