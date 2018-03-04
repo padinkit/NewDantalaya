@@ -630,7 +630,7 @@ if(from == 'Doctor'){
   };
 }
 else{
-  text = "You have an appointment! Details are mentined below : ";
+  text = "You have an appointment! Details are mentioned below : ";
 
   var mailOptions = {
       Source: 'noreply@dantalaya.com', // sender address
