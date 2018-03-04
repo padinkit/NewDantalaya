@@ -1343,6 +1343,10 @@ app.controller("viewAllPatientsController",function ($scope,$http,$rootScope,$st
 			runHome();
 		});
 		
+		$scope.formatDate = function(data) {
+			return new Date(data);
+		}
+		
 		function runHome(){
 
 			$scope.todayEvents = [];
