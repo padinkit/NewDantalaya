@@ -291,7 +291,7 @@ app.run(function($rootScope, $http, $state,$location) {
 		$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
 			setTimeout(function(){ 
 					document.body.scrollTop = document.documentElement.scrollTop = 0;
-			 }, 300);
+			 }, 600);
 		});
 	  $('.nav a').on('click', function(){
             $(".navbar-toggle").trigger( "click" );
