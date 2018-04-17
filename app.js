@@ -43,7 +43,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -773,7 +773,7 @@ app.get('/privacy', function (req, res) {
 	});
 });
 app.get('/t&c', function (req, res) {
-	var filePath = "/pdf/t&c.pdf";
+	var filePath = "/pdf/tc.pdf";
 
 	fs.readFile(__dirname + filePath , function (err,data){
 		res.contentType("application/pdf");
