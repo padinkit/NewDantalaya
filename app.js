@@ -46,6 +46,17 @@ var transporter = nodemailer.createTransport({
 
 var app = express();
 
+app.enable('trust proxy');
+app.use (function (req, res, next) {
+    if (req.secure) {
+            // request was via https, so do no special handling
+            next();
+    } else {
+            // request was via http, so redirect to https
+            res.redirect('https://' + req.headers.host + req.url);
+            console.log('redirect to https');
+    }
+});
 
 
 // all environments
@@ -68,6 +79,7 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
 
 passport.use( new LocalStrategy(
   function(username, password, done) {
@@ -1956,6 +1968,9 @@ app.post('/contactmailsend',function(req,res){
 
  });
 
+ 
+ 
+ 
  http.createServer(app).listen(80, function(){
 	  console.log('Express server listening on port 80 ');
 });
