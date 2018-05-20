@@ -6,7 +6,8 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
-  , https = require('http')
+  , http = require('http')
+  , https = require('https')
   , request= require('request')
   , path = require('path')
   , model = require('./model')
@@ -22,6 +23,11 @@ var express = require('express')
 var ejs = require('ejs');
 var fs = require('fs');
 
+var options = {
+	    key: fs.readFileSync('./ssl/private.pem'),
+	    cert: fs.readFileSync('./ssl/certificate.crt'),
+	    ca: fs.readFileSync('./ssl/ca_bundle.crt')
+	};
 var userTokens = {};
 
 var transporter = nodemailer.createTransport({
@@ -43,7 +49,7 @@ var app = express();
 
 
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 443);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -1951,6 +1957,6 @@ app.post('/contactmailsend',function(req,res){
  });
 
 
-https.createServer(app).listen(app.get('port'), function(){
+https.createServer(options, app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
