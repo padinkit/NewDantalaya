@@ -1802,7 +1802,7 @@ app.controller("PatientTreatmentDetailsController",function ($scope,$http,$rootS
 				];
 
 		obj.map(function(each, index){
-			bodyText.push([index+1, each.prescription, each.schedule]);
+			bodyText.push([index+1, each.prescription ? each.prescription : "", each.schedule ?  each.schedule : ""]);
 		});
 
 		return {
@@ -2136,7 +2136,7 @@ function formatPrescriptionData (obj){
 				];
 
 		obj.map(function(each, index){
-			bodyText.push([index+1, each.prescription, each.schedule]);
+			bodyText.push([index+1, each.prescription ? each.prescription : "", each.schedule ?  each.schedule : ""]);
 		});
 
 		return {
