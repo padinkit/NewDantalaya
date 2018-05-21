@@ -50,8 +50,9 @@ app.enable('trust proxy');
 app.use (function (req, res, next) {
 	var host = req.get('host');
 	var port = (host).split(':')[1];
-		
+	console.log('port',port);
 	if(parseInt(port) == 3010){
+		console.log('inside');
 		next();	
 	}
 	else{
