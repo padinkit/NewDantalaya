@@ -48,13 +48,21 @@ var app = express();
 
 app.enable('trust proxy');
 app.use (function (req, res, next) {
+	var host = req.get('host');
+	var port = (host).split(':')[1];
+		
+	if(parseInt(port) == 3010){
+		next();	
+		return;
+	}
     if (req.secure) {
             // request was via https, so do no special handling
             next();
     } else {
             // request was via http, so redirect to https
             res.redirect('https://' + req.headers.host + req.url);
-            console.log('redirect to https');
+            console.log('redirect');
+            
     }
 });
 
@@ -1973,6 +1981,10 @@ app.post('/contactmailsend',function(req,res){
  
  http.createServer(app).listen(80, function(){
 	  console.log('Express server listening on port 80 ');
+});
+ 
+ http.createServer(app).listen(3010, function(){
+	  console.log('Express server listening on port 3010 ');
 });
 
 https.createServer(options, app).listen(app.get('port'), function(){
