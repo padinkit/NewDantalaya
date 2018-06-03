@@ -236,7 +236,11 @@ app.config(['$stateProvider','$urlRouterProvider',function($stateProvider,$urlRo
 		controller : "patientAppointmenttController"
 	});
 
-	toastr.options.positionClass = "toast-top-center";
+	toastr.options= {
+			"positionClass" : "toast-top-center",
+			"timeOut": "12000",
+			"closeButton": true
+	};
 }]);
 
 app.run(function($rootScope, $http, $state,$location) {
