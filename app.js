@@ -51,7 +51,7 @@ app.use (function (req, res, next) {
 	var host = req.get('host');
 	var port = (host).split(':')[1];
 	if(parseInt(port) == 3010){
-		next();	
+		next();
 	}
 	else{
 		 if (req.secure) {
@@ -61,10 +61,10 @@ app.use (function (req, res, next) {
 	            // request was via http, so redirect to https
 	            res.redirect('https://' + req.headers.host + req.url);
 	            console.log('redirect');
-	            
+
 	    }
 	}
-   
+
 });
 
 
@@ -1977,13 +1977,13 @@ app.post('/contactmailsend',function(req,res){
 
  });
 
- 
- 
- 
+
+
+
  http.createServer(app).listen(80, function(){
 	  console.log('Express server listening on port 80 ');
 });
- 
+
  http.createServer(app).listen(3010, function(){
 	  console.log('Express server listening on port 3010 ');
 });

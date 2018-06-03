@@ -393,7 +393,7 @@
 																<div ng-if="treatment.patientacceptedtreatment">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<label class="col-md-10">({{$index + 1}}) Treatment Done</label><span>Date: {{eachTreatment.date | date}}</span>
 																		<div class="col-md-12">
 																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
@@ -531,12 +531,12 @@
 												</div> -->
 												<hr>
 												<form class="form-horizontal">
-												<div class="form-group">
+												<!-- <div class="form-group">
 													<label class="col-md-12">New Comments</label>
 													<div class="col-md-12">
 														<textarea class="form-control" rows="4" ng-model="treatment.newcomments"></textarea>
 													</div>
-												</div>
+												</div> -->
 												<div class="form-group">
 													<label class="col-md-12" for="currentChief">Chief Complaint<span style="color: red"> *</span> </label>
 													<div class="col-md-12">
@@ -871,7 +871,7 @@
 															<div ng-if="treatment.patientacceptedtreatment">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-10">({{$index + 1}}) Treatment Details</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<label class="col-md-10">({{$index + 1}}) Treatment Done</label><span>Date: {{eachTreatment.date | date}}</span>
 																		<div class="col-md-12">
 																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis"></textarea>
@@ -1026,12 +1026,12 @@
 												</div>
 
 												<div class="treatment-modal">
-													<div class="form-group">
+													<!-- <div class="form-group">
 														<label class="col-md-12">New Comments</label>
 														<div class="col-md-12">
 															<textarea class="form-control" rows="4" ng-model="treatment.newcomments" disabled></textarea>
 														</div>
-													</div>
+													</div> -->
 													<!-- <div class="form-group">
 														<label class="col-md-12" for="tdate">Treatment
 															Update Date </label>
@@ -1316,7 +1316,7 @@
 															<div ng-if="treatment.patientacceptedtreatment">
 																 <div ng-repeat="eachTreatment in treatment.treatmentanalysislist" class="each-treatment" ng-if="!$last">
 																	<div class="form-group" ng-class="{'mb0':!$last}">
-																		<label class="col-md-10">({{$index + 1}}) Treatment Analysis</label><span>Date: {{eachTreatment.date | date}}</span>
+																		<label class="col-md-10">({{$index + 1}}) Treatment Done</label><span>Date: {{eachTreatment.date | date}}</span>
 																		<div class="col-md-12">
 																			 <p ng-if="!$last">{{eachTreatment.treatmentanalysis}}</p>
 																			 <textarea ng-if="$last" class="form-control" rows="4" ng-model="eachTreatment.treatmentanalysis" disabled></textarea>
