@@ -541,6 +541,9 @@ app.controller('dashboardController',function($scope, $http, $state, $rootScope)
 							if($('#calendar').fullCalendar( 'getView' ).name == 'month'){
 					        	return false;
 					        }
+							if(moment(start) < moment()){
+								return false;
+							}
 
 							var eventData;
 							eventData = {
