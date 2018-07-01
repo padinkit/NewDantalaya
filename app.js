@@ -76,7 +76,8 @@ app.use (function (req, res, next) {
 
 
 // all environments
-app.set('port', process.env.PORT || 443);
+// app.set('port', process.env.PORT || 443);
+app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -2006,11 +2007,11 @@ app.post('/contactmailsend',function(req,res){
  });
 
 
- http.createServer(app).listen(80, function(){
-	  console.log('Express server listening on port 80 ');
-});
+//  http.createServer(app).listen(80, function(){
+// 	  console.log('Express server listening on port 80 ');
+// });
 
- http.createServer(app).listen(3010, function(){
+ http.createServer(app).listen(4000, function(){
 	  console.log('Express server listening on port 3010 ');
 });
 

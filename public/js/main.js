@@ -1013,7 +1013,7 @@ app.controller("patientRegisterController", function(
   };
 
   $scope.textChanged = function() {
-    if ($scope.signup.nri) {
+    if (!$scope.signup.nri) {
       if ($scope.signup.pin.length === 6) {
         $scope.loader = true;
         $http.get("/pincode/" + $scope.signup.pin).then(function(response) {
@@ -1235,6 +1235,35 @@ app.controller("technicianRegisterController", function(
   $rootScope,
   $state
 ) {
+  $scope.genderValues = ["Male", "Female", "Other"];
+
+  $scope.toTitleCase = function(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  };
+
+  $scope.textChanged = function() {
+      if ($scope.signup.pin.length === 6) {
+        $scope.loader = true;
+        $http.get("/pincode/" + $scope.signup.pin).then(function(response) {
+          if (response.data.length > 0) {
+            $scope.signup.city = response.data[0].districtname;
+            var stateName = response.data[0].statename.toLowerCase();
+            $scope.signup.state = $scope.toTitleCase(stateName);
+            $scope.loader = false;
+          } else {
+            alert("Invalid Zip Code");
+            $scope.signup.pin = null;
+            $scope.signup.state = null;
+            $scope.signup.city = null;
+            $scope.loader = false;
+          }
+        });
+      }
+  };
+
+
   $scope.submit = function() {
     $scope.signupFinal = {};
     if (validationService.technicianValidation()) {
@@ -1286,6 +1315,33 @@ app.controller("surgeonRegisterController", function(
   $rootScope,
   $state
 ) {
+  $scope.genderValues = ["Male", "Female", "Other"];
+  $scope.toTitleCase = function(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  };
+
+  $scope.textChanged = function() {
+      if ($scope.signup.pin.length === 6) {
+        $scope.loader = true;
+        $http.get("/pincode/" + $scope.signup.pin).then(function(response) {
+          if (response.data.length > 0) {
+            $scope.signup.city = response.data[0].districtname;
+            var stateName = response.data[0].statename.toLowerCase();
+            $scope.signup.state = $scope.toTitleCase(stateName);
+            $scope.loader = false;
+          } else {
+            alert("Invalid Zip Code");
+            $scope.signup.pin = null;
+            $scope.signup.state = null;
+            $scope.signup.city = null;
+            $scope.loader = false;
+          }
+        });
+      }
+  };
+
   $scope.submit = function() {
     $scope.signupFinal = {};
     if (validationService.surgeonValidation()) {

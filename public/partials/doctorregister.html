@@ -6,6 +6,9 @@
 
 <p class="dserhead">Doctor Registration Form</p>
 <div class="borderAlign">
+  <div class="{{loader == true ? 'form-loader' : '' }} preloader1">
+    <div class="cssload-speeding-wheel"></div>
+  </div>
   <form novalidate name="contactForm">
     <div layout-gt-sm="row">
       <md-input-container class="md-block" flex-gt-sm>
@@ -81,7 +84,7 @@ form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="
         <input ng-model="signup.city" disabled ng-required=true>
       </md-input-container>
       <md-input-container class="md-block" flex-gt-sm>
-        <label>Residential State <span style="color: red;">*</span> <span style="color: red;">*</span></label>
+        <label>Residential State <span style="color: red;">*</span></label>
         <input ng-model="signup.state" disabled ng-required=true>
       </md-input-container>
     </div>
@@ -175,17 +178,28 @@ form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="
       </md-input-container>
     </div>
     <div class="row dsub">
+        <div class="col-md-12">
+            <div class="dgal">
+                <div class="col-md-6">
+                    <button type="reset" class="btn dbtn pull-right ddis">Reset</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn dbtn pull-left" ng-click="submit()" ng-disabled="contactForm.$invalid">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row dsub">
       <div class="col-md-12">
         <div class="dgal">
-          <div class="col-md-6">
-            <a href="#">
-              <div class="btn dbtn pull-right ddis">Reset</div>
-            </a>
+          <div class="col-md-4">
           </div>
           <div class="col-md-6">
-            <button type="submit" class="btn dbtn pull-left" ng-disabled="contactForm.$invalid" ng-click="submit()">Submit</button> </div>
+            <p ng-show="contactForm.$invalid">(<span style="color: red;">*</span> - submit will be disabled untill all mandatory details are filled)</p>
+          </div>
         </div>
       </div>
+
     </div>
   </form>
   <div id="signupModal" class="modal fade" role="dialog">
