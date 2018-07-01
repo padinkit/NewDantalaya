@@ -28,7 +28,7 @@ body {
 }
 
 html {
-  position: relative;
+  /* position: relative; */
   min-height: 100%;
   background: #fff
 }
@@ -18835,3 +18835,26 @@ a.fc-event:not([href]):not([tabindex]) {
     float: left
   }
 }
+
+
+
+.md-datepicker-button {
+    display: none !important;
+}
+
+.md-datepicker-input-container {
+    margin-left: 0 !important;
+}
+
+.borderAlign{
+  /* border: 1px solid black; */
+  margin: 0px 25px;
+  padding: 10px;
+}
+
+.content {display:none;}
+.preload { width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;}
