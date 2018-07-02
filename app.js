@@ -22,6 +22,12 @@ var express = require('express')
   , AWS = require('aws-sdk');
 var ejs = require('ejs');
 var fs = require('fs');
+var cors = require('cors');
+const csvFilePath='./pincode/pincode.csv';
+const csv=require('csvtojson');
+
+
+
 
 var options = {
 	    key: fs.readFileSync('./ssl/private.pem'),
@@ -45,6 +51,7 @@ var transporter = nodemailer.createTransport({
 
 
 var app = express();
+app.use(cors({origin: '*'}));
 
 app.enable('trust proxy');
 app.use (function (req, res, next) {
@@ -1978,6 +1985,25 @@ app.post('/contactmailsend',function(req,res){
  });
 
 
+ app.get('/pincode/:id', function (req, res) {
+   console.log("hello");
+   console.log(req.params.id);
+
+   csv()
+   .fromFile(csvFilePath)
+   .then((jsonObj)=>{
+
+       var result = jsonObj.filter(function( obj ) {
+       return obj.pincode == +req.params.id;
+
+   });
+   res.end( JSON.stringify(result));
+
+
+   });
+
+
+ });
 
 
  http.createServer(app).listen(80, function(){
