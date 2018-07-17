@@ -2212,10 +2212,19 @@ app.controller("PatientTreatmentDetailsController", function(
             .post("/viewPayments", { data: paymentIds })
             .then(function(dataa) {
               $scope.allPayments = dataa.data;
+              
+              var gridData = dataa.data.filter(function(obj){
+            	  if(obj.data.status === 'Completed'){
+            		  return obj;
+            	  }
+            	  else{
+            		  return false;
+            	  }
+              });
 
               $scope.gridOptionsPayments = {
                 enableFiltering: false,
-                data: dataa.data,
+                data: gridData,
                 enableRowSelection: true,
                 enableRowHeaderSelection: false,
                 multiSelect: false,
@@ -2272,10 +2281,19 @@ app.controller("PatientTreatmentDetailsController", function(
 
     $http.post("/viewPayments", { data: paymentIds }).then(function(dataa) {
       $scope.allPaymentsModal = dataa.data;
-
+      
+      var gridData = dataa.data.filter(function(obj){
+    	  if(obj.data.status === 'Completed'){
+    		  return obj;
+    	  }
+    	  else{
+    		  return false;
+    	  }
+      });
+      
       $scope.gridOptionsPaymentsModal = {
         enableFiltering: false,
-        data: dataa.data,
+        data: gridData,
         enableRowSelection: true,
         enableRowHeaderSelection: false,
         multiSelect: false,
@@ -2630,10 +2648,19 @@ app.controller("treatmentDetailsController", function(
                 .post("/viewPayments", { data: paymentIds })
                 .then(function(dataa) {
                   $scope.allPayments = dataa.data;
-
+                  
+                  var gridData = dataa.data.filter(function(obj){
+                	  if(obj.data.status === 'Completed'){
+                		  return obj;
+                	  }
+                	  else{
+                		  return false;
+                	  }
+                  });
+                  
                   $scope.gridOptionsPayments = {
                     enableFiltering: false,
-                    data: dataa.data,
+                    data: gridData,
                     enableRowSelection: true,
                     enableRowHeaderSelection: false,
                     multiSelect: false,
@@ -2692,10 +2719,19 @@ app.controller("treatmentDetailsController", function(
 
     $http.post("/viewPayments", { data: paymentIds }).then(function(dataa) {
       $scope.allPaymentsModal = dataa.data;
-
+      
+      var gridData = dataa.data.filter(function(obj){
+    	  if(obj.data.status === 'Completed'){
+    		  return obj;
+    	  }
+    	  else{
+    		  return false;
+    	  }
+      });
+      
       $scope.gridOptionsPaymentsModal = {
         enableFiltering: false,
-        data: dataa.data,
+        data: gridData,
         enableRowSelection: true,
         enableRowHeaderSelection: false,
         multiSelect: false,

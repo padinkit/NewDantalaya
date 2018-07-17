@@ -99,7 +99,7 @@
         </div>
 
         <div class="col-md-8">
-          <a href="#login" ng-if="!userLoggedin" ng-click="scrollTo('login')">
+          <a href="javascript:void(0)" ng-if="!userLoggedin">
             <div class="btn dbtn" id="loginbutton"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</div>
           </a>
           <a href="#/register" ng-if="!userLoggedin">
@@ -291,9 +291,14 @@
     $(document).ready(function() {
 
       $("#loginbutton").click(function(e) {
-        e.preventDefault();
-        $(location).attr('href', '/#/home');
-        $("#Username").focus();
+    	 location.href ="/#/home";
+    	setTimeout(function(){ 
+    		 e.preventDefault();
+    	        $('html, body').animate({
+    	            scrollTop: $("#Username").offset().top -70
+    	        }, 1000); 
+    	}, 200);
+       
       });
     });
   </script>
