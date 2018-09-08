@@ -42,7 +42,7 @@ config.doctormailText = 'Dear Doctor welcome to Dantalaya, the largest network o
 '6) Average Lab prices pan-India.  Lab prices have been listed on the website for common procedures carried out by the Dental labs. <br><br> '+
 '7)Transaction charges : Online payments  by patients will be made directly to Dantalaya. The same will be transferred to the Doctor\'s account within 3 working days after deducting 6% of the total amount. '+
 'In case of cash payment, the transaction charges will be deducted from the Doctor\'s account at the end of every cycle. <br><br> '+
-'For patients seeking finance, the payment will be made to Dantalaya. The same will be transferred to the Doctors account within 3 working days after deducting 12% of the total amount.'+
+'For patients seeking finance, the payment will be made to Dantalaya. The same will be transferred to the Doctors account within 3 working days after deducting 6% of the total amount.'+
 'The finance scheme is introduced to enable patients avail treatment immediately who would have otherwise postponed or ignored. In most cases the finance provided is interest free for the first year. A small percentage of the total cost will be deducted from the Doctors account rather than the patient\'s account to encourage more patients to avail timely Dental treatment. Doctors are requested to cooperate! <br><br> '+
 '8) Doctors can make payments to their respective labs to Dantalaya via online payment gateway or they can choose to pay cash. <br><br> '+
 '9) Invoice will be generated for every transaction which can be downloaded and printed. <br><br> '+
