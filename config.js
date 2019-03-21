@@ -14,10 +14,10 @@ config.instamojo = {
 };
 config.aws = {
 		region : 'us-west-2',
-		accessKeyId: 'AKIAIARDQVMU3VF7TIKA',
-		secretAccessKey: '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'
+		accessKeyId: 'AKIAIPE6J5EMWAHLQRBA',
+		secretAccessKey: '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'
 };
-config.partner_fee = 6;
+config.partner_fee = 0;
 
 config.doctorAddPatient = "Dear patrons, welcome to Dantalaya, the world's largest network of practicing Dental  surgeons and oral care providers."+
 "Dantalaya offers Dental treatment for you and your family at very affordable prices at standardized clinics in your neighborhood. You can now get interest free loans for any procedure and pay later in easy EMI's. "+

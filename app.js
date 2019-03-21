@@ -31,8 +31,8 @@ const csv=require('csvtojson');
 
 var options = {
 	    key: fs.readFileSync('./ssl/private.pem'),
-	    cert: fs.readFileSync('./ssl/certificate.crt'),
-	    ca: fs.readFileSync('./ssl/ca_bundle.crt')
+	    cert: fs.readFileSync('./ssl/7a8af0c0f9c4853.crt'),
+	    ca: fs.readFileSync('./ssl/gd_bundle-g2-g1.crt')
 	};
 var userTokens = {};
 
