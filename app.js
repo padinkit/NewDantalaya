@@ -175,12 +175,18 @@ function sendSms(msg, phn, sub){
 		    Subject: sub
 		};
 
+        console.log('params');
+        console.log(params);
+
+
 		sns.publish(params, function(err, data) {
+            console.log('inside sms publish');
 		    if (err) {
 		    	console.log(err, err.stack);
 		    	res.send(err);
 		    }// an error occurred
 		    else    {
+                console.log('sms success');
 		    	console.log(data);           // successful response
 		    }
 
@@ -1464,6 +1470,16 @@ app.post('/userviewtreatment', function(req, res){
 
  app.post('/addTreatment', function(req, res){
 	  var userData =  new model.user({data : req.body.data});
+      console.log('this is add treatment');
+      console.log(req.body.patient_mobile);
+      console.log('end of add treatment');
+      if (req.body.data.nextappointment == null || req.body.data.nextappointment == "" || req.body.data.nextappointment == undefined) {
+          console.log('this is null');
+      }else{
+          msgALL = "Your next appointment is booked on " + req.body.data.nextappointment
+          sendSms(msgALL,'+91'+req.body.patient_mobile, 'New Appointment' )
+          sendappointmentmail( 'test' , 'test' , moment().format('DD-MMM-YYYY hh:mm A'), moment().format('DD-MMM-YYYY hh:mm A'), 'connect2sriram@hotmail.com','text', 'test');
+      }
 
 		userData.save(function(err, doc){
 			var newId = (doc._id).toString();
