@@ -645,6 +645,7 @@ function sendPasswordmail(req, user, pass, email){
 
 function sendappointmentmail( title, name ,starttime, endtime, email,text,from){
 var time = starttime.toString();
+console.log('inside email module');
 console.log(email);
 if(from == 'Doctor'){
   var mailOptions = {
@@ -1476,9 +1477,12 @@ app.post('/userviewtreatment', function(req, res){
       if (req.body.data.nextappointment == null || req.body.data.nextappointment == "" || req.body.data.nextappointment == undefined) {
           console.log('this is null');
       }else{
-          msgALL = "Your next appointment is booked on " + req.body.data.nextappointment
-          sendSms(msgALL,'+91'+req.body.patient_mobile, 'New Appointment' )
-          sendappointmentmail( 'test' , 'test' , moment().format('DD-MMM-YYYY hh:mm A'), moment().format('DD-MMM-YYYY hh:mm A'), 'connect2sriram@hotmail.com','text', 'test');
+          msgALL = "Greeting from Dantalaya. Your next appointment with dentist is scheduled on " + req.body.data.nextappointment
+          console.log('msg data');
+          console.log(msgALL);
+          sendSms(msgALL,'+91'+req.body.patient_mobile, 'Next Appointment' )
+          // sendSms(msgALL,'+917200744553', 'New Appointment' )
+          // sendappointmentmail( 'test' , 'test' , moment().format('DD-MMM-YYYY hh:mm A'), moment().format('DD-MMM-YYYY hh:mm A'), 'connect2sriram@hotmail.com','text', 'test');
       }
 
 		userData.save(function(err, doc){

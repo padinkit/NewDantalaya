@@ -2084,6 +2084,7 @@ app.controller("PatientTreatmentDetailsController", function(
       .post("/editDetails", {
         id: $scope.treatmentData._id,
         data: $scope.treatmentData.data,
+        nextAppointmentDate: $scope.treatment.nextappointment,
         close: close
       })
       .then(function(data) {
@@ -2986,7 +2987,8 @@ app.controller("treatmentDetailsController", function(
     $http
       .post("/editDetails", {
         id: $scope.treatmentData._id,
-        data: $scope.treatmentData.data
+        data: $scope.treatmentData.data,
+        nextAppointmentDate: $scope.treatment.nextappointment
       })
       .then(function(data) {
         if (close == "close") {
