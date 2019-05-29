@@ -1480,7 +1480,7 @@ app.post('/userviewtreatment', function(req, res){
           msgALL = "Greeting from Dantalaya. Your next appointment with dentist is scheduled on " + req.body.data.nextappointment
           console.log('msg data');
           console.log(msgALL);
-          // sendSms(msgALL,'+91'+req.body.patient_mobile, 'Next Appointment' )
+          sendSms(msgALL,'+91'+req.body.patient_mobile, 'Next Appointment' )
           sendSms(msgALL,'+917200744553', 'New Appointment' )
           sendappointmentmail( 'test' , 'test' , moment().format('DD-MMM-YYYY hh:mm A'), moment().format('DD-MMM-YYYY hh:mm A'), 'connect2sriram@hotmail.com','text', 'test');
       }
