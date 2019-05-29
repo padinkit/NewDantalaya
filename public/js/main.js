@@ -2084,6 +2084,7 @@ app.controller("PatientTreatmentDetailsController", function(
       .post("/editDetails", {
         id: $scope.treatmentData._id,
         data: $scope.treatmentData.data,
+        nextAppointmentDate: $scope.treatment.nextappointment,
         close: close
       })
       .then(function(data) {
@@ -2212,7 +2213,7 @@ app.controller("PatientTreatmentDetailsController", function(
             .post("/viewPayments", { data: paymentIds })
             .then(function(dataa) {
               $scope.allPayments = dataa.data;
-              
+
               var gridData = dataa.data.filter(function(obj){
             	  if(obj.data.status === 'Completed'){
             		  return obj;
@@ -2281,7 +2282,7 @@ app.controller("PatientTreatmentDetailsController", function(
 
     $http.post("/viewPayments", { data: paymentIds }).then(function(dataa) {
       $scope.allPaymentsModal = dataa.data;
-      
+
       var gridData = dataa.data.filter(function(obj){
     	  if(obj.data.status === 'Completed'){
     		  return obj;
@@ -2290,7 +2291,7 @@ app.controller("PatientTreatmentDetailsController", function(
     		  return false;
     	  }
       });
-      
+
       $scope.gridOptionsPaymentsModal = {
         enableFiltering: false,
         data: gridData,
@@ -2648,7 +2649,7 @@ app.controller("treatmentDetailsController", function(
                 .post("/viewPayments", { data: paymentIds })
                 .then(function(dataa) {
                   $scope.allPayments = dataa.data;
-                  
+
                   var gridData = dataa.data.filter(function(obj){
                 	  if(obj.data.status === 'Completed'){
                 		  return obj;
@@ -2657,7 +2658,7 @@ app.controller("treatmentDetailsController", function(
                 		  return false;
                 	  }
                   });
-                  
+
                   $scope.gridOptionsPayments = {
                     enableFiltering: false,
                     data: gridData,
@@ -2719,7 +2720,7 @@ app.controller("treatmentDetailsController", function(
 
     $http.post("/viewPayments", { data: paymentIds }).then(function(dataa) {
       $scope.allPaymentsModal = dataa.data;
-      
+
       var gridData = dataa.data.filter(function(obj){
     	  if(obj.data.status === 'Completed'){
     		  return obj;
@@ -2728,7 +2729,7 @@ app.controller("treatmentDetailsController", function(
     		  return false;
     	  }
       });
-      
+
       $scope.gridOptionsPaymentsModal = {
         enableFiltering: false,
         data: gridData,
@@ -2931,6 +2932,9 @@ app.controller("treatmentDetailsController", function(
   });
 
   $scope.addTreatment = function(fromsubaddTreatment, obj) {
+      console.log($scope.patientData.data.mobile);
+    var patient_mobile = $scope.patientData.data.mobile.toString();
+    console.log(patient_mobile.toString());
     if ($scope.treatment.showTreatment) {
       if (!$scope.treatment.treatmentcost) {
         toastr.warning(
@@ -2954,6 +2958,7 @@ app.controller("treatmentDetailsController", function(
       $http
         .post("/addTreatment", {
           id: $scope.patientData._id,
+          patient_mobile: patient_mobile,
           data: $scope.treatment
         })
         .then(function(data) {
@@ -2966,6 +2971,7 @@ app.controller("treatmentDetailsController", function(
       $http
         .post("/addTreatment", {
           id: $scope.patientData._id,
+          patient_mobile: patient_mobile,
           data: $scope.treatment
         })
         .then(function(data) {
@@ -2981,7 +2987,8 @@ app.controller("treatmentDetailsController", function(
     $http
       .post("/editDetails", {
         id: $scope.treatmentData._id,
-        data: $scope.treatmentData.data
+        data: $scope.treatmentData.data,
+        nextAppointmentDate: $scope.treatment.nextappointment
       })
       .then(function(data) {
         if (close == "close") {
