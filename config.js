@@ -43,4 +43,5 @@ config.doctormailText = 'Dear Doctor, Welcome to Dantalaya, the largest network 
 '7) Finance provided for patients will be at the sole discretion of the company and Dantalaya is not responsible for rejection of finance towards any treatment. Doctors cannot engage with the finance company directly as this will attract legal action and the contract with the doctor will be terminated immediately. <br><br> '+
 '8) For any queries email info@dantalaya.com and continue producing smiles for all !! <br><br><br><br> ' +
 'Regards Dantalaya Oral care Pvt., Ltd..'
+
 module.exports = config;
