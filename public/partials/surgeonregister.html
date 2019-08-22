@@ -52,7 +52,7 @@ form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="
   </div>
   <div layout-gt-sm="row">
     <md-input-container class="md-block" flex-gt-sm>
-      <label>Zip Code <span style="color: red;">*</span></label>
+      <label>Pin Code <span style="color: red;">*</span></label>
       <input ng-model="signup.pin" ng-change="textChanged()" ng-required=true ng-pattern="/^[1-9][0-9]{5}$/">
     </md-input-container>
     <md-input-container class="md-block" flex-gt-sm ng-if="!signup.nri">
@@ -67,13 +67,13 @@ form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="
     </md-input-container>
     <md-input-container class="md-block" flex-gt-sm>
       <label>Mobile <span style="color: red;">*</span></label>
-      <input ng-model="signup.mobile" ng-required=true ng-pattern="/^\d{10}$/">
+      <input ng-model="signup.mobile" ng-change="mobileNumberUniqueValidation()" ng-required=true ng-pattern="/^\d{10}$/">
     </md-input-container>
   </div>
   <div layout-gt-sm="row">
     <md-input-container class="md-block" flex-gt-sm>
-      <label>Email <span style="color: red;">*</span></label>
-      <input ng-model="signup.email" ng-required=true ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'>
+      <label>Email</label>
+      <input ng-model="signup.email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'>
     </md-input-container>
     <md-input-container class="md-block" flex-gt-sm>
       <input type="date" value="" size="35" id="date" name="date" ng-model="signup.internshipstartdate"  placeholder=" Date of Starting internship *" ng-required=true>
@@ -127,15 +127,10 @@ form signature: 17693863561870007841" autofill-prediction="NAME_FULL" ng-model="
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-signin" name="signupForm">
-                <h2 class="form-signin-heading">Sign Up</h2>
-                <label for="inputEmail" class="sr-only">User ID</label>
-                <input type="text" id="userid" class="form-control" placeholder="User ID" required="" autofocus="" ng-model="signupFinal.username" disabled>
-                <p class="text-danger">{{userIDerror}}</p>
-                <label for="inputPassword" class="sr-only">Password  <span class="required">*</span></label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="signupFinal.password">
-                <label for="inputPassword" class="sr-only">Re-enter Password  <span class="required">*</span></label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Re-enter Password" required ng-model="signupFinal.passwordreenter">
-                <p class="text-danger" ng-if="showError"><small>Passwords are not matching</small></p>
+              <h2 class="form-signin-heading">Verify Mobile</h2>
+              <h5>Enter the OTP sent your provided mobile number.</h5>
+              <input type="text" id="otp" class="form-control" placeholder="otp" required="" autofocus="" ng-model="signupFinal.otp">
+              <p class="text-danger">{{userIDerror}}</p>
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="!signupForm.$valid" ng-click="signupfn('surgeon')">Sign Up</button>
             </form>

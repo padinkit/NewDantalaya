@@ -181,6 +181,10 @@
 								<p>Clinic City : <span>{{showUserData.data.cliniccity}}</span></p>
 								<p>Clinic Zip Code : <span>{{showUserData.data.clinicpin}}</span></p>
 								<p>Website : <span>{{showUserData.data.clinicwebsite}}</span></p>
+								<div class="doctorworking">Total Patients - <span style="font-weight: bold">{{showUserData.data.patients.length}}</span></div>
+								<div class="doctorworking">Last Login - <span style="font-weight: bold">{{showUserData.data.lastlogin | date : "MMM d, y h:mm:ss a"}}</span></div>
+
+
 
 
 
@@ -278,8 +282,9 @@
 
                   </div>
               </div>
-              <hr>
-              <div class="doctorworking">Working hours - <span style="font-weight: bold">{{userData.data.hours}}</span></div>
+			  <hr>
+			  <div ng-if="userData.data.profile == 'doctor'" class="doctorworking">Total Patients - <span style="font-weight: bold">{{userData.data.patients.length}}</span></div>
+			  <div class="doctorworking">Last Login - <span style="font-weight: bold">{{userData.data.lastlogin | date : "MMM d, y h:mm:ss a"}}</span></div>
           </div>
         </div>
         <div class="modal-footer">

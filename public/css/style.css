@@ -671,6 +671,12 @@ hr {
   background-color: #fff
 }
 
+
+.user-avatar:hover {
+  fill:white;
+  cursor: pointer;
+}
+
 .dropdown-menu {
   border: 1px solid hsla(210, 8%, 51%, .13);
   border-radius: 0;
@@ -18896,3 +18902,6 @@ a.fc-event:not([href]):not([tabindex]) {
 .image-loader{
 
 }
+
+
+

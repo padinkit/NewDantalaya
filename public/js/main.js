@@ -272,6 +272,7 @@ app.run(function($rootScope, $http, $state, $location) {
         $http.post("/auth/login", logindata.data).then(
           function(data) {
             $rootScope.userLoggedin = true;
+            $rootScope.testforlogin = data.data;
             $rootScope.userId = data.data.username;
             $rootScope.userType = data.data.profile;
             if ($rootScope.userType == "admin") {
@@ -350,6 +351,11 @@ app.controller("middleController", function($scope, $location) {
 });
 
 app.controller("loginController", function($scope, $http, $state, $rootScope) {
+  $scope.verifyButtonText = "Verify OTP";
+  $scope.showEnterOtp = false;
+  $scope.ph_numbr = /^\+?\d{10}$/;
+  $scope.disableOtpButton = false;
+  $scope.disableVerifyButton = false;
   setTimeout(function() {
     $(document).ready(function() {
       $("#owl-demo").owlCarousel({
@@ -375,11 +381,32 @@ app.controller("loginController", function($scope, $http, $state, $rootScope) {
     }
   }
 
+  $scope.getOtp = function(){
+    $scope.disableOtpButton = true;
+    $http.post("/sendotp",$scope.user).then(
+      function(data) {
+        if(data.data.messageResponse === "error"){
+          $scope.disableOtpButton = false;
+          toastr.error(
+            "User Not Registered"
+          );
+        }else{
+          $scope.disableOtpButton = false;
+          $scope.showEnterOtp = true;
+        }
+      }
+    )
+  }
+
+
+
   $scope.login = function() {
+    $scope.disableVerifyButton = true;
     $rootScope.fetchedUserData = false;
     $http.post("/auth/login", $scope.user).then(
       function(data) {
         toastr.success("Login Successful");
+        $scope.verifyButtonText = "Logging you in ..."
         $rootScope.userLoggedin = true;
         $rootScope.userId = data.data.username;
         $rootScope.userType = data.data.profile;
@@ -414,8 +441,9 @@ app.controller("loginController", function($scope, $http, $state, $rootScope) {
         );
       },
       function(err) {
+        $scope.disableVerifyButton = false;
         toastr.error(
-          "Username or Password Incorrect Or Account Not Yet Activated"
+          "Incorrect OTP or Account Not Verified"
         );
       }
     );
@@ -989,6 +1017,7 @@ app.controller("patientRegisterController", function(
   $rootScope,
   $state
 ) {
+  $scope.ph_numbr = /^\+?\d{10}$/;
   $scope.testing = null;
   $scope.loader = false;
   $scope.genderValues = ["Male", "Female", "Other"];
@@ -1034,24 +1063,43 @@ app.controller("patientRegisterController", function(
     }
   };
 
+  $scope.mobileNumberUniqueValidation = function(){
+    if($scope.signup.mobile.length === 10){
+      $scope.loader = true;
+      $http.post("/mobileuniquecheck", $scope.signup).then(function(response) {
+        if (response.data.messageResponse === "New User") {
+          $scope.loader = false;
+        }else if(response.data.messageResponse === "Old User"){
+          alert('This mobile number is already registered with us. You can proceed to login with the same');
+          $scope.signup.mobile = null;
+          $scope.loader = false;
+        }
+      });
+    }
+  }
+
   $scope.submit = function() {
     $scope.signupFinal = {};
-    if (validationService.patientValidation()) {
-      $("#signupModal").modal();
-      $scope.userIDerror = "";
-      $scope.signupFinal.username = $scope.signup.email;
-    }
+    $http.post("/registersendotp", $scope.signup).then(function(response) {
+      console.log(response.data.messageResponse);
+      if (response.data.messageResponse === "success") {
+        if (validationService.patientValidation()) {
+          $("#signupModal").modal();
+          $scope.userIDerror = "";
+          $scope.signupFinal.username = $scope.signup.email;
+        }
+      }else{
+        toastr.error("Error occurred during registration. Please try again after some time.");
+      }
+    });
+
+
   };
 
   $scope.signupfn = function(profile) {
-    if ($scope.signupFinal.password !== $scope.signupFinal.passwordreenter) {
-      $scope.showError = true;
-      return;
-    }
     if ($scope.signupForm.$valid) {
       $scope.signup.profile = profile;
       $scope.signupFinal.profile = profile;
-      delete $scope.signupFinal.passwordreenter;
 
       $http
         .post("/auth/signup", {
@@ -1062,10 +1110,15 @@ app.controller("patientRegisterController", function(
           function(data) {
             if (data.data.alert == "userIDError") {
               $scope.userIDerror = "User ID not available. Try a new one";
-            } else {
+            } else if (data.data.alert === "incorrectOTP"){
+              $scope.userIDerror = "Entered OTP is not valid. Please try again";
+            } else if (data.data.alert === "Registration error"){
+              toastr.error("Error occured ! Registration Failed !");
+            }
+             else {
               $("#signupModal").modal("toggle");
               toastr.success(
-                "Thank you! Your Registration form was successfully submitted. Activate Your Account By clicking on the link sent to your Registered Mail-ID"
+                "Thank you! Your registration was successful. You can now login to view your account."
               );
               $state.go("home");
             }
@@ -1184,24 +1237,42 @@ app.controller("doctorRegisterController", function(
       }
   };
 
+
+  $scope.mobileNumberUniqueValidation = function(){
+    if($scope.signup.mobile.length === 10){
+      $scope.loader = true;
+      $http.post("/mobileuniquecheck", $scope.signup).then(function(response) {
+        if (response.data.messageResponse === "New User") {
+          $scope.loader = false;
+        }else if(response.data.messageResponse === "Old User"){
+          alert('This mobile number is already registered with us. You can proceed to login with the same');
+          $scope.signup.mobile = null;
+          $scope.loader = false;
+        }
+      });
+    }
+  }
+
   $scope.submit = function() {
     $scope.signupFinal = {};
-    if (validationService.doctorValidation()) {
-      $("#signupModal").modal();
-      $scope.userIDerror = "";
-      $scope.signupFinal.username = $scope.signup.email;
-    }
+    $http.post("/registersendotp", $scope.signup).then(function(response) {
+      console.log(response.data.messageResponse);
+      if (response.data.messageResponse === "success") {
+        if (validationService.patientValidation()) {
+          $("#signupModal").modal();
+          $scope.userIDerror = "";
+          $scope.signupFinal.username = $scope.signup.email;
+        }
+      }else{
+        toastr.error("Error occurred during registration. Please try again after some time.");
+      }
+    });
   };
 
   $scope.signupfn = function(profile) {
-    if ($scope.signupFinal.password !== $scope.signupFinal.passwordreenter) {
-      $scope.showError = true;
-      return;
-    }
     if ($scope.signupForm.$valid) {
       $scope.signup.profile = profile;
       $scope.signupFinal.profile = profile;
-      delete $scope.signupFinal.passwordreenter;
 
       $http
         .post("/auth/signup", {
@@ -1212,10 +1283,15 @@ app.controller("doctorRegisterController", function(
           function(data) {
             if (data.data.alert == "userIDError") {
               $scope.userIDerror = "User ID not available. Try a new one";
-            } else {
+            } else if (data.data.alert === "incorrectOTP"){
+              $scope.userIDerror = "Entered OTP is not valid. Please try again";
+            } else if (data.data.alert === "Registration error"){
+              toastr.error("Error occured ! Registration Failed !");
+            }
+             else {
               $("#signupModal").modal("toggle");
               toastr.success(
-                "Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once its verified."
+                "Thank you! Your registration was successful. You can now login to view your account."
               );
               $state.go("home");
             }
@@ -1263,25 +1339,43 @@ app.controller("technicianRegisterController", function(
       }
   };
 
+  $scope.mobileNumberUniqueValidation = function(){
+    if($scope.signup.mobile.length === 10){
+      $scope.loader = true;
+      $http.post("/mobileuniquecheck", $scope.signup).then(function(response) {
+        if (response.data.messageResponse === "New User") {
+          $scope.loader = false;
+        }else if(response.data.messageResponse === "Old User"){
+          alert('This mobile number is already registered with us. You can proceed to login with the same');
+          $scope.signup.mobile = null;
+          $scope.loader = false;
+        }
+      });
+    }
+  }
+
+
 
   $scope.submit = function() {
     $scope.signupFinal = {};
-    if (validationService.technicianValidation()) {
-      $("#signupModal").modal();
-      $scope.userIDerror = "";
-      $scope.signupFinal.username = $scope.signup.email;
-    }
+    $http.post("/registersendotp", $scope.signup).then(function(response) {
+      console.log(response.data.messageResponse);
+      if (response.data.messageResponse === "success") {
+        if (validationService.patientValidation()) {
+          $("#signupModal").modal();
+          $scope.userIDerror = "";
+          $scope.signupFinal.username = $scope.signup.email;
+        }
+      }else{
+        toastr.error("Error occurred during registration. Please try again after some time.");
+      }
+    });
   };
 
   $scope.signupfn = function(profile) {
-    if ($scope.signupFinal.password !== $scope.signupFinal.passwordreenter) {
-      $scope.showError = true;
-      return;
-    }
     if ($scope.signupForm.$valid) {
       $scope.signup.profile = profile;
       $scope.signupFinal.profile = profile;
-      delete $scope.signupFinal.passwordreenter;
 
       $http
         .post("/auth/signup", {
@@ -1292,10 +1386,15 @@ app.controller("technicianRegisterController", function(
           function(data) {
             if (data.data.alert == "userIDError") {
               $scope.userIDerror = "User ID not available. Try a new one";
-            } else {
+            } else if (data.data.alert === "incorrectOTP"){
+              $scope.userIDerror = "Entered OTP is not valid. Please try again";
+            } else if (data.data.alert === "Registration error"){
+              toastr.error("Error occured ! Registration Failed !");
+            }
+             else {
               $("#signupModal").modal("toggle");
               toastr.success(
-                "Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once its verified."
+                "Thank you! Your registration was successful. You can now login to view your account."
               );
               $state.go("home");
             }
@@ -1306,6 +1405,7 @@ app.controller("technicianRegisterController", function(
         );
     }
   };
+
 });
 
 app.controller("surgeonRegisterController", function(
@@ -1342,24 +1442,41 @@ app.controller("surgeonRegisterController", function(
       }
   };
 
+  $scope.mobileNumberUniqueValidation = function(){
+    if($scope.signup.mobile.length === 10){
+      $scope.loader = true;
+      $http.post("/mobileuniquecheck", $scope.signup).then(function(response) {
+        if (response.data.messageResponse === "New User") {
+          $scope.loader = false;
+        }else if(response.data.messageResponse === "Old User"){
+          alert('This mobile number is already registered with us. You can proceed to login with the same');
+          $scope.signup.mobile = null;
+          $scope.loader = false;
+        }
+      });
+    }
+  }
+
   $scope.submit = function() {
     $scope.signupFinal = {};
-    if (validationService.surgeonValidation()) {
-      $("#signupModal").modal();
-      $scope.userIDerror = "";
-      $scope.signupFinal.username = $scope.signup.email;
-    }
+    $http.post("/registersendotp", $scope.signup).then(function(response) {
+      console.log(response.data.messageResponse);
+      if (response.data.messageResponse === "success") {
+        if (validationService.patientValidation()) {
+          $("#signupModal").modal();
+          $scope.userIDerror = "";
+          $scope.signupFinal.username = $scope.signup.email;
+        }
+      }else{
+        toastr.error("Error occurred during registration. Please try again after some time.");
+      }
+    });
   };
 
   $scope.signupfn = function(profile) {
-    if ($scope.signupFinal.password !== $scope.signupFinal.passwordreenter) {
-      $scope.showError = true;
-      return;
-    }
     if ($scope.signupForm.$valid) {
       $scope.signup.profile = profile;
       $scope.signupFinal.profile = profile;
-      delete $scope.signupFinal.passwordreenter;
 
       $http
         .post("/auth/signup", {
@@ -1370,10 +1487,15 @@ app.controller("surgeonRegisterController", function(
           function(data) {
             if (data.data.alert == "userIDError") {
               $scope.userIDerror = "User ID not available. Try a new one";
-            } else {
+            } else if (data.data.alert === "incorrectOTP"){
+              $scope.userIDerror = "Entered OTP is not valid. Please try again";
+            } else if (data.data.alert === "Registration error"){
+              toastr.error("Error occured ! Registration Failed !");
+            }
+             else {
               $("#signupModal").modal("toggle");
               toastr.success(
-                "Thank you! Your Registration form was successfully submitted. Confirmation mail will be sent to you once its verified."
+                "Thank you! Your registration was successful. You can now login to view your account."
               );
               $state.go("home");
             }

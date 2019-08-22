@@ -8,13 +8,15 @@ mongoose.connect(config.host,function(){
 
 	var authSchema = new mongoose.Schema({
 		    username: String,
-		    password: String,
+			password: String,
+			mobile: String,
 		    profile: String,
 		    activated: Boolean,
 		    adminactivated : Boolean,
 		    billnotpaid: Boolean,
 		    key : String,
-		    email : String
+			email : String,
+			lastlogin : String
 	});
 	
 	// generating a hash

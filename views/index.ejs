@@ -105,20 +105,50 @@
           <a href="#/register" ng-if="!userLoggedin">
             <div class="btn  dbtn"><i class="fa fa-user-plus" aria-hidden="true"></i> New Registration</div>
           </a>
+
+          
+
           <div class="dropdown user-menu" ng-if="userLoggedin">
-            <button class="btn btn-default dropdown-patient" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-	                    {{userId}}
-	                    <span class="caret"></span>
-	                  </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li ng-if="userType == 'patient'"><a href="#/dashboard">Dashboard</a></li>
-              <li ng-if="userType == 'doctor'"><a href="#/doctor/dashboard">Dashboard</a></li>
-              <li><a href="#/{{userType}}profile">Profile</a></li>
-              <li ng-if="userType == 'doctor'"><a href="#/chargeSheet">Charge Sheet</a></li>
-              <li><a href="#/changepassword">Change Password</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>
-            </ul>
+              <a type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <svg class="user-avatar"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg3"
+   version="1.1"
+   viewBox="0 0 50 50.039242"
+   height="50.039242"
+   width="50">
+  <metadata
+     id="metadata9">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7" />
+  <path
+     style="fill:#2ecc71"
+     d="m 49.999969,25.039237 a 25,25 0 1 0 -42.3469998,17.963 1.526,1.526 0 0 0 0.394,0.358 24.855,24.855 0 0 0 33.9059998,0 1.526,1.526 0 0 0 0.394,-0.358 24.911,24.911 0 0 0 7.653,-17.963 z m -25,-21.8750004 a 21.844,21.844 0 0 1 17.145,35.4180004 c -1.355,-4.37 -5.224,-7.792 -10.475,-9.366 a 11.4,11.4 0 1 0 -13.34,0 c -5.251,1.574 -9.1199998,5 -10.4749998,9.366 A 21.844,21.844 0 0 1 24.999969,3.1642366 Z m -8.278,16.8350004 a 8.278,8.278 0 1 1 8.278,8.263 8.28,8.28 0 0 1 -8.278,-8.263 z m -6.241,21.357 c 0.47,-5.729 6.545,-9.969 14.519,-9.969 7.974,0 14.05,4.24 14.519,9.969 a 21.742,21.742 0 0 1 -29.038,0 z"
+     id="iconfinder_00-ELASTOFONT-STORE-READY_user-circle_2703062" />
+</svg>
+
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  <li ng-if="userType == 'patient'"><a href="#/dashboard">Dashboard</a></li>
+                  <li ng-if="userType == 'doctor'"><a href="#/doctor/dashboard">Dashboard</a></li>
+                  <li><a href="#/{{userType}}profile">Profile</a></li>
+                  <li ng-if="userType == 'doctor'"><a href="#/chargeSheet">Charge Sheet</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="javascript:void(0)" ng-click="logout()">Logout</a></li>
+                </ul>
           </div>
         </div>
       </div>

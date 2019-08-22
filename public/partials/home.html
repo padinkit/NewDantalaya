@@ -56,24 +56,24 @@
 				</div>
                 <div id="login" class="col-md-5 dbox">
 
-                    <form class="dform">
+                    <form class="dform" name="loginForm">
 
                         <div class="dlog">Login To Your Account</div>
 
                         <li class="input-field">
-                            <input placeholder="Email" id="Username" type="text " class="validate dlogin" ng-model="user.username">
+                            <input ng-disabled="showEnterOtp" placeholder="Mobile Number" id="Username" type="text " class="validate dlogin" ng-model="user.username" ng-pattern="ph_numbr" required>
                         </li>
-                        <li class="input-field">
-                            <input placeholder="Password" id="password" type="password" class="validate dlogin" ng-model="user.password">
+                        
+                        <li class="input-field" ng-if="showEnterOtp">
+                            <input placeholder="Enter OTP" id="password" type="password" class="validate dlogin" ng-model="user.password">
                         </li>
 
-                        <div class="drem">
-                            <label class="check">
-                                <input type="checkbox"><span class="lever"></span>Remember Me</label>
+                        <div class="dsubm" ng-if="!showEnterOtp">
+                            <button ng-disabled="!loginForm.$valid || disableOtpButton" class="btn dbtn dbtn2" type="submit" ng-click="getOtp()">Get OTP <span ng-if="disableOtpButton" class="spinner-grow" role="status"></span></button>
                         </div>
-                        <!--<div class="submit"><input type="submit" onclick="" value="Sign In" ></div>-->
-                        <div class="dsubm">
-                            <button class="btn dbtn dbtn2" type="submit" ng-click="login()">Sign in</button>
+
+                        <div class="dsubm" ng-if="showEnterOtp">
+                            <button class="btn dbtn dbtn2" ng-disabled="disableVerifyButton" type="submit" ng-click="login()"> {{verifyButtonText}} <span ng-if="disableVerifyButton" class="spinner-grow" role="status"></span> </button>
                         </div>
 
 

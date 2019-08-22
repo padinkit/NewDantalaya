@@ -28,6 +28,10 @@ const csv=require('csvtojson');
 
 
 
+const msg91Auth = "186217ACaum1awol5a20c425";
+
+
+
 
 var options = {
 	    key: fs.readFileSync('./ssl/private.pem'),
@@ -99,27 +103,46 @@ if ('development' == app.get('env')) {
 
 passport.use( new LocalStrategy(
   function(username, password, done) {
-    // check in mongo if a user with username exists or not
-	  model.auth.findOne({ 'username' :  username },
-      function(err, user) {
-		  if (err) {
-              return done(err);
-          }
-          if (!user) {
-              return done(null, false, {alert: 'Incorrect username.'});
-          }
-          if (user.password != password) {
-              return done(null, false, {alert: 'Incorrect password.'});
-          }
-          if (user.activated == false) {
-              return done(null, false, {alert: 'Account Not Yet Activated'});
-          }
-          if ((user.profile==="doctor" || user.profile==="technician" || user.profile==="surgeon") && user.adminactivated == false) {
-              return done(null, false, {alert: 'Account Not Yet Activated By Admin'});
-          }
-          return done(null, user);
-      }
-    );
+	  console.log("username");
+	  console.log(username);
+	  console.log("password")
+	  console.log(password)
+
+
+
+	  var verifySmsUrl = "https://control.msg91.com/api/verifyRequestOTP.php?authkey=" + msg91Auth +"&mobile=91" + username + "&otp=" + password;
+	  request.post(verifySmsUrl, function(err, response, body ){
+		  if(err){
+			  console.log('Something went wrong');
+		  }else{
+			  body = JSON.parse(body);
+			  console.log(body);
+			  console.log(body.type);
+			  if(body.type === "success"){		  	  
+				// check in mongo if a user with username exists or not
+				model.auth.findOne({ 'mobile' :  username },
+				function(err, user) {
+					if (err) {
+						return done(err);
+					}
+					if (user.activated == false) {
+						return done(null, false, {alert: 'Account Not Yet Activated'});
+					}
+					if ((user.profile==="doctor" || user.profile==="technician" || user.profile==="surgeon") && user.adminactivated == false) {
+						return done(null, false, {alert: 'Account Not Yet Activated By Admin'});
+					}
+					return done(null, user);
+				}
+				);
+			  }else{
+				return done(err);
+			  }
+
+			  
+		  }
+	  });
+	  
+
 }));
 
 passport.serializeUser(function(user, done) {
@@ -247,8 +270,86 @@ function sendmail(req ,user,  key, email, profile){
 		   else     console.log(data);           // successful response
 	});
 }
+
+
+app.post('/sendotp', function(req, res){
+	console.log(req.body.username)
+	var typedMobileNo = req.body.username;
+	model.auth.findOne({ 'mobile' :  typedMobileNo },
+	function(err, user) {
+		if (err) {
+			console.log('error occured');
+		}
+		if(user){
+			sendSmsPostUrl = "https://control.msg91.com/api/sendotp.php?sender=Dantalaya&message=&mobile=" + "91" +  typedMobileNo + "&authkey=" + msg91Auth;
+			request.post(sendSmsPostUrl, function(err, response, body){
+				if(err){
+					console.log(err)
+				}else{
+					console.log(body);
+					res.send({messageResponse: body.type});
+				}
+			});
+		}else{
+			res.send({messageResponse: "error"});
+		}
+		
+	}
+  );
+});
+
+
+app.post('/registersendotp', function(req, res){
+	var sendSmsPostUrl = "https://control.msg91.com/api/sendotp.php?sender=Dantalaya&message=&mobile=" + "91" +  req.body.mobile + "&authkey=" + msg91Auth;
+	request.post(sendSmsPostUrl, function(err, response, body){
+		if(err){
+			res.send({messageResponse: "error"});
+		}else{
+			console.log(body);
+			res.send({messageResponse: "success"});
+		}
+	});
+});
+
+
+
+
+
+app.post('/verifyotp', function(req, res){
+	var verifySmsUrl = "https://control.msg91.com/api/verifyRequestOTP.php?authkey=" + msg91Auth +"&mobile=91" + req.body.mobile + "&otp=" + req.body.otp;
+	request.post(verifySmsUrl, function(err, response, body ){
+		if(err){
+			console.log('Something went wrong');
+		}else{
+			body = JSON.parse(body);
+			if(body.type === "success"){
+				model.auth.findOne({ 'mobile' :  req.body.mobile },
+				function(err, user) {
+					if (err) {
+						return done(err);
+					}
+					if (user.activated == false) {
+						return done(null, false, {alert: 'Account Not Yet Activated'});
+					}
+					if ((user.profile==="doctor" || user.profile==="technician" || user.profile==="surgeon") && user.adminactivated == false) {
+						return done(null, false, {alert: 'Account Not Yet Activated By Admin'});
+					}
+					return done(null, user);
+				}
+			  );
+			}
+			
+		}
+	});
+});
+
+
 app.post('/auth/login', passport.authenticate('local'),function(req, res){
 	var userData = req.user._doc;
+	console.log('this is user data');
+	console.log(req.user);
+	
+	
 	userData.token = Math.random().toString(36).slice(2);
 	if (userData.token in userTokens){
 		userData.token = Math.random().toString(36).slice(2);
@@ -277,43 +378,62 @@ app.post('/auth/loginToken',function(req, res){
 
 
 app.post('/auth/signup',function(req,res){
-	req.body.contactInfo.username = req.body.authInfo.username;
-	req.body.contactInfo.adminactivated = false;
-	req.body.authInfo.activated = false;
-	req.body.authInfo.adminactivated = false;
-	if(req.body.authInfo.profile == 'patient'){
-		req.body.authInfo.adminactivated = true;
-		req.body.contactInfo.adminactivated = true;
-	}
-	req.body.authInfo.email = req.body.contactInfo.email;
-	var randomNo = Math.random().toString(36).slice(2);
-	req.body.authInfo.key = randomNo;
+	var verifySmsUrl = "https://control.msg91.com/api/verifyRequestOTP.php?authkey=" + msg91Auth +"&mobile=91" + req.body.contactInfo.mobile + "&otp=" + req.body.authInfo.otp;
+	request.post(verifySmsUrl, function(err, response, body ){
+		if(err){
+			res.json({'alert':'Registration error'});
+		}else{
+			body = JSON.parse(body);
+			if(body.type === "success"){
+				req.body.contactInfo.username = req.body.contactInfo.email;
+				req.body.contactInfo.adminactivated = false;
+				req.body.authInfo.mobile = req.body.contactInfo.mobile;
+				req.body.authInfo.activated = false;
+				req.body.authInfo.adminactivated = false;
+				if(req.body.authInfo.profile == 'patient'){
+					req.body.authInfo.adminactivated = true;
+					req.body.contactInfo.adminactivated = true;
+					req.body.authInfo.activated = true;
+				}else{
+					req.body.authInfo.activated = true;
+				}
+				req.body.authInfo.email = req.body.contactInfo.email;
+				var randomNo = Math.random().toString(36).slice(2);
+				req.body.authInfo.key = randomNo;
+			
+				var authData = new model.auth(req.body.authInfo);
+			
+				var userData =  new model.user({data : req.body.contactInfo});
+			
+				  model.auth.find({mobile : req.body.contactInfo.mobile},function(err, list){
+					if(list.length !== 0){
+						res.json({'alert':'userIDError'});
+					}
+					else{
+						authData.save(function(err){
+							if (err) {
+								res.json({'alert':'Registration error'});
+							}else{
+								userData.save(function(err){
+									if (err) {
+										res.json({'alert':'Registration error'});
+									}else{
+										res.json({'alert':'Registration success'});
+										sendmail(req,req.body.authInfo.username , randomNo , req.body.contactInfo.email , req.body.authInfo.profile);
+									}
+								});
+							}
+						});
+					}
+				});
+			} else {
+				res.json({'alert':'incorrectOTP'});
+			}
+			
+		}
+	});
 
-	var authData = new model.auth(req.body.authInfo);
 
-    var userData =  new model.user({data : req.body.contactInfo});
-
-      model.auth.find({username : req.body.authInfo.username},function(err, list){
-    	if(list.length !== 0){
-    		res.json({'alert':'userIDError'});
-    	}
-    	else{
-    		authData.save(function(err){
-    	        if (err) {
-    	            res.json({'alert':'Registration error'});
-    	        }else{
-    	        	userData.save(function(err){
-    	                if (err) {
-    	                    res.json({'alert':'Registration error'});
-    	                }else{
-    	                    res.json({'alert':'Registration success'});
-    	                    sendmail(req,req.body.authInfo.username , randomNo , req.body.contactInfo.email , req.body.authInfo.profile);
-    	                }
-    	            });
-    	        }
-    	    });
-    	}
-    });
 
 
 });
@@ -454,16 +574,24 @@ app.post('/searchuser',function(req, res){
 
 
 app.post('/getuserDetails',function(req, res){
-	var userData = model.user.findOne({ 'data.username' :  req.body.user },
-		function(err, user) {
-			if(!err){
-				res.send(user);
-			}
-			else{
-				res.status(404).send("failure");
-			}
-	    }
-  );
+	var usertest = model.user.findOneAndUpdate({'data.username': req.body.user}, {$set:{'data.lastlogin': new Date()}}, {new: true}, (err, user) => {
+		if(!err){
+			res.send(user);
+		}
+		else{
+			res.status(404).send("failure");
+		}
+	});
+// 	var userData = model.user.findOne({ 'data.username' :  req.body.user },
+// 		function(err, user) {
+// 			if(!err){
+// 				res.send(user);
+// 			}
+// 			else{
+// 				res.status(404).send("failure");
+// 			}
+// 	    }
+//   );
 });
 
 app.post('/getuserDetailsById',function(req, res){
@@ -2022,6 +2150,21 @@ app.post('/contactmailsend',function(req,res){
 
    });
 
+
+ });
+
+ app.post('/mobileuniquecheck', function(req, res) {
+	 model.auth.findOne({ 'mobile' :  req.body.mobile },
+	 function(err, user) {
+		 if (err) {
+			 return done(err);
+		 }else if (user === null){
+			res.send({messageResponse: "New User"});
+		 }else{
+			res.send({messageResponse: "Old User"});			 
+		 }
+	 }
+   );
 
  });
 
