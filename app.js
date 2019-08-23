@@ -28,7 +28,7 @@ const csv=require('csvtojson');
 
 
 
-const msg91Auth = "186217ACaum1awol5a20c425";
+const msg91Auth = "290814A054wYIfZv5d5f7f19";
 
 
 
@@ -281,7 +281,7 @@ app.post('/sendotp', function(req, res){
 			console.log('error occured');
 		}
 		if(user){
-			sendSmsPostUrl = "https://control.msg91.com/api/sendotp.php?sender=Dantalaya&message=&mobile=" + "91" +  typedMobileNo + "&authkey=" + msg91Auth;
+			sendSmsPostUrl = "https://control.msg91.com/api/sendotp.php?sender=DANTALAYA&message=&mobile=" + "91" +  typedMobileNo + "&authkey=" + msg91Auth;
 			request.post(sendSmsPostUrl, function(err, response, body){
 				if(err){
 					console.log(err)
@@ -300,7 +300,7 @@ app.post('/sendotp', function(req, res){
 
 
 app.post('/registersendotp', function(req, res){
-	var sendSmsPostUrl = "https://control.msg91.com/api/sendotp.php?sender=Dantalaya&message=&mobile=" + "91" +  req.body.mobile + "&authkey=" + msg91Auth;
+	var sendSmsPostUrl = "https://control.msg91.com/api/sendotp.php?sender=DANTALAYA&message=&mobile=" + "91" +  req.body.mobile + "&authkey=" + msg91Auth;
 	request.post(sendSmsPostUrl, function(err, response, body){
 		if(err){
 			res.send({messageResponse: "error"});
