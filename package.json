@@ -19,7 +19,7 @@
     "fs": "0.0.1-security",
     "mail": "^0.2.3",
     "moment": "^2.20.1",
-    "mongoose": "^4.10.8",
+    "mongoose": "^5.7.5",
     "node-schedule": "^1.2.5",
     "nodemailer": "^2.7.2",
     "passport": "~0.2.0",
