@@ -18,7 +18,7 @@
     "express-session": "^1.14.2",
     "fs": "0.0.1-security",
     "mail": "^0.2.3",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "mongoose": "^4.10.8",
     "node-schedule": "^1.2.5",
     "nodemailer": "^2.7.2",
