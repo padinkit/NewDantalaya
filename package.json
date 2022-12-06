@@ -14,7 +14,7 @@
     "csvtojson": "^2.0.4",
     "ejs": "^2.5.7",
     "emailjs": "^1.0.8",
-    "express": "3.2.6",
+    "express": "4.17.3",
     "express-session": "^1.14.2",
     "fs": "0.0.1-security",
     "mail": "^0.2.3",
